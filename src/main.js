@@ -98,14 +98,14 @@ const renderDOM = (currentWeatherData) => {
 // Planet Algorithm
 const determinePlanet = (filteredTemp, conditions) => {
     let planet
-
+    
     // Determine conditions, if none, run temp algo
     if (conditions === 'Rain' || conditions === 'Thunderstorm') {
         planet = "storm's end"
         updateImage('stormsend-bg')
     } else if (conditions === 'Mist' || conditions === 'Fog') {
-        planet = 'Endor'
-        updateImage('endor-bg')
+        planet = 'north of the wall'
+        updateImage('north-bg')
     } else {
         if (filteredTemp <= 35) {
             planet = 'Hoth'
@@ -141,7 +141,7 @@ const determineTempMessage = (planet, filteredTemp, conditions) => {
 
     if (currPlanet === "storm's end") {
         message = `Wow. ${currWeather}`
-    } else if (currPlanet === 'endor') {
+    } else if (currPlanet === 'north of the wall') {
         message = `Hmm. ${currWeather}`
     } else if (currPlanet === 'hoth') {
         message = `Oh my. ${currWeather}`
@@ -164,8 +164,8 @@ const determineDescription = (planet) => {
 
     if (currPlanet === "storm's end") {
         description = "Storm's end known for impenetrable walls and stormy weather."
-    } else if (currPlanet === 'endor') {
-        description = "Temperate foggy. Watch for Ewok's"
+    } else if (currPlanet === 'north of the wall') {
+        description = "Foggy out there. Watch out for White Walkers."
     } else if (currPlanet === 'hoth') {
         description = 'Cold, Icy, Freezing Desolation.'
     } else if (currPlanet === 'naboo') {
