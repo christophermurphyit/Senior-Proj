@@ -253,8 +253,9 @@ header {
 }
 
 /* Cold-day backgrounds */
-.Hoth-bg {
-    background: url("/images/hoth.jpg");
+.winterfell-bg {
+    background: url("/images/winterfell.jpg");
+    color: #fcfbf9;
 }
 
 /* Pretty day backgrounds 60-80f */

@@ -98,7 +98,7 @@ const renderDOM = (currentWeatherData) => {
 // Planet Algorithm
 const determinePlanet = (filteredTemp, conditions) => {
     let planet
-    
+    filteredTemp = 25
     // Determine conditions, if none, run temp algo
     if (conditions === 'Rain' || conditions === 'Thunderstorm') {
         planet = "storm's end"
@@ -108,8 +108,8 @@ const determinePlanet = (filteredTemp, conditions) => {
         updateImage('north-bg')
     } else {
         if (filteredTemp <= 35) {
-            planet = 'Hoth'
-            updateImage('Hoth-bg')
+            planet = 'winterfell'
+            updateImage('winterfell-bg')
         } else if (filteredTemp <= 55) {
             planet = 'Naboo'
             updateImage('naboo-bg-warmer')
@@ -143,7 +143,7 @@ const determineTempMessage = (planet, filteredTemp, conditions) => {
         message = `Wow. ${currWeather}`
     } else if (currPlanet === 'north of the wall') {
         message = `Hmm. ${currWeather}`
-    } else if (currPlanet === 'hoth') {
+    } else if (currPlanet === 'winterfell') {
         message = `Oh my. ${currWeather}`
     } else if (currPlanet === 'naboo') {
         message = `Oh. ${currWeather}`
@@ -166,8 +166,8 @@ const determineDescription = (planet) => {
         description = "Storm's end known for impenetrable walls and stormy weather."
     } else if (currPlanet === 'north of the wall') {
         description = "Foggy out there. Watch out for White Walkers."
-    } else if (currPlanet === 'hoth') {
-        description = 'Cold, Icy, Freezing Desolation.'
+    } else if (currPlanet === 'winterfell') {
+        description = 'Cold, Icy, Freezing. Home of the Starks.'
     } else if (currPlanet === 'naboo') {
         description = 'Temperate, dry, and fairly pleasant'
     } else if (currPlanet === 'coruscant') {
