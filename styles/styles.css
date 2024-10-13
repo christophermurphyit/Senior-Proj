@@ -173,7 +173,7 @@ header {
 
 .out_there {
     float: right;
-    padding-right: 4em;
+    padding-right: 12em;
 }
 
 /* Start Bottom Container */
@@ -286,8 +286,8 @@ header {
 }
 
 /* Rainy Backgrounds */
-.kamino-bg {
-    background: url("/images/kamino.png");
+.stormsend-bg {
+    background: url("/images/storms-end.png");
     color: #f1e8d6;
 }
 

@@ -101,8 +101,8 @@ const determinePlanet = (filteredTemp, conditions) => {
 
     // Determine conditions, if none, run temp algo
     if (conditions === 'Rain' || conditions === 'Thunderstorm') {
-        planet = 'Kamino'
-        updateImage('kamino-bg')
+        planet = "storm's end"
+        updateImage('stormsend-bg')
     } else if (conditions === 'Mist' || conditions === 'Fog') {
         planet = 'Endor'
         updateImage('endor-bg')
@@ -139,7 +139,7 @@ const determineTempMessage = (planet, filteredTemp, conditions) => {
     const currWeather = ` ${filteredTemp}°F, ${conditions}?`
     let message = ''
 
-    if (currPlanet === 'kamino') {
+    if (currPlanet === "storm's end") {
         message = `Wow. ${currWeather}`
     } else if (currPlanet === 'endor') {
         message = `Hmm. ${currWeather}`
@@ -162,8 +162,8 @@ const determineDescription = (planet) => {
     const currPlanet = planet.textContent.toLowerCase()
     let description = ''
 
-    if (currPlanet === 'kamino') {
-        description = 'Wet.'
+    if (currPlanet === "storm's end") {
+        description = "Storm's end known for impenetrable walls and stormy weather."
     } else if (currPlanet === 'endor') {
         description = "Temperate foggy. Watch for Ewok's"
     } else if (currPlanet === 'hoth') {
