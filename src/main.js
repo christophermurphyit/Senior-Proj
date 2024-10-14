@@ -82,74 +82,78 @@ const getCurrentWeather = async (latitude, longitude) => {
 
 const renderDOM = (currentWeatherData) => {
     const tempElement = document.querySelector('#temp')
-    const planetElement = document.querySelector('#planet')
+    const cityElement = document.querySelector('#city')
     const descriptionElement = document.querySelector('#description')
     const filteredTemp = currentWeatherData.main.temp.toFixed()
     const conditions = currentWeatherData.weather[0].main
 
-    planetElement.textContent = determinePlanet(filteredTemp, conditions)
-    tempElement.textContent = determineTempMessage(planet, filteredTemp, conditions)
-    descriptionElement.textContent = determineDescription(planet)
+    const cityName = determineCity(filteredTemp, conditions)
+    cityElement.textContent = cityName
+    tempElement.textContent = determineTempMessage(cityName, filteredTemp, conditions)
+    descriptionElement.textContent = determineDescription(cityName)
 
     // debug
     console.log('Weather Data:', currentWeatherData)
 }
 
-// Planet Algorithm
-const determinePlanet = (filteredTemp, conditions) => {
-    let planet
-    filteredTemp = 25
+// city Algorithm
+const determineCity = (filteredTemp, conditions) => {
+    let city
+
+    //filteredTemp = 25
+    conditions = 'Rain'
+
     // Determine conditions, if none, run temp algo
     if (conditions === 'Rain' || conditions === 'Thunderstorm') {
-        planet = "storm's end"
+        city = "storm's end"
         updateImage('stormsend-bg')
     } else if (conditions === 'Mist' || conditions === 'Fog') {
-        planet = 'north of the wall'
+        city = 'north of the wall'
         updateImage('north-bg')
     } else {
         if (filteredTemp <= 35) {
-            planet = 'winterfell'
+            city = 'winterfell'
             updateImage('winterfell-bg')
         } else if (filteredTemp <= 55) {
-            planet = 'Naboo'
+            city = 'Naboo'
             updateImage('naboo-bg-warmer')
         } else if (filteredTemp <= 65) {
-            planet = 'Coruscant'
+            city = 'Coruscant'
             updateImage('coruscant-bg')
         } else if (filteredTemp <= 72) {
-            planet = 'Scariff'
+            city = 'Scariff'
             updateImage('scariff-bg')
         } else if (filteredTemp <= 78) {
-            planet = 'Tattoine'
+            city = 'Tattoine'
             updateImage('tattoine-bg')
         } else if (filteredTemp <= 90) {
-            planet = 'Bespin'
+            city = 'Bespin'
             updateImage('bespin-bg')
         } else {
-            planet = 'Kashyyk'
+            city = 'Kashyyk'
             updateImage('kashyyk-bg')
         }
     }
-    return planet
+    return city
 }
 
 // Dynamically decide which DOM messages to apply
-const determineTempMessage = (planet, filteredTemp, conditions) => {
-    const currPlanet = planet.textContent.toLowerCase()
+const determineTempMessage = (city, filteredTemp, conditions) => {
+    const currCity = city.toLowerCase()
     const currWeather = ` ${filteredTemp}°F, ${conditions}?`
     let message = ''
 
-    if (currPlanet === "storm's end") {
+    if (currCity === "storm's end") {
         message = `Wow. ${currWeather}`
-    } else if (currPlanet === 'north of the wall') {
+    } else if (currCity === 'north of the wall') {
         message = `Hmm. ${currWeather}`
-    } else if (currPlanet === 'winterfell') {
+    } else if (currCity === 'winterfell') {
         message = `Oh my. ${currWeather}`
-    } else if (currPlanet === 'naboo') {
+    } else if (currCity === 'naboo') {
         message = `Oh. ${currWeather}`
-    } else if (currPlanet === 'tattoine') {
+    } else if (currCity === 'tattoine') {
         message = `Whew. ${currWeather}`
-    } else if (currPlanet === 'bespin') {
+    } else if (currCity === 'bespin') {
         message = `Yikes. ${currWeather}`
     } else {
         message = `Ahh. ${currWeather}`
@@ -158,25 +162,25 @@ const determineTempMessage = (planet, filteredTemp, conditions) => {
     return message
 }
 
-const determineDescription = (planet) => {
-    const currPlanet = planet.textContent.toLowerCase()
+const determineDescription = (city) => {
+    const currCity = city.toLowerCase()
     let description = ''
 
-    if (currPlanet === "storm's end") {
+    if (currCity === "storm's end") {
         description = "Storm's end known for impenetrable walls and stormy weather."
-    } else if (currPlanet === 'north of the wall') {
+    } else if (currCity === 'north of the wall') {
         description = "Foggy out there. Watch out for White Walkers."
-    } else if (currPlanet === 'winterfell') {
+    } else if (currCity === 'winterfell') {
         description = 'Cold, Icy, Freezing. Home of the Starks.'
-    } else if (currPlanet === 'naboo') {
+    } else if (currCity === 'naboo') {
         description = 'Temperate, dry, and fairly pleasant'
-    } else if (currPlanet === 'coruscant') {
+    } else if (currCity === 'coruscant') {
         description = 'Jedi meeting present. But outside is beautifully calm.'
-    } else if (currPlanet === 'scariff') {
+    } else if (currCity === 'scariff') {
         description = 'Cloudy, clear, and beautiful outside.'
-    } else if (currPlanet === 'tattoine') {
+    } else if (currCity === 'tattoine') {
         description = 'Hot, Dry, Occasional Sarlacc.'
-    } else if (currPlanet === 'bespin') {
+    } else if (currCity === 'bespin') {
         description = 'Visit Mos Eisley for a drink, its HOT.'
     } else {
         description = 'Firing up the Millennium Falcon'
@@ -185,7 +189,7 @@ const determineDescription = (planet) => {
     return description
 }
 
-// Dynamically apply CSS background to according planet
+// Dynamically apply CSS background to according city
 const updateImage = (nameOfClass) => {
     const imageElement = document.querySelector('#image-container')
 

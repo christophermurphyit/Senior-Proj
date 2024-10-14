@@ -159,7 +159,7 @@ header {
     text-transform: uppercase;
 }
 
-.planet_name {
+.city_name {
     letter-spacing: 0.4em;
     padding-left: 0.5em;
 }
@@ -289,7 +289,7 @@ header {
 /* Rainy Backgrounds */
 .stormsend-bg {
     background: url("/images/storms-end.png");
-    color: #f1e8d6;
+    color: #fcfbf9;
 }
 
 .kashyyk-bg {
@@ -343,7 +343,7 @@ header {
         padding: 0.1em;
     }
 
-    .planet_name {
+    .city_name {
         letter-spacing: 0.4em;
     }
 
