@@ -100,8 +100,9 @@ const renderDOM = (currentWeatherData) => {
 const determineCity = (filteredTemp, conditions) => {
     let city
 
-    //filteredTemp = 25
-    conditions = 'Rain'
+    //Test Data
+    //filteredTemp = 100
+    //conditions = 'Rain'
 
     // Determine conditions, if none, run temp algo
     if (conditions === 'Rain' || conditions === 'Thunderstorm') {
@@ -115,23 +116,23 @@ const determineCity = (filteredTemp, conditions) => {
             city = 'winterfell'
             updateImage('winterfell-bg')
         } else if (filteredTemp <= 55) {
-            city = 'Naboo'
-            updateImage('naboo-bg-warmer')
+            city = 'riverrun'
+            updateImage('riverrun-bg')
         } else if (filteredTemp <= 65) {
-            city = 'Coruscant'
-            updateImage('coruscant-bg')
+            city = 'highgarden'
+            updateImage('highgarden-bg')
         } else if (filteredTemp <= 72) {
-            city = 'Scariff'
-            updateImage('scariff-bg')
+            city = 'kings landing'
+            updateImage('kingslanding-bg')
         } else if (filteredTemp <= 78) {
-            city = 'Tattoine'
-            updateImage('tattoine-bg')
+            city = "slaver's bay"
+            updateImage('slaversbay-bg')
         } else if (filteredTemp <= 90) {
-            city = 'Bespin'
-            updateImage('bespin-bg')
+            city = 'Dorne'
+            updateImage('dorne-bg')
         } else {
-            city = 'Kashyyk'
-            updateImage('kashyyk-bg')
+            city = 'castle black'
+            updateImage('castleblack-bg')
         }
     }
     return city
@@ -149,11 +150,11 @@ const determineTempMessage = (city, filteredTemp, conditions) => {
         message = `Hmm. ${currWeather}`
     } else if (currCity === 'winterfell') {
         message = `Oh my. ${currWeather}`
-    } else if (currCity === 'naboo') {
+    } else if (currCity === 'riverrun') {
         message = `Oh. ${currWeather}`
-    } else if (currCity === 'tattoine') {
+    } else if (currCity === "slaver's bay") {
         message = `Whew. ${currWeather}`
-    } else if (currCity === 'bespin') {
+    } else if (currCity === 'dorne') {
         message = `Yikes. ${currWeather}`
     } else {
         message = `Ahh. ${currWeather}`
@@ -172,18 +173,18 @@ const determineDescription = (city) => {
         description = "Foggy out there. Watch out for White Walkers."
     } else if (currCity === 'winterfell') {
         description = 'Cold, Icy, Freezing. Home of the Starks.'
-    } else if (currCity === 'naboo') {
-        description = 'Temperate, dry, and fairly pleasant'
-    } else if (currCity === 'coruscant') {
-        description = 'Jedi meeting present. But outside is beautifully calm.'
-    } else if (currCity === 'scariff') {
-        description = 'Cloudy, clear, and beautiful outside.'
-    } else if (currCity === 'tattoine') {
-        description = 'Hot, Dry, Occasional Sarlacc.'
-    } else if (currCity === 'bespin') {
-        description = 'Visit Mos Eisley for a drink, its HOT.'
+    } else if (currCity === 'riverrun') {
+        description = 'River-crossed fortress with lush, fertile lands.'
+    } else if (currCity === 'highgarden') {
+        description = 'Verdant, prosperous castle amid fertile, blooming lands.'
+    } else if (currCity === 'kings landing') {
+        description = 'Sprawling coastal city and seat of royal power.'
+    } else if (currCity === "slaver's bay") {
+        description = 'Harsh, arid coastal region with waves of heat.'
+    } else if (currCity === 'dorne') {
+        description = 'Sun-soaked desert land with fierce, proud people.'
     } else {
-        description = 'Firing up the Millennium Falcon'
+        description = 'Last bastion  of civilization before the wilds'
     }
 
     return description

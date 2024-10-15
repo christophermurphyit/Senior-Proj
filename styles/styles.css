@@ -259,22 +259,24 @@ header {
 }
 
 /* Pretty day backgrounds 60-80f */
-.coruscant-bg {
-    background: url("/images/coruscant.jpg");
-    color: #fcfbf9;
-}
-
-.naboo-bg-warmer {
-    background: url("/images/naboo1.jpg");
+.highgarden-bg {
+    background: url("/images/highgarden.jpg");
     color: #fcfbf9;
     text-shadow: rgb(3, 3, 3) 1px 0 10px;
 }
 
-.scariff-bg {
-    background: url("/images/Scariff.jpg");
-    color: #0a0803;
-    text-shadow: rgb(245, 245, 243) 1px 0 10px;
+.riverrun-bg {
+    background: url("/images/riverrun.png");
+    color: #fcfbf9;
+
 }
+
+.kingslanding-bg {
+    background: url("/images/kingslanding.jpg");
+    color: #fcfbf9;
+    text-shadow: rgb(3, 3, 3) 1px 0 10px;
+}
+
 
 /* Forest or Foggy Day Backgrounds */
 .north-bg {
@@ -290,20 +292,24 @@ header {
 .stormsend-bg {
     background: url("/images/storms-end.png");
     color: #fcfbf9;
+    text-shadow: rgb(3, 3, 3) 1px 0 10px;
 }
 
-.kashyyk-bg {
-    background: url("/images/kashyyyk.jpg");
+.castleblack-bg {
+    background: url("/images/castle_black.jpg");
+    color: #fcfbf9;
 }
 
 /* Really hot day Background */
-.bespin-bg {
-    background: url("/images/bespin.jpg");
+.dorne-bg {
+    background: url("/images/dorne.jpg");
+    color: #fcfbf9;
 }
 
-.tattoine-bg {
-    background: url("/images/tatooine.jpg");
-    color: #f1e8d6;
+.slaversbay-bg {
+    background: url("/images/slavers_bay.jpg");
+    color: #ffffff;
+    text-shadow: rgb(0, 0, 0) 1px 0 10px;
 }
 
 /* Mobile Query */
