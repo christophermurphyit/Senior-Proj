@@ -1,0 +1,42 @@
+/* ==============
+   Footer Styling
+   ============== 
+*/
+
+/*
+.footer_container {
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 0.1em;
+    color: #fff;
+    background: #111;
+    opacity: 90%;
+}
+*/
+
+.footer_container {
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    height: 9vh; /* Adjust as needed */
+    padding: 0;
+    color: #fff;
+    background: #111;
+    opacity: 90%;
+    box-sizing: border-box;
+}
+
+.footer_title {
+    font-size: 0.8em;
+}
+
+.logos {
+    margin-left: 10px;
+    font-size: 0.8em;
+}
