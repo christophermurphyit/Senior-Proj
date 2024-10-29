@@ -1,6 +1,11 @@
 CREATE DATABASE IF NOT EXISTS got_weather_db;
 USE got_weather_db;
 
+DROP TABLE IF EXISTS ACCOUNT_T;
+
+-- Optional: Print a message indicating success
+SELECT 'ACCOUNT_T table deleted successfully.' AS status;
+
 CREATE TABLE ACCOUNT_T (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
@@ -19,8 +24,6 @@ CREATE TABLE IF NOT EXISTS ACCOUNT_T (
     username VARCHAR(50) NOT NULL UNIQUE,
     user_email VARCHAR(100) UNIQUE,
     user_password VARCHAR(255) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_location VARCHAR(50),
     favorite_location VARCHAR(50)
 );
