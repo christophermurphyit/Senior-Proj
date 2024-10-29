@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS got_weather_db;
+USE got_weather_db;
+
 CREATE TABLE ACCOUNT_T (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
