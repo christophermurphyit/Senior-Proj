@@ -1,25 +1,10 @@
 CREATE DATABASE IF NOT EXISTS got_weather_db;
 USE got_weather_db;
 
+-- Drop existing table and create a new one without timestamps
 DROP TABLE IF EXISTS ACCOUNT_T;
 
--- Optional: Print a message indicating success
-SELECT 'ACCOUNT_T table deleted successfully.' AS status;
-
 CREATE TABLE ACCOUNT_T (
-    user_id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL,
-    user_email VARCHAR(100),
-    user_password VARCHAR(255) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_location VARCHAR(50),
-    favorite_location VARCHAR(50)
-);
-CREATE DATABASE IF NOT EXISTS got_weather_db;
-USE got_weather_db;
-
-CREATE TABLE IF NOT EXISTS ACCOUNT_T (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
     user_email VARCHAR(100) UNIQUE,
@@ -28,7 +13,7 @@ CREATE TABLE IF NOT EXISTS ACCOUNT_T (
     favorite_location VARCHAR(50)
 );
 
--- Insert 30 example users with real-world locations, only if the username or email does not already exist
+-- Insert 30 example users with real-world locations
 INSERT IGNORE INTO ACCOUNT_T (username, user_email, user_password, user_location, favorite_location) VALUES
 ('johndoe', 'johndoe123@example.com', 'password123', 'New York', 'Paris'),
 ('janedoe', 'janedoe456@example.com', 'password456', 'Los Angeles', 'Tokyo'),
