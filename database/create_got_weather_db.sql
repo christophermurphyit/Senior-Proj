@@ -1,0 +1,10 @@
+CREATE TABLE ACCOUNT_T (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    user_email VARCHAR(100),
+    user_password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_location VARCHAR(50),
+    favorite_location VARCHAR(50)
+);
