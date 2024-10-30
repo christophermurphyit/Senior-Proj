@@ -3,19 +3,6 @@
    ============== 
 */
 
-/*
-.footer_container {
-    display: flex;
-    justify-content: center;
-    position: sticky;
-    bottom: 0;
-    width: 100%;
-    padding: 0.1em;
-    color: #fff;
-    background: #111;
-    opacity: 90%;
-}
-*/
 
 .footer_container {
     display: flex;

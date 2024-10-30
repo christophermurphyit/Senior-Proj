@@ -3,14 +3,6 @@
    ==========================================
 */
 
-/*.header_container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding-left: 50px;
-} */
-
 .header_container {
     display: flex;
     align-items: center;
@@ -23,6 +15,7 @@
     height: 6vh; /* Adjust header to occupy a small portion of viewport */
     box-sizing: border-box;
 }
+
 /* Search box Start */
 .search_box {
     width: fit-content;
