@@ -192,25 +192,25 @@
 
 /* Cold-day backgrounds */
 .winterfell-bg {
-    background: url("/images/winterfell.jpg");
+    background: url("./images/winterfell.jpg");
     color: #fcfbf9;
 }
 
 /* Pretty day backgrounds 60-80f */
 .highgarden-bg {
-    background: url("/images/highgarden.jpg");
+    background: url("./images/highgarden.jpg");
     color: #fcfbf9;
     text-shadow: rgb(3, 3, 3) 1px 0 10px;
 }
 
 .riverrun-bg {
-    background: url("/images/riverrun.png");
+    background: url("./images/riverrun.png");
     color: #fcfbf9;
 
 }
 
 .kingslanding-bg {
-    background: url("/images/kingslanding.jpg");
+    background: url("./images/kingslanding.jpg");
     color: #fcfbf9;
     text-shadow: rgb(3, 3, 3) 1px 0 10px;
 }
@@ -218,34 +218,34 @@
 
 /* Forest or Foggy Day Backgrounds */
 .north-bg {
-    background: url("/images/North.png");
+    background: url("./images/North.png");
     color: #fcfbf9;
 }
 
 .dagobah-bg {
-    background: url("/images/dagobah.jpg");
+    background: url("./images/dagobah.jpg");
 }
 
 /* Rainy Backgrounds */
 .stormsend-bg {
-    background: url("/images/storms-end.png");
+    background: url("./images/storms-end.png");
     color: #fcfbf9;
     text-shadow: rgb(3, 3, 3) 1px 0 10px;
 }
 
 .castleblack-bg {
-    background: url("/images/castle_black.jpg");
+    background: url("./images/castle_black.jpg");
     color: #fcfbf9;
 }
 
 /* Really hot day Background */
 .dorne-bg {
-    background: url("/images/dorne.jpg");
+    background: url("./images/dorne.jpg");
     color: #fcfbf9;
 }
 
 .slaversbay-bg {
-    background: url("/images/slavers_bay.jpg");
+    background: url("./images/slavers_bay.jpg");
     color: #ffffff;
     text-shadow: rgb(0, 0, 0) 1px 0 10px;
 }
