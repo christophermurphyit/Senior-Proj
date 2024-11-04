@@ -128,4 +128,17 @@ export class WeatherComponent implements OnInit {
     };
     return descriptions[city.toLowerCase()] || '';
   }
+  onSearchKey(event: KeyboardEvent): void {
+    if (event.key === "Enter") {
+      this.performSearch();
+    }
+  }
+  
+  performSearch(): void {
+    const searchInput = (document.getElementById('city-search') as HTMLInputElement).value;
+    if (searchInput) {
+      this.searchCity(searchInput);
+    }
+  }
+  
 }
