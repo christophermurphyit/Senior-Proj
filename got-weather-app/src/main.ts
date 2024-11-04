@@ -6,9 +6,9 @@ import { WeatherComponent } from './app/weather.component';
 import { provideHttpClient } from '@angular/common/http';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'home', component: WeatherComponent },  // Main page for your app
   { path: 'login', component: LoginComponent },
-  { path: 'weather', component: WeatherComponent }
+  { path: '', redirectTo: 'home', pathMatch: 'full' }  // Redirect root to /home
 ];
 
 bootstrapApplication(AppComponent, {
