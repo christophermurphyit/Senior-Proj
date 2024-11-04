@@ -1,0 +1,16 @@
+<div class="hamburger" (click)="toggleMenu()">
+    <!-- Hamburger icon -->
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+  
+  <div *ngIf="isMenuOpen" class="menu">
+    <ul>
+      <li>Home</li>
+      <li>About</li>
+      <li>Contact</li>
+      <!-- Add more links as needed -->
+    </ul>
+  </div>
+  
