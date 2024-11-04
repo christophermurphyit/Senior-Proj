@@ -8,7 +8,26 @@
   <div *ngIf="isMenuOpen" class="menu">
     <ul>
       <li>Weather Format</li>
-      <li>Weather Units</li>
+      <li>Weather Units <br>
+        <label>
+            <input
+              type="checkbox"
+              [checked]="selectedUnit === 'Fahrenheit'"
+              (change)="setUnit('Fahrenheit')"
+            />
+            Fahrenheit
+          </label>
+        </li>
+        <li>
+          <label>
+            <input
+              type="checkbox"
+              [checked]="selectedUnit === 'Celsius'"
+              (change)="setUnit('Celsius')"
+            />
+            Celsius
+          </label>  
+      </li>
       <li>Login</li>
       <li>Create Account</li>
       <li>Favorites</li>

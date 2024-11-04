@@ -24,6 +24,7 @@ export class WeatherComponent implements OnInit {
     this.checkLocationPermission();
   }
 
+
   private checkLocationPermission(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
