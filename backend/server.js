@@ -1,11 +1,13 @@
 const express = require('express');
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
+const cors = require('cors'); // Import CORS
 
 // Load environment variables from db_cred.env
 dotenv.config({ path: './db_cred.env' });
 
 const app = express();
+app.use(cors()); // Use CORS after initializing `app`
 app.use(express.json());
 
 const db = mysql.createConnection({
@@ -24,14 +26,29 @@ db.connect((err) => {
 });
 
 app.post('/createAccount', (req, res) => {
-  const { username, password } = req.body;
-  const sql = 'INSERT INTO ACCOUNT_T (username, user_password) VALUES (?, ?)';
-  db.query(sql, [username, password], (err, result) => {
+  const { email, username, password, favoriteLocation } = req.body;
+
+  if (!email || !username || !password || !favoriteLocation) {
+    return res.status(400).send("All fields are required.");
+  }
+
+  const checkSql = 'SELECT * FROM ACCOUNT_T WHERE username = ? OR user_email = ?';
+  db.query(checkSql, [username, email], (err, results) => {
     if (err) {
-      res.status(500).send(err.message);
-    } else {
-      res.status(201).send('Account created');
+      return res.status(500).send(err.message);
     }
+
+    if (results.length > 0) {
+      return res.status(409).send("Username or email already exists.");
+    }
+
+    const insertSql = 'INSERT INTO ACCOUNT_T (user_email, username, user_password, favorite_location) VALUES (?, ?, ?, ?)';
+    db.query(insertSql, [email, username, password, favoriteLocation], (err, result) => {
+      if (err) {
+        return res.status(500).send(err.message);
+      }
+      res.status(201).send("Account created successfully");
+    });
   });
 });
 

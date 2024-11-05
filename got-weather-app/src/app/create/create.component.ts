@@ -1,15 +1,51 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
+import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule for HTTP requests
 
 @Component({
-  selector: 'app-create',  // Changed selector from 'app-login' to 'app-create'
+  selector: 'app-create',
   standalone: true,
-  imports: [FormsModule],
-  templateUrl: './create.component.html',  // Changed from 'login.component.html'
-  styleUrls: ['./create.component.css']  // Changed from 'login.component.css'
+  imports: [FormsModule, HttpClientModule], // Add HttpClientModule here
+  templateUrl: './create.component.html',
+  styleUrls: ['./create.component.css']
 })
-export class CreateComponent {  // Changed class name from LoginComponent to CreateComponent
+export class CreateComponent {
+  email = '';
+  username = '';
+  password = '';
+  favoriteLocation = '';
+  message = '';
+
+  constructor(private http: HttpClient) {}
+
   onSubmit() {
-    console.log("Form submitted");
+    console.log("Preparing to send request:", this.email, this.username, this.password, this.favoriteLocation);
+    console.log('Form submitted'); // Add this line to confirm if the method is triggered
+    // Check if all fields are filled
+    if (!this.email || !this.username || !this.password || !this.favoriteLocation) {
+      this.message = "All fields are required.";
+      return;
+    }
+
+    // Send account data to the backend
+    this.http.post('http://localhost:5001/createAccount', {
+      email: this.email,
+      username: this.username,
+      password: this.password,
+      favoriteLocation: this.favoriteLocation
+    }).subscribe({
+      next: () => {
+        this.message = "Account created successfully!";
+      },
+      error: (error) => {
+        if (error.status === 409) {
+          this.message = "Username or email already exists.";
+        } else if (error.status === 400) {
+          this.message = "All fields are required.";
+        } else {
+          this.message = "An error occurred. Please try again.";
+        }
+      }
+    });
   }
 }
