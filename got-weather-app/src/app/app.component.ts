@@ -22,7 +22,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-      this.showContent = event.url !== '/login';
+      this.showContent = event.url !== '/create-account';
+
     });
   }
 }

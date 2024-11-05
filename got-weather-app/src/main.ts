@@ -7,7 +7,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 const routes: Routes = [
   { path: 'home', component: WeatherComponent },  // Main page for your app
-  { path: 'login', component: LoginComponent },
+  { path: 'create-account', component: LoginComponent },  // Change 'login' to 'create-account'
   { path: '', redirectTo: 'home', pathMatch: 'full' }  // Redirect root to /home
 ];
 
