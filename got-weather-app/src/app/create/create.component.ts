@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule for HTTP requests
+import { HttpClient } from '@angular/common/http'; // Import HttpClient for HTTP requests
 
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [FormsModule, HttpClientModule], // Add HttpClientModule here
+  imports: [FormsModule], // Remove provideHttpClient here
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css']
 })
