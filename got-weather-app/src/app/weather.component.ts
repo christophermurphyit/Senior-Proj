@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // Import CommonModule
+import { FooterComponent } from './footer.component';
+import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.component';
+
 
 @Component({
   selector: 'weather',
   standalone: true,
-  imports: [CommonModule], // Add CommonModule here
+  imports: [CommonModule, FooterComponent, HamburgerMenuComponent], // Add CommonModule here
   templateUrl: './weather.component.html',
   styleUrls: ['./weather.component.css'],
 })

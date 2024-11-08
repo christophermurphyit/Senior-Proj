@@ -3,14 +3,12 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Import CommonModule
-import { WeatherComponent } from './weather.component';
-import { FooterComponent } from './footer.component';
-import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.component';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, WeatherComponent, FooterComponent, HamburgerMenuComponent],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
