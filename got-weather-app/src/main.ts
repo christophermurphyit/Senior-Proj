@@ -6,9 +6,9 @@ import { WeatherComponent } from './app/weather.component';  // Import WeatherCo
 import { provideHttpClient } from '@angular/common/http';
 
 const routes: Routes = [
-  { path: 'home', component: WeatherComponent },
-  { path: 'create-account', component: CreateComponent },  // Route for Create Account
-  { path: '', redirectTo: 'home', pathMatch: 'full' }  // Default route
+  { path: 'home', component: WeatherComponent},  // Main page for your app
+  { path: 'create-account', component: CreateComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' }  // Redirect root to /home
 ];
 
 bootstrapApplication(AppComponent, {
