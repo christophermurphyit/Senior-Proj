@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
 import { HttpClient } from '@angular/common/http'; // Import HttpClient for HTTP requests
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-create',
@@ -16,7 +19,7 @@ export class CreateComponent {
   favoriteLocation = '';
   message = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit() {
     console.log("Preparing to send request:", this.email, this.username, this.password, this.favoriteLocation);
@@ -45,7 +48,11 @@ export class CreateComponent {
         } else {
           this.message = "An error occurred. Please try again.";
         }
+   
       }
     });
+  }
+  goHome() {
+    this.router.navigate(['/home']); // Adjust '/home' to your actual home page route
   }
 }
