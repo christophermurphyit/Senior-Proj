@@ -60,3 +60,18 @@
     text-decoration: none;
   }
   
+  .menu-button {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #333; /* Dark grey border */
+    border-radius: 4px; /* Optional: rounded corners */
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .menu-button:hover {
+    color: #ddd;
+    border-color: #555; /* Slightly lighter grey on hover */
+  }
+  
