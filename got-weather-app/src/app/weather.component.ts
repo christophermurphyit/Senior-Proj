@@ -145,4 +145,36 @@ export class WeatherComponent implements OnInit {
     }
   }
   
+  // Private property to track unit internally
+private _unit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default unit
+
+// Getter for the unit
+get unit(): 'Fahrenheit' | 'Celsius' {
+  return this._unit;
+}
+
+// Setter for the unit to update temperature display
+set unit(value: 'Fahrenheit' | 'Celsius') {
+  this._unit = value;
+}
+
+// Method to set temperature unit and update display without exposing unit as a property
+setTemperatureUnit(unit: 'Fahrenheit' | 'Celsius'): void {
+  this.unit = unit; // Use setter
+}
+
+// Helper function to display temperature with the correct unit
+get displayTemp(): string {
+  const numericTemp = parseFloat(this.temp);
+  const formattedTemp = this.unit === 'Fahrenheit' ? numericTemp : this.convertToCelsius(numericTemp);
+  const unitSymbol = this.unit === 'Fahrenheit' ? '°F' : '°C';
+  return isNaN(formattedTemp) ? 'Huh?' : `${Math.round(formattedTemp)} ${unitSymbol}`;
+}
+
+// Helper function to convert Fahrenheit to Celsius
+private convertToCelsius(tempFahrenheit: number): number {
+  return (tempFahrenheit - 32) * 5 / 9;
+}
+
+
 }

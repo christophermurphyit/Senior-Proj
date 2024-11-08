@@ -1,5 +1,5 @@
 <header>
-  <app-hamburger-menu></app-hamburger-menu>
+  <app-hamburger-menu (unitChange)="setTemperatureUnit($event)"></app-hamburger-menu>
   <div class="header_container">
     <p>Click me to search:</p>
     <div class="search_box">
@@ -17,7 +17,7 @@
 
 <div class="bg-image" [ngClass]="imageClass" id="image-container">
   <section class="top_container">
-    <p id="temp">{{ temp || 'Huh?' }}</p>
+    <p id="temp">The temperature is currently {{ displayTemp || 'Huh?' }}</p>
   </section>
 
   <section class="center_container">
