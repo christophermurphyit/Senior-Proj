@@ -78,7 +78,7 @@
     transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 }
 
-/* 
+/*
  Begin page content
 } */
 
@@ -170,7 +170,7 @@
     font-size: 1em;
 }
 
- 
+
 /* CHATGPT SCROLLING TEST*/
 #image-container {
     background-size: cover;
@@ -255,3 +255,23 @@
     color: #ffffff;
     text-shadow: rgb(0, 0, 0) 1px 0 10px;
 }
+
+.current-weather {
+  margin-bottom: 20px;
+}
+
+.forecast-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.forecast-card {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  text-align: center;
+}
+

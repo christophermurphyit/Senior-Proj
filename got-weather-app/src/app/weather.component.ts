@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { FooterComponent } from './footer.component';
+import { WeatherService } from './weather.service';
 import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.component';
 
 
@@ -17,11 +18,13 @@ export class WeatherComponent implements OnInit {
   city: string = '';
   description: string = '';
   imageClass: string = '';
-  
+  forecastData: any[] = []; //Array to store the 7-day forecast
+
   private readonly apiKey = 'd474509725247f01f4f5b322d067dd8b';
   private readonly apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private weatherService: WeatherService) {}
+
 
   ngOnInit(): void {
     this.checkLocationPermission();
@@ -53,7 +56,7 @@ export class WeatherComponent implements OnInit {
         error: () => alert('Error fetching weather data. Please try again later.'),
       });
   }
-  
+
 
   searchCity(cityName: string): void {
     this.http
@@ -62,22 +65,29 @@ export class WeatherComponent implements OnInit {
         next: (data: any) => this.renderDOM(data),
         error: () => alert('City not found. Please try a different city.'),
       });
+
+      this.weatherService.get7DayForecast(cityName).subscribe({
+        next: (data: any) => {
+        this.forecastData = data.list;
+        },
+        error: () => console.error('Error fetching 7-day forecast')
+      });
   }
 
   private renderDOM(weatherData: any): void {
     console.log('Processing weather data:', weatherData); // Log the weather data
     const temp = weatherData.main.temp.toFixed();
     const conditions = weatherData.weather[0].main;
-  
+
     this.city = this.determineCity(temp, conditions);
     this.temp = this.determineTempMessage(this.city, temp, conditions);
     this.description = this.determineDescription(this.city);
-  
+
     console.log('Updated city:', this.city);
     console.log('Updated temp:', this.temp);
     console.log('Updated description:', this.description);
   }
-  
+
 
   private determineCity(temp: number, conditions: string): string {
     let city = '';
@@ -137,14 +147,14 @@ export class WeatherComponent implements OnInit {
       this.performSearch();
     }
   }
-  
+
   performSearch(): void {
     const searchInput = (document.getElementById('city-search') as HTMLInputElement).value;
     if (searchInput) {
       this.searchCity(searchInput);
     }
   }
-  
+
   // Private property to track unit internally
 private _unit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default unit
 

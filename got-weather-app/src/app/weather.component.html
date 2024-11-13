@@ -32,6 +32,23 @@
     </div>
   </section>
 
+  <div class="current-weather">
+  <!-- Display current weather information -->
+  <h2>Weather in {{ city }}</h2>
+  <p>Temperature: {{ temp }}</p>
+  <p>Description: {{ description }}</p>
+</div>
+
+<div class="forecast-container">
+  <h3>7-Day Forecast</h3>
+  <!-- Loop through forecastData to display each day's forecast -->
+  <div *ngFor="let day of forecastData" class="forecast-card">
+    <p>Date: {{ day.dt | date }}</p>
+    <p>Temperature: {{ day.temp.day }} °F</p>
+    <p>Condition: {{ day.weather[0].description }}</p>
+  </div>
+</div>
+
   <section class="bottom_container">
     <div class="bottom_item_1">
       <p id="description">{{ description || 'Loading up...' }}</p>
