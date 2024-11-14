@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule], // Remove provideHttpClient here
+  imports: [FormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -26,15 +26,20 @@ export class LoginComponent {
       this.message = "Username/Email and password are required.";
       return;
     }
-  
+
     // Send login data to the backend
     this.http.post('http://localhost:5001/login', {
       usernameOrEmail: this.usernameOrEmail,
       password: this.password
-    }).subscribe({
-      next: (response) => {
-        this.message = "Login successful!";
-        this.router.navigate(['/home']);  // Redirect to home page after login
+    }, { responseType: 'text' }).subscribe({
+      next: (response: string) => {
+        console.log(response); // Log the response for debugging
+        if (response === "Login successful") { // Check the text response
+          this.message = "Login successful!";
+          this.router.navigate(['/home']); // Redirect on success
+        } else {
+          this.message = "Invalid username or password.";
+        }
       },
       error: (error) => {
         if (error.status === 401) {
@@ -45,7 +50,6 @@ export class LoginComponent {
       }
     });
   }
-  
 
   goHome() {
     this.router.navigate(['/home']);

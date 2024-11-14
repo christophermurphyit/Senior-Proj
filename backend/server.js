@@ -15,6 +15,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  port: 3306 // Set the database port to 3306
 });
 
 db.connect((err) => {
@@ -49,6 +50,28 @@ app.post('/createAccount', (req, res) => {
       }
       res.status(201).send("Account created successfully");
     });
+  });
+});
+
+app.post('/login', (req, res) => {
+  console.log("Received login request:", req.body);
+  const { usernameOrEmail, password } = req.body;
+
+  if (!usernameOrEmail || !password) {
+    return res.status(400).send("Username/email and password are required.");
+  }
+
+  const sql = 'SELECT * FROM ACCOUNT_T WHERE (username = ? OR user_email = ?) AND user_password = ?';
+  db.query(sql, [usernameOrEmail, usernameOrEmail, password], (err, results) => {
+    if (err) {
+      return res.status(500).send("Server error occurred.");
+    }
+
+    if (results.length > 0) {
+      res.status(200).send("Login successful");
+    } else {
+      res.status(401).send("Invalid credentials");
+    }
   });
 });
 
