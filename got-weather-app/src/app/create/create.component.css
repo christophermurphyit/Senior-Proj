@@ -97,4 +97,10 @@ button[type="submit"]:disabled {
   .background-image {
     position: relative; 
   }
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
   

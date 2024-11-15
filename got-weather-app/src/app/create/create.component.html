@@ -2,7 +2,7 @@
   <button type="button" (click)="goHome()" class="home-button">Home</button>
   <div class="overlay">
     <div class="login-container">
-      <h2>Create Account</h2> <!-- Changed from Login to Create Account -->
+      <h2>Create Account</h2>
       <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
         <div class="form-group">
           <label for="email">Email:</label>
@@ -22,6 +22,7 @@
         </div>
         <button type="submit" [disabled]="!loginForm.valid">Create Account</button>
       </form>
+      <div *ngIf="message" class="error-message">{{ message }}</div>
     </div>
   </div>
 </div>

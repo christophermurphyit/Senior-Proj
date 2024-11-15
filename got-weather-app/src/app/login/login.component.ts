@@ -49,7 +49,11 @@ export class LoginComponent {
         if (error.status === 401) {
           this.message = 'Invalid username/email or password.';
         } else {
+<<<<<<< Updated upstream
           this.message = 'An error occurred. Please try again.';
+=======
+          this.message = "Username or Password is Incorrect. Please try again.";
+>>>>>>> Stashed changes
         }
       },
     });
