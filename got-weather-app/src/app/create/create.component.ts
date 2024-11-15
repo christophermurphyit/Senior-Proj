@@ -35,20 +35,26 @@ export class CreateComponent {
           this.message = "Invalid favorite location. Please enter a valid location.";
           return;
         }
-        
+
+        console.log("Sending account creation request to the backend...");
+
+       
+
+  
         // Send account data to the backend
         this.http.post('http://localhost:5001/createAccount', {
           email: this.email,
           username: this.username,
           password: this.password,
           favoriteLocation: this.favoriteLocation
-        }, { responseType: 'text' }).subscribe({
-          next: (response) => {
-            console.log("Account creation response:", response);
-            this.message = "Account created successfully!";
+        }, { responseType: 'json' }).subscribe({
+          next: (response: any) => {
+            console.log("Account creation response received:", response);
+            alert(response.message);
             this.router.navigate(['/home']); // Redirect to home on success
           },
           error: (error) => {
+            console.error("Error response received from the backend:", error);
             if (error.status === 409) {
               this.message = "Username or email already exists.";
             } else {
@@ -62,9 +68,39 @@ export class CreateComponent {
       }
     });
   }
+
+  checkUserExists() {
+    this.http.post(
+      'http://localhost:5001/checkUserExists',
+      {
+        email: this.email,
+        username: this.username,
+        password: this.password,
+        favoriteLocation: this.favoriteLocation
+      },
+      { responseType: 'json' }
+    ).subscribe({
+      next: (response: any) => {
+        if (response.exists) {
+          alert("Account created successfully! Redirecting to the homepage...");
+          this.router.navigate(['/home']); // Redirect to the homepage
+        } else {
+          console.error("Unexpected error: User not found after account creation.");
+          this.message = "An unexpected error occurred. Please try again.";
+        }
+      },
+      error: (error) => {
+        console.error("Error during user verification:", error);
+        this.message = "An error occurred while verifying the account. Please try again.";
+      }
+    });
+  }
   
   
   
+  goHome() {
+    this.router.navigate(['/home']);
+  }
   
 
   validateLocation(location: string) {

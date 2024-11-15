@@ -49,10 +49,45 @@ app.post('/createAccount', (req, res) => {
         return res.status(500).json({ message: err.message });
       }
       // Respond with JSON
-      res.status(201).json({ message: "Account created successfully" });
+
+      console.log("Insert successful. Sending 201 response...");
+      try {
+        res.status(201).json({ message: "Account created successfully" });
+        console.log("201 response sent to client.");
+      } catch (error) {
+        console.error("Error while sending 201 response:", error);
+      }
     });
   });
 });
+
+app.post('/checkUserExists', (req, res) => {
+  const { email, username, password, favoriteLocation } = req.body;
+
+  if (!email || !username || !password || !favoriteLocation) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  const checkSql = `SELECT * FROM ACCOUNT_T 
+                    WHERE user_email = ? 
+                    AND username = ? 
+                    AND user_password = ? 
+                    AND favorite_location = ?`;
+
+  db.query(checkSql, [email, username, password, favoriteLocation], (err, results) => {
+    if (err) {
+      console.error("Database error during check:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+
+    if (results.length > 0) {
+      return res.status(200).json({ exists: true, message: "User exists in the database." });
+    } else {
+      return res.status(404).json({ exists: false, message: "User not found in the database." });
+    }
+  });
+});
+
 
 
 app.post('/login', (req, res) => {
