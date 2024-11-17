@@ -1,41 +1,44 @@
 <div class="hamburger" (click)="toggleMenu()">
-    <!-- Hamburger icon -->
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
-  
-  <div *ngIf="isMenuOpen" class="menu">
-    <ul>
-      <li>Weather Format</li>
-      <li>Weather Units <br>
-        <label>
-            <input
-              type="checkbox"
-              [checked]="selectedUnit === 'Fahrenheit'"
-              (change)="setUnit('Fahrenheit')"
-            />
-            Fahrenheit
-          </label>
-        </li>
-        <li>
-          <label>
-            <input
-              type="checkbox"
-              [checked]="selectedUnit === 'Celsius'"
-              (change)="setUnit('Celsius')"
-            />
-            Celsius
-          </label>  
-      </li>
-      <li><button class="menu-button">Favorites</button></li>
-      <li>
-        <button class="menu-button" (click)="handleAuthAction()">
-          {{ isLoggedIn ? 'Logout' : 'Login' }}
-        </button>
-      </li>
-      <li><button (click)="navigateToCreate()" class="menu-button">Create Account</button></li>
-      
-    </ul>
-  </div>
-  
+  <!-- Hamburger icon -->
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</div>
+
+<div *ngIf="isMenuOpen" class="menu">
+  <ul>
+    <li>Weather Format</li>
+    <li>Weather Units <br>
+      <label>
+        <input
+          type="checkbox"
+          [checked]="selectedUnit === 'Fahrenheit'"
+          (change)="setUnit('Fahrenheit')"
+        />
+        Fahrenheit
+      </label>
+    </li>
+    <li>
+      <label>
+        <input
+          type="checkbox"
+          [checked]="selectedUnit === 'Celsius'"
+          (change)="setUnit('Celsius')"
+        />
+        Celsius
+      </label>
+    </li>
+    <!-- Updated Favorite Button -->
+    <li>
+      <button class="menu-button" (click)="emitFavoriteSearch()">Favorite</button>
+    </li>
+    <li>
+      <button class="menu-button" (click)="handleAuthAction()">
+        {{ isLoggedIn ? 'Logout' : 'Login' }}
+      </button>
+    </li>
+    <li>
+      <button (click)="navigateToCreate()" class="menu-button">Create Account</button>
+    </li>
+  </ul>
+</div>

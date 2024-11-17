@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common'; // Import CommonModule
 import { FooterComponent } from './footer.component';
 import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.component';
 
-
 @Component({
   selector: 'weather',
   standalone: true,
@@ -17,7 +16,7 @@ export class WeatherComponent implements OnInit {
   city: string = '';
   description: string = '';
   imageClass: string = '';
-  
+
   private readonly apiKey = 'd474509725247f01f4f5b322d067dd8b';
   private readonly apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
@@ -26,7 +25,6 @@ export class WeatherComponent implements OnInit {
   ngOnInit(): void {
     this.checkLocationPermission();
   }
-
 
   private checkLocationPermission(): void {
     if (navigator.geolocation) {
@@ -53,7 +51,6 @@ export class WeatherComponent implements OnInit {
         error: () => alert('Error fetching weather data. Please try again later.'),
       });
   }
-  
 
   searchCity(cityName: string): void {
     this.http
@@ -68,16 +65,15 @@ export class WeatherComponent implements OnInit {
     console.log('Processing weather data:', weatherData); // Log the weather data
     const temp = weatherData.main.temp.toFixed();
     const conditions = weatherData.weather[0].main;
-  
+
     this.city = this.determineCity(temp, conditions);
     this.temp = this.determineTempMessage(this.city, temp, conditions);
     this.description = this.determineDescription(this.city);
-  
+
     console.log('Updated city:', this.city);
     console.log('Updated temp:', this.temp);
     console.log('Updated description:', this.description);
   }
-  
 
   private determineCity(temp: number, conditions: string): string {
     let city = '';
@@ -132,49 +128,54 @@ export class WeatherComponent implements OnInit {
     };
     return descriptions[city.toLowerCase()] || '';
   }
+
   onSearchKey(event: KeyboardEvent): void {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       this.performSearch();
     }
   }
-  
+
   performSearch(): void {
     const searchInput = (document.getElementById('city-search') as HTMLInputElement).value;
     if (searchInput) {
       this.searchCity(searchInput);
     }
   }
-  
+
+  onFavoriteSearch(city: string): void {
+    // Handle the favorite search
+    console.log('Searching weather for favorite location:', city);
+    this.searchCity(city);
+  }
+
   // Private property to track unit internally
-private _unit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default unit
+  private _unit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default unit
 
-// Getter for the unit
-get unit(): 'Fahrenheit' | 'Celsius' {
-  return this._unit;
-}
+  // Getter for the unit
+  get unit(): 'Fahrenheit' | 'Celsius' {
+    return this._unit;
+  }
 
-// Setter for the unit to update temperature display
-set unit(value: 'Fahrenheit' | 'Celsius') {
-  this._unit = value;
-}
+  // Setter for the unit to update temperature display
+  set unit(value: 'Fahrenheit' | 'Celsius') {
+    this._unit = value;
+  }
 
-// Method to set temperature unit and update display without exposing unit as a property
-setTemperatureUnit(unit: 'Fahrenheit' | 'Celsius'): void {
-  this.unit = unit; // Use setter
-}
+  // Method to set temperature unit and update display without exposing unit as a property
+  setTemperatureUnit(unit: 'Fahrenheit' | 'Celsius'): void {
+    this.unit = unit; // Use setter
+  }
 
-// Helper function to display temperature with the correct unit
-get displayTemp(): string {
-  const numericTemp = parseFloat(this.temp);
-  const formattedTemp = this.unit === 'Fahrenheit' ? numericTemp : this.convertToCelsius(numericTemp);
-  const unitSymbol = this.unit === 'Fahrenheit' ? '°F' : '°C';
-  return isNaN(formattedTemp) ? 'Huh?' : `${Math.round(formattedTemp)} ${unitSymbol}`;
-}
+  // Helper function to display temperature with the correct unit
+  get displayTemp(): string {
+    const numericTemp = parseFloat(this.temp);
+    const formattedTemp = this.unit === 'Fahrenheit' ? numericTemp : this.convertToCelsius(numericTemp);
+    const unitSymbol = this.unit === 'Fahrenheit' ? '°F' : '°C';
+    return isNaN(formattedTemp) ? 'Huh?' : `${Math.round(formattedTemp)} ${unitSymbol}`;
+  }
 
-// Helper function to convert Fahrenheit to Celsius
-private convertToCelsius(tempFahrenheit: number): number {
-  return (tempFahrenheit - 32) * 5 / 9;
-}
-
-
+  // Helper function to convert Fahrenheit to Celsius
+  private convertToCelsius(tempFahrenheit: number): number {
+    return ((tempFahrenheit - 32) * 5) / 9;
+  }
 }

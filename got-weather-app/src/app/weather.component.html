@@ -1,9 +1,14 @@
 <header>
-  <app-hamburger-menu (unitChange)="setTemperatureUnit($event)"></app-hamburger-menu>
+  <app-hamburger-menu 
+    (unitChange)="setTemperatureUnit($event)" 
+    (favoriteSearch)="onFavoriteSearch($event)">
+  </app-hamburger-menu>
   <div class="header_container">
     <p>Click me to search:</p>
     <div class="search_box">
-      <button class="btn_search" (click)="performSearch()"><i class="fa fa-search"></i></button>
+      <button class="btn_search" (click)="performSearch()">
+        <i class="fa fa-search"></i>
+      </button>
       <input
         type="search"
         class="input_search"

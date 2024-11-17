@@ -3,7 +3,6 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
-
 @Component({
   selector: 'app-hamburger-menu',
   standalone: true,
@@ -16,6 +15,9 @@ export class HamburgerMenuComponent {
   selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
   isLoggedIn = false;
 
+  @Output() unitChange = new EventEmitter<'Fahrenheit' | 'Celsius'>();
+  @Output() favoriteSearch = new EventEmitter<string>(); // Add Output for favorite search
+
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
@@ -25,13 +27,9 @@ export class HamburgerMenuComponent {
     });
   }
 
-
-  @Output() unitChange = new EventEmitter<'Fahrenheit' | 'Celsius'>();
-
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
-
 
   handleAuthAction() {
     if (this.authService.isAuthenticated()) {
@@ -47,12 +45,19 @@ export class HamburgerMenuComponent {
     this.selectedUnit = unit;
     this.unitChange.emit(this.selectedUnit); // Emit the selected unit
   }
+
   navigateToLogin() {
     this.isMenuOpen = false; // Optional: close the menu after navigation
     this.router.navigate(['/login']); // Navigate to the login page
   }
+
   navigateToCreate() {
     this.isMenuOpen = false; // Optional: close the menu after navigation
     this.router.navigate(['/create-account']); // Navigate to the login page
+  }
+
+  emitFavoriteSearch() {
+    const favoriteLocation = 'Dallas'; // Replace this with the actual logic for fetching the user's favorite location
+    this.favoriteSearch.emit(favoriteLocation); // Emit the favorite location to the parent component
   }
 }
