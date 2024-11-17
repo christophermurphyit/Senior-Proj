@@ -263,15 +263,27 @@
 .forecast-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  justify-content: center; /* Center align cards */
+  gap: 16px; /* Space between cards */
+  margin-top: 20px;
 }
 
 .forecast-card {
-  background: #f5f5f5;
+  background: #f0f0f0;
   padding: 12px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 150px;
+  width: 120px; /* Fixed width for consistent layout */
   text-align: center;
 }
 
+.forecast-date {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.forecast-temp {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #555;
+}

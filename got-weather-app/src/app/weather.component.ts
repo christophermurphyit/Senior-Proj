@@ -59,6 +59,34 @@ export class WeatherComponent implements OnInit {
 
 
   searchCity(cityName: string): void {
+  // Fetch current weather to get latitude and longitude
+  this.weatherService.getCurrentWeather(cityName).subscribe({
+    next: (data: any) => {
+      const lat = data.coord.lat;
+      const lon = data.coord.lon;// Extract latitude and longitude
+      console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+
+      // Fetch 7-day forecast using latitude and longitude
+      this.weatherService.get7DayForecast(lat, lon).subscribe({
+        next: (forecastData: any) => {
+          this.forecastData = forecastData.daily; // Assign daily forecast data
+          console.log('7-Day Forecast Data:', this.forecastData);
+        },
+        error: (err) => {
+          console.error('Error fetching 7-day forecast:', err);
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Error fetching current weather:', err);
+      alert('City not found. Please try a different city.');
+    }
+  });
+}
+
+
+/*
+  searchCity(cityName: string): void {
     this.http
       .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
       .subscribe({
@@ -69,10 +97,12 @@ export class WeatherComponent implements OnInit {
       this.weatherService.get7DayForecast(cityName).subscribe({
         next: (data: any) => {
         this.forecastData = data.list;
+        console.log(this.forecastData);
         },
         error: () => console.error('Error fetching 7-day forecast')
       });
   }
+  */
 
   private renderDOM(weatherData: any): void {
     console.log('Processing weather data:', weatherData); // Log the weather data
