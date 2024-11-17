@@ -42,7 +42,7 @@
 <div class="forecast-container">
   <h3>7-Day Forecast</h3>
   <div *ngFor="let day of forecastData" class="forecast-card">
-    <p class="forecast-date">{{ day.dt | date:'EEE, MMM d' }}</p> <!-- Day and date -->
+    <p class="forecast-date">{{ day.dt * 1000 | date:'EEE, MMM d' }}</p> <!-- Day and date -->
     <p class="forecast-temp">{{ day.temp.max }}°F / {{ day.temp.min }}°F</p> <!-- High/Low -->
   </div>
 </div>
