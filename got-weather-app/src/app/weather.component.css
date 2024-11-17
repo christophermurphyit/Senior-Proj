@@ -266,24 +266,31 @@
   justify-content: center; /* Center align cards */
   gap: 16px; /* Space between cards */
   margin-top: 20px;
+  padding: 20px; /* adds padding to the container for better spacing*/
 }
 
 .forecast-card {
-  background: #f0f0f0;
-  padding: 12px;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 16px;
+  border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 120px; /* Fixed width for consistent layout */
+  width: 140px; /* Fixed width for consistent layout */
   text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.forecast-card:hover {
+  transform: scale(1.05);
 }
 
 .forecast-date {
   font-weight: bold;
   margin-bottom: 8px;
+  color: #333;
 }
 
 .forecast-temp {
-  font-size: 1.1em;
+  font-size: 1.2em;
   font-weight: bold;
   color: #555;
 }
