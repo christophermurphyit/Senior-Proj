@@ -58,6 +58,7 @@ export class WeatherComponent implements OnInit {
   }
 
 
+  
   searchCity(cityName: string): void {
   // Fetch current weather to get latitude and longitude
   this.weatherService.getCurrentWeather(cityName).subscribe({
@@ -83,6 +84,33 @@ export class WeatherComponent implements OnInit {
     }
   });
 }
+
+
+
+/*fetch7DayForecast(cityName: string): void {
+  // Call `searchCity` to get latitude and longitude
+  this.http
+    .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+    .subscribe({
+      next: (data: any) => {
+        const lat = data.coord.lat; // Extract latitude
+        const lon = data.coord.lon; // Extract longitude
+        console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+
+        // Now fetch the 7-day forecast
+        this.weatherService.get7DayForecast(lat, lon).subscribe({
+          next: (forecastData: any) => {
+            this.forecastData = forecastData.list; // Assign forecast data
+            console.log('7-Day Forecast Data:', this.forecastData);
+          },
+          error: () => console.error('Error fetching 7-day forecast'),
+        });
+      },
+      error: () => alert('City not found. Please try a different city.'),
+    });
+}*/
+
+
 
 
 /*
@@ -172,6 +200,7 @@ export class WeatherComponent implements OnInit {
     };
     return descriptions[city.toLowerCase()] || '';
   }
+
   onSearchKey(event: KeyboardEvent): void {
     if (event.key === "Enter") {
       this.performSearch();
@@ -184,7 +213,6 @@ export class WeatherComponent implements OnInit {
       this.searchCity(searchInput);
     }
   }
-
   // Private property to track unit internally
 private _unit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default unit
 

@@ -7,7 +7,40 @@
   
   <div *ngIf="isMenuOpen" class="menu">
     <ul>
-      <li>Weather Format</li>
+      <li>
+        <label>
+          <input
+            type="radio"
+            name="forecastOption"
+            [checked]="selectedView === 'current'"
+            (change)="setView('current')"
+          />
+          Current
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            type="radio"
+            name="forecastOption"
+            [checked]="selectedView === '7day'"
+            (change)="setView('7day')"
+          />
+          7-Day Forecast
+        </label>
+      </li>
+      <li>
+        <label>
+          <input
+            type="radio"
+            name="forecastOption"
+            [checked]="selectedView === 'daily'"
+            (change)="setView('daily')"
+          />
+          Daily
+        </label>
+      </li>
+      
       <li>Weather Units <br>
         <label>
             <input
