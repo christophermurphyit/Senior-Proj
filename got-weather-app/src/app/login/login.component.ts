@@ -39,7 +39,7 @@ export class LoginComponent {
         if (response === 'Login successful') {
           alert('Login Successful!');
           this.message = 'Login successful!';
-          this.authService.login(); // Notify that user is logged in
+          this.authService.login(this.usernameOrEmail); // Pass the username/email to AuthService
           this.router.navigate(['/home']); // Redirect to homepage
         } else {
           this.message = 'Invalid username or password.';

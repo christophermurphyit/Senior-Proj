@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-hamburger-menu',
@@ -18,7 +20,8 @@ export class HamburgerMenuComponent {
   @Output() unitChange = new EventEmitter<'Fahrenheit' | 'Celsius'>();
   @Output() favoriteSearch = new EventEmitter<string>(); // Add Output for favorite search
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private http: HttpClient) {}
+
 
   ngOnInit() {
     // Subscribe to authentication state changes
@@ -57,7 +60,26 @@ export class HamburgerMenuComponent {
   }
 
   emitFavoriteSearch() {
-    const favoriteLocation = 'Dallas'; // Replace this with the actual logic for fetching the user's favorite location
-    this.favoriteSearch.emit(favoriteLocation); // Emit the favorite location to the parent component
+    const loggedInUser = this.authService.getCurrentUser();
+    if (!loggedInUser) {
+      alert('Please log in to access your favorite location.');
+      return;
+    }
+  
+    this.http.get(`/getFavoriteLocation?usernameOrEmail=${loggedInUser}`).subscribe({
+      next: (response: any) => {
+        if (response.favoriteLocation) {
+          this.favoriteSearch.emit(response.favoriteLocation);
+        } else {
+          alert('No favorite location found for your account.');
+        }
+      },
+      error: (error) => {
+        console.error('Error retrieving favorite location:', error);
+        alert('Error retrieving favorite location. Please try again later.');
+      }
+    });
   }
+  
+  
 }

@@ -26,6 +26,28 @@ db.connect((err) => {
   console.log('Connected to database.');
 });
 
+app.get('/getFavoriteLocation', (req, res) => {
+  const { usernameOrEmail } = req.query;
+
+  if (!usernameOrEmail) {
+    return res.status(400).json({ message: "Username or email is required." });
+  }
+
+  const sql = 'SELECT favorite_location FROM ACCOUNT_T WHERE username = ? OR user_email = ?';
+  db.query(sql, [usernameOrEmail, usernameOrEmail], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Server error occurred." });
+    }
+
+    if (results.length > 0) {
+      res.status(200).json({ favoriteLocation: results[0].favorite_location });
+    } else {
+      res.status(404).json({ message: "User not found or no favorite location set." });
+    }
+  });
+});
+
+
 app.post('/createAccount', (req, res) => {
   const { email, username, password, favoriteLocation } = req.body;
 
