@@ -23,7 +23,7 @@ export class WeatherComponent implements OnInit {
 
 
   private readonly apiKey = 'd474509725247f01f4f5b322d067dd8b';
-  private readonly apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
+  private readonly apiUrl = 'https://api.openweathermap.org/data/2.5';
 
   constructor(private http: HttpClient, private weatherService: WeatherService) {}
 
@@ -49,7 +49,7 @@ export class WeatherComponent implements OnInit {
   private getCurrentWeather(latitude: number, longitude: number): void {
     console.log('Fetching weather data for location:', latitude, longitude); // Log to confirm coordinates
     this.http
-      .get(`${this.apiUrl}?lat=${latitude}&lon=${longitude}&appid=${this.apiKey}&units=imperial`)
+      .get(`${this.apiUrl}/weather?lat=${latitude}&lon=${longitude}&appid=${this.apiKey}&units=imperial`)
       .subscribe({
         next: (data: any) => {
           console.log('Weather data received:', data); // Log to confirm data is received
@@ -85,51 +85,62 @@ export class WeatherComponent implements OnInit {
     if (this.selectedSignal === 'current') {
       console.log(this.selectedSignal);
       this.http
-      .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
-      .subscribe({
-        next: (data: any) => this.renderDOM(data),
-        error: () => alert('City not found. Please try a different city.'),
-      });
-
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
+            console.log('Current Weather Data:', data);
+            this.renderDOM(data);
+          },
+          error: (err) => {
+            console.error('Error fetching current weather:', err);
+            alert('City not found. Please try a different city.');
+          },
+        });
     } else if (this.selectedSignal === '7day') {
       console.log(this.selectedSignal);
       this.http
-        .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
         .subscribe({
           next: (data: any) => {
+            console.log('Current Weather Data for 7-day forecast:', data);
             const lat = data.coord.lat;
             const lon = data.coord.lon;
-            this.get7DayForecast(cityName);
+            console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+
+            // Use WeatherService to fetch the 7-day forecast
+            this.weatherService.get7DayForecast(lat, lon).subscribe({
+              next: (forecastData: any) => {
+                console.log('7-Day Forecast Data:', forecastData);
+                this.forecastData = forecastData.daily;
+              },
+              error: (err) => console.error('Error fetching 7-day forecast:', err),
+            });
           },
-          error: () => alert('City not found. Please try a different city.'),
+          error: (err) => {
+            console.error('Error fetching current weather for 7-day forecast:', err);
+            alert('City not found. Please try a different city.');
+          },
         });
     } else if (this.selectedSignal === 'daily') {
       console.log('Fetch daily forecast logic here');
       // Add logic for daily forecast
     }
   }
+  
 
-  private get7DayForecast(cityName : string) {
-    this.http
-    .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+  /*private get7DayForecast(lat: number, lon: number) {
+    const oneCallUrl = `${this.weatherService.oneCallApiUrl}?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${this.apiKey}&units=imperial`;
+  this.http
+    .get(oneCallUrl)
     .subscribe({
-      next: (data: any) => {
-        const lat = data.coord.lat; // Extract latitude
-        const lon = data.coord.lon; // Extract longitude
-        console.log(`Latitude: ${lat}, Longitude: ${lon}`);
-
-        // Now fetch the 7-day forecast
-        this.weatherService.get7DayForecast(lat, lon).subscribe({
-          next: (forecastData: any) => {
-            this.forecastData = forecastData.list; // Assign forecast data
-            console.log('7-Day Forecast Data:', this.forecastData);
-          },
-          error: () => console.error('Error fetching 7-day forecast'),
-        });
+      next: (forecastData: any) => {
+        this.forecastData = forecastData.daily; // Correct property is 'daily'
+        console.log('7-Day Forecast Data:', this.forecastData);
       },
-      error: () => alert('City not found. Please try a different city.'),
+      error: () => console.error('Error fetching 7-day forecast'),
     });
-  }
+  }*/
+
 
 
   
