@@ -20,6 +20,7 @@ export class WeatherComponent implements OnInit {
   imageClass: string = '';
   forecastData: any[] = []; //Array to store the 7-day forecast
   private _selectedSignal: 'current' | '7day' | 'daily' = 'current'; // Default signal
+  
 
 
   private readonly apiKey = 'd474509725247f01f4f5b322d067dd8b';
@@ -326,6 +327,7 @@ set unit(value: 'Fahrenheit' | 'Celsius') {
 // Method to set temperature unit and update display without exposing unit as a property
 setTemperatureUnit(unit: 'Fahrenheit' | 'Celsius'): void {
   this.unit = unit; // Use setter
+  this.convertForecastDataToSelectedUnit();
 }
 
 // Helper function to display temperature with the correct unit
@@ -335,6 +337,29 @@ get displayTemp(): string {
   const unitSymbol = this.unit === 'Fahrenheit' ? '°F' : '°C';
   return isNaN(formattedTemp) ? 'Huh?' : `${Math.round(formattedTemp)} ${unitSymbol}`;
 }
+
+convertForecastDataToSelectedUnit(): void {
+  if (this.forecastData && this.forecastData.length > 0) {
+    this.forecastData = this.forecastData.map(day => {
+      // If original temperatures are not set, store them
+      if (!day.temp.originalMax) {
+        day.temp.originalMax = day.temp.max;
+        day.temp.originalMin = day.temp.min;
+      }
+      // Convert based on the selected unit
+      return {
+        ...day,
+        temp: {
+          max: this.unit === 'Fahrenheit' ? day.temp.originalMax : this.convertToCelsius(day.temp.originalMax),
+          min: this.unit === 'Fahrenheit' ? day.temp.originalMin : this.convertToCelsius(day.temp.originalMin),
+          originalMax: day.temp.originalMax,
+          originalMin: day.temp.originalMin
+        }
+      };
+    });
+  }
+}
+
 
 // Helper function to convert Fahrenheit to Celsius
 private convertToCelsius(tempFahrenheit: number): number {
