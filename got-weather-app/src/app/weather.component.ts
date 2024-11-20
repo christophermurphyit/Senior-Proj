@@ -102,6 +102,18 @@ export class WeatherComponent implements OnInit {
         .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
         .subscribe({
           next: (data: any) => {
+            console.log('Current Weather Data:', data);
+            this.renderDOM(data);
+          },
+          error: (err) => {
+            console.error('Error fetching current weather:', err);
+            alert('City not found. Please try a different city.');
+          },
+        });
+      this.http
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
             console.log('Current Weather Data for 7-day forecast:', data);
             const lat = data.coord.lat;
             const lon = data.coord.lon;

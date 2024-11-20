@@ -38,15 +38,15 @@
   <p>Temperature: {{ temp }}</p>
   <p>Description: {{ description }}</p>
 </div> -->
-
+<div *ngIf="selectedSignal === '7day'" class="forecast-container">
 <div class="forecast-container">
   <!-- <h3>7-Day Forecast</h3> -->
   <div *ngFor="let day of forecastData" class="forecast-card">
     <p class="forecast-date">{{ day.dt * 1000 | date:'EEE, MMM d' }}</p> <!-- Day and date -->
-    <p class="forecast-temp">{{ day.temp.max }}°F / {{ day.temp.min }}°F</p> <!-- High/Low -->
+    <p class="forecast-temp">{{ day.temp.max | number:'1.0-0' }}°F / {{ day.temp.min | number:'1.0-0' }}°F</p> <!-- High/Low -->
   </div>
 </div>
-
+</div>
 <!--
 <div class="forecast-container">
   <h3>7-Day Forecast</h3>
