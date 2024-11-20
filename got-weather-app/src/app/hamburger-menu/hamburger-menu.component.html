@@ -8,6 +8,7 @@
   <div *ngIf="isMenuOpen" class="menu">
     <ul>
       <li>
+        Weather Format <br>
         <label>
           <input
             type="radio"
@@ -15,10 +16,9 @@
             [checked]="selectedView === 'current'"
             (change)="setView('current')"
           />
-          Current
+          Current Forecast
         </label>
-      </li>
-      <li>
+        <br>
         <label>
           <input
             type="radio"
@@ -28,8 +28,7 @@
           />
           7-Day Forecast
         </label>
-      </li>
-      <li>
+        <br>
         <label>
           <input
             type="radio"
@@ -37,10 +36,12 @@
             [checked]="selectedView === 'daily'"
             (change)="setView('daily')"
           />
-          Daily
+          Daily Forecast
         </label>
       </li>
       
+      
+
       <li>Weather Units <br>
         <label>
             <input

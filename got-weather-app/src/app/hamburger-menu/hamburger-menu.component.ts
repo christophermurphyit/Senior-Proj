@@ -13,14 +13,23 @@ import { Router } from '@angular/router';
 export class HamburgerMenuComponent {
   isMenuOpen = false;
   selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
+  selectedView: 'current' | '7day' | 'daily' = 'current'; // Default view
+
 
   constructor(private router: Router) {}
 
 
   @Output() unitChange = new EventEmitter<'Fahrenheit' | 'Celsius'>();
+  @Output() forecastChanged = new EventEmitter<'current' | '7day' | 'daily'>(); // Emit changes to parent component
+
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  setView(view: 'current' | '7day' | 'daily') {
+    this.selectedView = view;
+    this.forecastChanged.emit(view); // Emit the selected forecast type
   }
 
   setUnit(unit: 'Fahrenheit' | 'Celsius') {

@@ -19,6 +19,8 @@ export class WeatherComponent implements OnInit {
   description: string = '';
   imageClass: string = '';
   forecastData: any[] = []; //Array to store the 7-day forecast
+  private _selectedSignal: 'current' | '7day' | 'daily' = 'current'; // Default signal
+
 
   private readonly apiKey = 'd474509725247f01f4f5b322d067dd8b';
   private readonly apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
@@ -57,9 +59,81 @@ export class WeatherComponent implements OnInit {
       });
   }
 
+  // Getter for selectedSignal
+  get selectedSignal(): 'current' | '7day' | 'daily' {
+    return this._selectedSignal;
+  }
+
+  // Setter for selectedSignal
+  set selectedSignal(value: 'current' | '7day' | 'daily') {
+    this._selectedSignal = value;
+    console.log('Selected Signal updated to:', this._selectedSignal);
+    // Trigger any additional logic you want when the signal changes
+  }
+
+  onForecastChanged(view: 'current' | '7day' | 'daily') {
+    this.selectedSignal = view;
+    console.log('Forecast view changed to:', this.selectedSignal);
+  }
+
+  updateSelectedSignal(signal: 'current' | '7day' | 'daily') {
+    this.selectedSignal = signal; // Update the signal based on the menu
+    console.log('Selected Signal Updated:', this.selectedSignal);
+  }
+
+  searchCity(cityName: string) {
+    if (this.selectedSignal === 'current') {
+      console.log(this.selectedSignal);
+      this.http
+      .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+      .subscribe({
+        next: (data: any) => this.renderDOM(data),
+        error: () => alert('City not found. Please try a different city.'),
+      });
+
+    } else if (this.selectedSignal === '7day') {
+      console.log(this.selectedSignal);
+      this.http
+        .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
+            const lat = data.coord.lat;
+            const lon = data.coord.lon;
+            this.get7DayForecast(cityName);
+          },
+          error: () => alert('City not found. Please try a different city.'),
+        });
+    } else if (this.selectedSignal === 'daily') {
+      console.log('Fetch daily forecast logic here');
+      // Add logic for daily forecast
+    }
+  }
+
+  private get7DayForecast(cityName : string) {
+    this.http
+    .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+    .subscribe({
+      next: (data: any) => {
+        const lat = data.coord.lat; // Extract latitude
+        const lon = data.coord.lon; // Extract longitude
+        console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+
+        // Now fetch the 7-day forecast
+        this.weatherService.get7DayForecast(lat, lon).subscribe({
+          next: (forecastData: any) => {
+            this.forecastData = forecastData.list; // Assign forecast data
+            console.log('7-Day Forecast Data:', this.forecastData);
+          },
+          error: () => console.error('Error fetching 7-day forecast'),
+        });
+      },
+      error: () => alert('City not found. Please try a different city.'),
+    });
+  }
+
 
   
-  searchCity(cityName: string): void {
+  /*searchCity(cityName: string): void {
   // Fetch current weather to get latitude and longitude
   this.weatherService.getCurrentWeather(cityName).subscribe({
     next: (data: any) => {
@@ -83,7 +157,7 @@ export class WeatherComponent implements OnInit {
       alert('City not found. Please try a different city.');
     }
   });
-}
+} */
 
 
 

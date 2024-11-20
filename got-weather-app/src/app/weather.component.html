@@ -1,5 +1,5 @@
 <header>
-  <app-hamburger-menu (unitChange)="setTemperatureUnit($event)"></app-hamburger-menu>
+  <app-hamburger-menu (unitChange)="setTemperatureUnit($event)" (forecastChanged)="onForecastChanged($event)"></app-hamburger-menu>
   <div class="header_container">
     <p>Click me to search:</p>
     <div class="search_box">
@@ -33,7 +33,7 @@
   </section>
 
   <!-- <div class="current-weather">
-   Display current weather information
+   Display current weather information 
   <h2>Weather in {{ city }}</h2>
   <p>Temperature: {{ temp }}</p>
   <p>Description: {{ description }}</p>
