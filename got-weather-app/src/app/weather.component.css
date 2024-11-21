@@ -310,7 +310,7 @@
     justify-content: flex-start; /* Align boxes to the left */
     position: fixed; /* Fix position on the screen */
     bottom: 10%; /* Increase the value to move higher */
-    left: 2%; /* Position farther left */
+    left: 1%; /* Position farther left */
     margin: 0; /* Remove any extra margin */
     padding: 30px; /* Add padding for spacing */
     gap: 20px; /* Increase space between boxes for a better look */
@@ -322,7 +322,7 @@
     padding: 20px; /* Increase padding for bigger cards */
     border-radius: 12px; /* Increase rounding of corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow for more depth */
-    width: 150px; /* Increase width for bigger cards */
+    width: 100px; /* Increase width for bigger cards */
     text-align: center; /* Center-align the text inside the cards */
     font-size: 1.1em; /* Increase font size for better readability */
     transition: transform 0.2s ease-in-out;

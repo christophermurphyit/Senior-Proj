@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { FooterComponent } from './footer.component';
@@ -23,6 +23,7 @@ export class WeatherComponent implements OnInit {
   imageClass: string = '';
   forecastData: any[] = []; //Array to store the 7-day forecast
   private _selectedSignal: 'current' | '7day' | 'daily' = 'current'; // Default signal
+  selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
   dailyForecast: any;
 
 
@@ -30,6 +31,7 @@ export class WeatherComponent implements OnInit {
   private readonly apiUrl = 'https://api.openweathermap.org/data/2.5';
 
   constructor(private http: HttpClient, private weatherService: WeatherService) {}
+  @ViewChild(HamburgerMenuComponent) hamburgerMenu!: HamburgerMenuComponent;
 
 
   ngOnInit(): void {
@@ -86,6 +88,10 @@ export class WeatherComponent implements OnInit {
   }
 
   searchCity(cityName: string) {
+    this.selectedUnit = 'Fahrenheit';
+    if (this.hamburgerMenu) {
+      this.hamburgerMenu.setUnit('Fahrenheit');
+    }
     if (this.selectedSignal === 'current') {
       console.log(this.selectedSignal);
       this.http
@@ -195,95 +201,6 @@ export class WeatherComponent implements OnInit {
   }
   
 
-  /*private get7DayForecast(lat: number, lon: number) {
-    const oneCallUrl = `${this.weatherService.oneCallApiUrl}?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${this.apiKey}&units=imperial`;
-  this.http
-    .get(oneCallUrl)
-    .subscribe({
-      next: (forecastData: any) => {
-        this.forecastData = forecastData.daily; // Correct property is 'daily'
-        console.log('7-Day Forecast Data:', this.forecastData);
-      },
-      error: () => console.error('Error fetching 7-day forecast'),
-    });
-  }*/
-
-
-
-  
-  /*searchCity(cityName: string): void {
-  // Fetch current weather to get latitude and longitude
-  this.weatherService.getCurrentWeather(cityName).subscribe({
-    next: (data: any) => {
-      const lat = data.coord.lat;
-      const lon = data.coord.lon;// Extract latitude and longitude
-      console.log(`Latitude: ${lat}, Longitude: ${lon}`);
-
-      // Fetch 7-day forecast using latitude and longitude
-      this.weatherService.get7DayForecast(lat, lon).subscribe({
-        next: (forecastData: any) => {
-          this.forecastData = forecastData.daily; // Assign daily forecast data
-          console.log('7-Day Forecast Data:', this.forecastData);
-        },
-        error: (err) => {
-          console.error('Error fetching 7-day forecast:', err);
-        }
-      });
-    },
-    error: (err) => {
-      console.error('Error fetching current weather:', err);
-      alert('City not found. Please try a different city.');
-    }
-  });
-} */
-
-
-
-/*fetch7DayForecast(cityName: string): void {
-  // Call `searchCity` to get latitude and longitude
-  this.http
-    .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
-    .subscribe({
-      next: (data: any) => {
-        const lat = data.coord.lat; // Extract latitude
-        const lon = data.coord.lon; // Extract longitude
-        console.log(`Latitude: ${lat}, Longitude: ${lon}`);
-
-        // Now fetch the 7-day forecast
-        this.weatherService.get7DayForecast(lat, lon).subscribe({
-          next: (forecastData: any) => {
-            this.forecastData = forecastData.list; // Assign forecast data
-            console.log('7-Day Forecast Data:', this.forecastData);
-          },
-          error: () => console.error('Error fetching 7-day forecast'),
-        });
-      },
-      error: () => alert('City not found. Please try a different city.'),
-    });
-}*/
-
-
-
-
-/*
-  searchCity(cityName: string): void {
-    this.http
-      .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
-      .subscribe({
-        next: (data: any) => this.renderDOM(data),
-        error: () => alert('City not found. Please try a different city.'),
-      });
-
-      this.weatherService.get7DayForecast(cityName).subscribe({
-        next: (data: any) => {
-        this.forecastData = data.list;
-        console.log(this.forecastData);
-        },
-        error: () => console.error('Error fetching 7-day forecast')
-      });
-  }
-  */
-
   private renderDOM(weatherData: any): void {
     console.log('Processing weather data:', weatherData); // Log the weather data
     const temp = weatherData.main.temp.toFixed();
@@ -376,12 +293,13 @@ get unit(): 'Fahrenheit' | 'Celsius' {
 // Setter for the unit to update temperature display
 set unit(value: 'Fahrenheit' | 'Celsius') {
   this._unit = value;
+  this.convertForecastDataToSelectedUnit();
+  this.convertDailyForecastToSelectedUnit(); // Update daily forecast temperatures
 }
 
 // Method to set temperature unit and update display without exposing unit as a property
 setTemperatureUnit(unit: 'Fahrenheit' | 'Celsius'): void {
   this.unit = unit; // Use setter
-  this.convertForecastDataToSelectedUnit();
 }
 
 // Helper function to display temperature with the correct unit
@@ -411,6 +329,40 @@ convertForecastDataToSelectedUnit(): void {
         }
       };
     });
+  }
+}
+
+convertDailyForecastToSelectedUnit(): void {
+  if (this.dailyForecast) {
+    // Convert morning temperature
+    if (this.dailyForecast.morning) {
+      if (!this.dailyForecast.morning.originalTemp) {
+        this.dailyForecast.morning.originalTemp = this.dailyForecast.morning.temp; // Store the original Fahrenheit temperature
+      }
+      this.dailyForecast.morning.temp = this.unit === 'Fahrenheit'
+        ? this.dailyForecast.morning.originalTemp
+        : this.convertToCelsius(this.dailyForecast.morning.originalTemp);
+    }
+
+    // Convert noon temperature
+    if (this.dailyForecast.noon) {
+      if (!this.dailyForecast.noon.originalTemp) {
+        this.dailyForecast.noon.originalTemp = this.dailyForecast.noon.temp; // Store the original Fahrenheit temperature
+      }
+      this.dailyForecast.noon.temp = this.unit === 'Fahrenheit'
+        ? this.dailyForecast.noon.originalTemp
+        : this.convertToCelsius(this.dailyForecast.noon.originalTemp);
+    }
+
+    // Convert afternoon temperature
+    if (this.dailyForecast.afternoon) {
+      if (!this.dailyForecast.afternoon.originalTemp) {
+        this.dailyForecast.afternoon.originalTemp = this.dailyForecast.afternoon.temp; // Store the original Fahrenheit temperature
+      }
+      this.dailyForecast.afternoon.temp = this.unit === 'Fahrenheit'
+        ? this.dailyForecast.afternoon.originalTemp
+        : this.convertToCelsius(this.dailyForecast.afternoon.originalTemp);
+    }
   }
 }
 

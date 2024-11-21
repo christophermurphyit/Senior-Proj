@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class HamburgerMenuComponent {
   isMenuOpen = false;
-  selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
+  //selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
   selectedView: 'current' | '7day' | 'daily' = 'current'; // Default view
 
 
@@ -21,6 +21,7 @@ export class HamburgerMenuComponent {
 
   @Output() unitChange = new EventEmitter<'Fahrenheit' | 'Celsius'>();
   @Output() forecastChanged = new EventEmitter<'current' | '7day' | 'daily'>(); // Emit changes to parent component
+  @Input() selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Receive the selected unit from parent
 
 
   toggleMenu() {
