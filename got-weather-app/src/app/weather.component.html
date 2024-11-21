@@ -44,6 +44,30 @@
     <p class="forecast-temp">{{ day.temp.max | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }} / {{ day.temp.min | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }}</p> <!-- High/Low -->
   </div>
 </div>
+
+<div *ngIf="selectedSignal === 'daily'" class="daily-forecast-container">
+  <div class="daily-forecast-card morning">
+    <p class="forecast-time">Morning (7 AM)</p>
+    <p class="forecast-temp">
+      {{ dailyForecast?.morning?.temp | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }}
+    </p>
+  </div>
+
+  <div class="daily-forecast-card noon">
+    <p class="forecast-time">Noon (12 PM)</p>
+    <p class="forecast-temp">
+      {{ dailyForecast?.noon?.temp | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }}
+    </p>
+  </div>
+
+  <div class="daily-forecast-card afternoon">
+    <p class="forecast-time">Afternoon (5 PM)</p>
+    <p class="forecast-temp">
+      {{ dailyForecast?.afternoon?.temp | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }}
+    </p>
+  </div>
+</div>
+
 <!--
 <div class="forecast-container">
   <h3>7-Day Forecast</h3>

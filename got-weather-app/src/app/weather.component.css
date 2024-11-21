@@ -303,4 +303,47 @@
     font-weight: bold;
     color: #000000;
   }
+
+  .daily-forecast-container {
+    display: flex;
+    flex-wrap: nowrap; /* Ensure the boxes are in a single row */
+    justify-content: flex-start; /* Align boxes to the left */
+    position: fixed; /* Fix position on the screen */
+    bottom: 10%; /* Increase the value to move higher */
+    left: 2%; /* Position farther left */
+    margin: 0; /* Remove any extra margin */
+    padding: 30px; /* Add padding for spacing */
+    gap: 20px; /* Increase space between boxes for a better look */
+    z-index: 10; /* Ensure it appears above other content */
+  }
+  
+  .daily-forecast-card {
+    background: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+    padding: 20px; /* Increase padding for bigger cards */
+    border-radius: 12px; /* Increase rounding of corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow for more depth */
+    width: 150px; /* Increase width for bigger cards */
+    text-align: center; /* Center-align the text inside the cards */
+    font-size: 1.1em; /* Increase font size for better readability */
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .daily-forecast-card:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+  }
+  
+  .forecast-time {
+    font-weight: bold;
+    margin-bottom: 8px; /* Increase space between title and temperature */
+    color: #000000;
+    font-size: 1em; /* Increase font size for better readability */
+  }
+  
+  .forecast-temp {
+    font-size: 1.2em; /* Increase font size */
+    font-weight: bold;
+    color: #000000;
+  }
+  
+  
   
