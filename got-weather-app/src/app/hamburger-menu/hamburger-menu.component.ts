@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -12,17 +14,34 @@ import { Router } from '@angular/router';
 })
 export class HamburgerMenuComponent {
   isMenuOpen = false;
-  //selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
   selectedView: 'current' | '7day' | 'daily' = 'current'; // Default view
+  isLoggedIn = false;
 
 
-  constructor(private router: Router) {}
 
+  constructor(private router: Router, private authService: AuthService, private http: HttpClient) {}
 
+  @Output() favoriteSearch = new EventEmitter<string>(); // Add Output for favorite search
   @Output() unitChange = new EventEmitter<'Fahrenheit' | 'Celsius'>();
   @Output() forecastChanged = new EventEmitter<'current' | '7day' | 'daily'>(); // Emit changes to parent component
   @Input() selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Receive the selected unit from parent
 
+  ngOnInit() {
+    // Subscribe to authentication state changes
+    this.authService.isLoggedIn$.subscribe((loggedIn) => {
+      this.isLoggedIn = loggedIn;
+    });
+  }
+
+  handleAuthAction() {
+    if (this.authService.isAuthenticated()) {
+      alert('You are being logged out.');
+      this.authService.logout(); // Log out the user
+      this.router.navigate(['/']); // Redirect to homepage
+    } else {
+      this.router.navigate(['/login']); // Redirect to login page
+    }
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
@@ -44,5 +63,27 @@ export class HamburgerMenuComponent {
   navigateToCreate() {
     this.isMenuOpen = false; // Optional: close the menu after navigation
     this.router.navigate(['/create-account']); // Navigate to the login page
+  }
+
+  emitFavoriteSearch() {
+    const loggedInUser = this.authService.getCurrentUser();
+    if (!loggedInUser) {
+      alert('Please log in to access your favorite location.');
+      return;
+    }
+  
+    this.http.get(`/getFavoriteLocation?usernameOrEmail=${loggedInUser}`).subscribe({
+      next: (response: any) => {
+        if (response.favoriteLocation) {
+          this.favoriteSearch.emit(response.favoriteLocation);
+        } else {
+          alert('No favorite location found for your account.');
+        }
+      },
+      error: (error) => {
+        console.error('Error retrieving favorite location:', error);
+        alert('Error retrieving favorite location. Please try again later.');
+      }
+    });
   }
 }
