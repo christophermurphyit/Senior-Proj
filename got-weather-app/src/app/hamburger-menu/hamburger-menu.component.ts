@@ -56,40 +56,14 @@ export class HamburgerMenuComponent {
     this.selectedUnit = unit;
     this.unitChange.emit(this.selectedUnit); // Emit the selected unit
   }
-
   navigateToLogin() {
     this.isMenuOpen = false; // Optional: close the menu after navigation
     this.router.navigate(['/login']); // Navigate to the login page
   }
-
   navigateToCreate() {
     this.isMenuOpen = false; // Optional: close the menu after navigation
     this.router.navigate(['/create-account']); // Navigate to the login page
   }
-
-  emitFavoriteSearch() {
-    const loggedInUser = this.authService.getCurrentUser();
-    if (!loggedInUser) {
-      alert('Please log in to access your favorite location.');
-      return;
-    }
-  
-    this.http.get(`/getFavoriteLocation?usernameOrEmail=${loggedInUser}`).subscribe({
-      next: (response: any) => {
-        if (response.favoriteLocation) {
-          this.favoriteSearch.emit(response.favoriteLocation);
-        } else {
-          alert('No favorite location found for your account.');
-        }
-      },
-      error: (error) => {
-        console.error('Error retrieving favorite location:', error);
-        alert('Error retrieving favorite location. Please try again later.');
-      }
-    });
-  }
-  
-  
 
   emitFavoriteSearch() {
     const loggedInUser = this.authService.getCurrentUser();
