@@ -282,6 +282,12 @@ export class WeatherComponent implements OnInit {
       this.searchCity(searchInput);
     }
   }
+
+  onFavoriteSearch(city: string): void {
+    // Handle the favorite search
+    console.log('Searching weather for favorite location:', city);
+    this.searchCity(city);
+  }
   // Private property to track unit internally
 private _unit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default unit
 
