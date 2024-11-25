@@ -62,10 +62,17 @@
           Celsius
         </label>  
       </li>      
-      <li>Favorites</li>
-      <li><button (click)="navigateToLogin()" class="menu-button">Login</button></li>
-      <li><button (click)="navigateToCreate()" class="menu-button">Create Account</button></li>
-      
+      <li>
+        <button class="menu-button" (click)="emitFavoriteSearch()">Favorite</button>
+      </li>
+      <li>
+        <button class="menu-button" (click)="handleAuthAction()">
+          {{ isLoggedIn ? 'Logout' : 'Login' }}
+        </button>
+      </li>
+      <li>
+        <button (click)="navigateToCreate()" class="menu-button">Create Account</button>
+      </li>
     </ul>
   </div>
   
