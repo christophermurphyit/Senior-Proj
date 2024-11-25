@@ -7,6 +7,8 @@ import { AuthService } from '../auth.service';
 
 
 
+
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -27,6 +29,7 @@ export class LoginComponent {
       return;
     }
   
+    // Send login data to the backend
     this.http.post(
       'http://localhost:5001/login',
       {

@@ -24,13 +24,13 @@ export class CreateComponent {
 
   isValidating = false; // Add this property to track validation state
 
-onSubmit() {
-  if (!this.email || !this.username || !this.password || !this.favoriteLocation) {
-    this.message = "All fields are required.";
-    return;
-  }
+  onSubmit() {
+    if (!this.email || !this.username || !this.password || !this.favoriteLocation) {
+      this.message = "All fields are required.";
+      return;
+    }
 
-  this.isValidating = true; // Set loading state
+ this.isValidating = true; // Set loading state
   this.validateLocation(this.favoriteLocation).subscribe({
     next: (isValid) => {
       this.isValidating = false; // Reset loading state
@@ -50,20 +50,20 @@ onSubmit() {
 }
 
 private createAccount() {
-  this.http.post('http://localhost:5001/createAccount', {
-    email: this.email,
-    username: this.username,
-    password: this.password,
-    favoriteLocation: this.favoriteLocation
-  }).subscribe({
-    next: (response: any) => {
+    this.http.post('http://localhost:5001/createAccount', {
+      email: this.email,
+      username: this.username,
+      password: this.password,
+      favoriteLocation: this.favoriteLocation
+    }).subscribe({
+     next: (response: any) => {
       alert(response.message);
       this.router.navigate(['/home']);
-    },
-    error: (error) => {
-      if (error.status === 409) {
-        this.message = "Username or email already exists.";
-      } else {
+      },
+      error: (error) => {
+        if (error.status === 409) {
+          this.message = "Username or email already exists.";
+     } else {
         this.message = "An error occurred. Please try again.";
       }
     }
@@ -90,18 +90,15 @@ private createAccount() {
           console.error("Unexpected error: User not found after account creation.");
           this.message = "An unexpected error occurred. Please try again.";
         }
-      },
+     },
       error: (error) => {
         console.error("Error during user verification:", error);
         this.message = "An error occurred while verifying the account. Please try again.";
       }
     });
   }
-  
-  
-  
   goHome() {
-    this.router.navigate(['/home']);
+  this.router.navigate(['/home']);
   }
   
 

@@ -1,8 +1,5 @@
 <header>
-  <app-hamburger-menu 
-    (unitChange)="setTemperatureUnit($event)" 
-    (favoriteSearch)="onFavoriteSearch($event)">
-  </app-hamburger-menu>
+  <app-hamburger-menu (unitChange)="setTemperatureUnit($event)" (forecastChanged)="onForecastChanged($event)" (favoriteSearch)="onFavoriteSearch($event)"></app-hamburger-menu>
   <div class="header_container">
     <p>Click me to search:</p>
     <div class="search_box">
@@ -36,6 +33,54 @@
       <p class="out_there">out there.</p>
     </div>
   </section>
+
+  <!-- <div class="current-weather">
+   Display current weather information 
+  <h2>Weather in {{ city }}</h2>
+  <p>Temperature: {{ temp }}</p>
+  <p>Description: {{ description }}</p>
+</div> -->
+<div *ngIf="selectedSignal === '7day'" class="forecast-container">
+  <div *ngFor="let day of forecastData" class="forecast-card">
+    <p class="forecast-date">{{ day.dt * 1000 | date:'EEE, MMM d' }}</p> <!-- Day and date -->
+    <p class="forecast-temp">{{ day.temp.max | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }} / {{ day.temp.min | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }}</p> <!-- High/Low -->
+  </div>
+</div>
+
+<div *ngIf="selectedSignal === 'daily'" class="daily-forecast-container">
+  <div class="daily-forecast-card morning">
+    <p class="forecast-time">Morning (7 AM)</p>
+    <p class="forecast-temp">
+      {{ dailyForecast?.morning?.temp | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }}
+    </p>
+  </div>
+
+  <div class="daily-forecast-card noon">
+    <p class="forecast-time">Noon (12 PM)</p>
+    <p class="forecast-temp">
+      {{ dailyForecast?.noon?.temp | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }}
+    </p>
+  </div>
+
+  <div class="daily-forecast-card afternoon">
+    <p class="forecast-time">Afternoon (5 PM)</p>
+    <p class="forecast-temp">
+      {{ dailyForecast?.afternoon?.temp | number:'1.0-0' }} {{ unit === 'Fahrenheit' ? '°F' : '°C' }}
+    </p>
+  </div>
+</div>
+
+<!--
+<div class="forecast-container">
+  <h3>7-Day Forecast</h3>
+  <div *ngFor="let day of forecastData" class="forecast-card">
+    <p>Date: {{ day.dt | date }}</p>
+    <p>Temperature: {{ day.temp.day }} °F</p>
+    <p>Condition: {{ day.weather[0].description }}</p>
+  </div>
+</div>
+-->
+<!-- Loop through forecastData to display each day's forecast, meant for lines 51 to 58 -->
 
   <section class="bottom_container">
     <div class="bottom_item_1">

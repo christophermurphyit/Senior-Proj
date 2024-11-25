@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -14,24 +14,23 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HamburgerMenuComponent {
   isMenuOpen = false;
-  selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
+  selectedView: 'current' | '7day' | 'daily' = 'current'; // Default view
   isLoggedIn = false;
 
-  @Output() unitChange = new EventEmitter<'Fahrenheit' | 'Celsius'>();
-  @Output() favoriteSearch = new EventEmitter<string>(); // Add Output for favorite search
+
 
   constructor(private router: Router, private authService: AuthService, private http: HttpClient) {}
 
+  @Output() favoriteSearch = new EventEmitter<string>(); // Add Output for favorite search
+  @Output() unitChange = new EventEmitter<'Fahrenheit' | 'Celsius'>();
+  @Output() forecastChanged = new EventEmitter<'current' | '7day' | 'daily'>(); // Emit changes to parent component
+  @Input() selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Receive the selected unit from parent
 
   ngOnInit() {
     // Subscribe to authentication state changes
     this.authService.isLoggedIn$.subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
     });
-  }
-
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
   }
 
   handleAuthAction() {
@@ -42,6 +41,15 @@ export class HamburgerMenuComponent {
     } else {
       this.router.navigate(['/login']); // Redirect to login page
     }
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  setView(view: 'current' | '7day' | 'daily') {
+    this.selectedView = view;
+    this.forecastChanged.emit(view); // Emit the selected forecast type
   }
 
   setUnit(unit: 'Fahrenheit' | 'Celsius') {
@@ -82,4 +90,26 @@ export class HamburgerMenuComponent {
   }
   
   
+
+  emitFavoriteSearch() {
+    const loggedInUser = this.authService.getCurrentUser();
+    if (!loggedInUser) {
+      alert('Please log in to access your favorite location.');
+      return;
+    }
+  
+    this.http.get(`/getFavoriteLocation?usernameOrEmail=${loggedInUser}`).subscribe({
+      next: (response: any) => {
+        if (response.favoriteLocation) {
+          this.favoriteSearch.emit(response.favoriteLocation);
+        } else {
+          alert('No favorite location found for your account.');
+        }
+      },
+      error: (error) => {
+        console.error('Error retrieving favorite location:', error);
+        alert('Error retrieving favorite location. Please try again later.');
+      }
+    });
+  }
 }

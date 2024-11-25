@@ -78,7 +78,7 @@
     transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 }
 
-/* 
+/*
  Begin page content
 } */
 
@@ -168,9 +168,11 @@
 .bottom_item_2 {
     position: relative;
     font-size: 1em;
-}
+    text-align: right; /* Align text to the right */
+    padding-right: 5%; /* Increase the padding to push the text farther right */
+  }
 
- 
+
 /* CHATGPT SCROLLING TEST*/
 #image-container {
     background-size: cover;
@@ -255,3 +257,93 @@
     color: #ffffff;
     text-shadow: rgb(0, 0, 0) 1px 0 10px;
 }
+
+.current-weather {
+  margin-bottom: 20px;
+}
+
+.forecast-container {
+    display: flex;
+    flex-wrap: nowrap; /* Ensure the boxes are in a single row */
+    justify-content: flex-start; /* Align boxes to the left */
+    position: fixed; /* Fix position on the screen */
+    bottom: 10%; /* Increase the value to move higher (was 5% previously) */
+    left: 2%; /* Position farther left */
+    margin: 0; /* Remove any extra margin */
+    padding: 10px; /* Add padding for spacing */
+    gap: 10px; /* Space between boxes */
+    z-index: 10; /* Ensure it appears above other content */
+  }
+  
+  
+  .forecast-card {
+    background: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+    padding: 8px; /* Reduce padding for smaller cards */
+    border-radius: 8px; /* Slight rounding of corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    width: 100px; /* Smaller width */
+    text-align: center; /* Center-align the text inside the cards */
+    font-size: 0.9em; /* Adjust font size for smaller cards */
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .forecast-card:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+  }
+  
+  .forecast-date {
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #000000;
+    font-size: 0.85em; /* Slightly smaller font size */
+  }
+  
+  .forecast-temp {
+    font-size: 0.9em; /* Adjusted font size */
+    font-weight: bold;
+    color: #000000;
+  }
+
+  .daily-forecast-container {
+    display: flex;
+    flex-wrap: nowrap; /* Ensure the boxes are in a single row */
+    justify-content: flex-start; /* Align boxes to the left */
+    position: fixed; /* Fix position on the screen */
+    bottom: 10%; /* Increase the value to move higher */
+    left: 1%; /* Position farther left */
+    margin: 0; /* Remove any extra margin */
+    padding: 30px; /* Add padding for spacing */
+    gap: 20px; /* Increase space between boxes for a better look */
+    z-index: 10; /* Ensure it appears above other content */
+  }
+  
+  .daily-forecast-card {
+    background: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+    padding: 20px; /* Increase padding for bigger cards */
+    border-radius: 12px; /* Increase rounding of corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow for more depth */
+    width: 100px; /* Increase width for bigger cards */
+    text-align: center; /* Center-align the text inside the cards */
+    font-size: 1.1em; /* Increase font size for better readability */
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .daily-forecast-card:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+  }
+  
+  .forecast-time {
+    font-weight: bold;
+    margin-bottom: 8px; /* Increase space between title and temperature */
+    color: #000000;
+    font-size: 1em; /* Increase font size for better readability */
+  }
+  
+  .forecast-temp {
+    font-size: 1.2em; /* Increase font size */
+    font-weight: bold;
+    color: #000000;
+  }
+  
+  
+  

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { FooterComponent } from './footer.component';
+import { WeatherService } from './weather.service';
 import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.component';
 
 @Component({
@@ -11,16 +12,26 @@ import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.componen
   templateUrl: './weather.component.html',
   styleUrls: ['./weather.component.css'],
 })
+
+
+
 export class WeatherComponent implements OnInit {
   temp: string = '';
   city: string = '';
   description: string = '';
   imageClass: string = '';
+  forecastData: any[] = []; //Array to store the 7-day forecast
+  private _selectedSignal: 'current' | '7day' | 'daily' = 'current'; // Default signal
+  selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
+  dailyForecast: any;
+
 
   private readonly apiKey = 'd474509725247f01f4f5b322d067dd8b';
-  private readonly apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
+  private readonly apiUrl = 'https://api.openweathermap.org/data/2.5';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private weatherService: WeatherService) {}
+  @ViewChild(HamburgerMenuComponent) hamburgerMenu!: HamburgerMenuComponent;
+
 
   ngOnInit(): void {
     this.checkLocationPermission();
@@ -42,7 +53,7 @@ export class WeatherComponent implements OnInit {
   private getCurrentWeather(latitude: number, longitude: number): void {
     console.log('Fetching weather data for location:', latitude, longitude); // Log to confirm coordinates
     this.http
-      .get(`${this.apiUrl}?lat=${latitude}&lon=${longitude}&appid=${this.apiKey}&units=imperial`)
+      .get(`${this.apiUrl}/weather?lat=${latitude}&lon=${longitude}&appid=${this.apiKey}&units=imperial`)
       .subscribe({
         next: (data: any) => {
           console.log('Weather data received:', data); // Log to confirm data is received
@@ -52,14 +63,141 @@ export class WeatherComponent implements OnInit {
       });
   }
 
-  searchCity(cityName: string): void {
-    this.http
-      .get(`${this.apiUrl}?q=${cityName}&appid=${this.apiKey}&units=imperial`)
-      .subscribe({
-        next: (data: any) => this.renderDOM(data),
-        error: () => alert('City not found. Please try a different city.'),
-      });
+  // Getter for selectedSignal
+  get selectedSignal(): 'current' | '7day' | 'daily' {
+    return this._selectedSignal;
   }
+
+  // Setter for selectedSignal
+  set selectedSignal(value: 'current' | '7day' | 'daily') {
+    this._selectedSignal = value;
+    console.log('Selected Signal updated to:', this._selectedSignal);
+    // Trigger any additional logic you want when the signal changes
+  }
+
+  onForecastChanged(view: 'current' | '7day' | 'daily') {
+    this.selectedSignal = view;
+    console.log('Forecast view changed to:', this.selectedSignal);
+  }
+
+  updateSelectedSignal(signal: 'current' | '7day' | 'daily') {
+    this.selectedSignal = signal; // Update the signal based on the menu
+    console.log('Selected Signal Updated:', this.selectedSignal);
+  }
+
+  searchCity(cityName: string) {
+    this.selectedUnit = 'Fahrenheit';
+    if (this.hamburgerMenu) {
+      this.hamburgerMenu.setUnit('Fahrenheit');
+    }
+    if (this.selectedSignal === 'current') {
+      console.log(this.selectedSignal);
+      this.http
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
+            console.log('Current Weather Data:', data);
+            this.renderDOM(data);
+          },
+          error: (err) => {
+            console.error('Error fetching current weather:', err);
+            alert('City not found. Please try a different city.');
+          },
+        });
+    } else if (this.selectedSignal === '7day') {
+      console.log(this.selectedSignal);
+      this.http
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
+            console.log('Current Weather Data:', data);
+            this.renderDOM(data);
+          },
+          error: (err) => {
+            console.error('Error fetching current weather:', err);
+            alert('City not found. Please try a different city.');
+          },
+        });
+      this.http
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
+            console.log('Current Weather Data for 7-day forecast:', data);
+            const lat = data.coord.lat;
+            const lon = data.coord.lon;
+            console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+
+            // Use WeatherService to fetch the 7-day forecast
+            this.weatherService.get7DayForecast(lat, lon).subscribe({
+              next: (forecastData: any) => {
+                console.log('7-Day Forecast Data:', forecastData);
+                this.forecastData = forecastData.daily;
+              },
+              error: (err) => console.error('Error fetching 7-day forecast:', err),
+            });
+          },
+          error: (err) => {
+            console.error('Error fetching current weather for 7-day forecast:', err);
+            alert('City not found. Please try a different city.');
+          },
+        });
+    } else if (this.selectedSignal === 'daily') {
+      console.log('Fetch daily forecast logic here');
+      // Add logic for daily forecast
+      console.log('Fetching daily forecast data...');
+      this.http
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
+            console.log('Current Weather Data:', data);
+            this.renderDOM(data);
+          },
+          error: (err) => {
+            console.error('Error fetching current weather:', err);
+            alert('City not found. Please try a different city.');
+          },
+        });
+  this.http
+    .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+    .subscribe({
+      next: (data: any) => {
+        console.log('Current Weather Data:', data);
+
+        // Get coordinates for hourly forecast
+        const lat = data.coord.lat;
+        const lon = data.coord.lon;
+        console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+
+        // Use WeatherService to fetch hourly forecast using One Call API
+        this.weatherService.get7DayForecast(lat, lon).subscribe({
+          next: (forecastData: any) => {
+            if (forecastData.hourly && forecastData.hourly.length > 0) {
+              // Filter temperatures for 7 AM, 12 PM, and 5 PM
+              this.dailyForecast = {
+                morning: forecastData.hourly.find((hour: any) => new Date(hour.dt * 1000).getHours() === 7),
+                noon: forecastData.hourly.find((hour: any) => new Date(hour.dt * 1000).getHours() === 12),
+                afternoon: forecastData.hourly.find((hour: any) => new Date(hour.dt * 1000).getHours() === 17),
+
+              };
+              console.log('Daily Hourly Forecast Data:', this.dailyForecast);
+            } else {
+              console.error('No hourly forecast data found');
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching daily forecast:', err);
+            alert('Error fetching daily forecast. Please try again later.');
+          },
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching current weather for daily forecast:', err);
+        alert('City not found. Please try a different city.');
+      },
+    });
+    }
+  }
+  
 
   private renderDOM(weatherData: any): void {
     console.log('Processing weather data:', weatherData); // Log the weather data
@@ -74,6 +212,7 @@ export class WeatherComponent implements OnInit {
     console.log('Updated temp:', this.temp);
     console.log('Updated description:', this.description);
   }
+
 
   private determineCity(temp: number, conditions: string): string {
     let city = '';
@@ -147,7 +286,6 @@ export class WeatherComponent implements OnInit {
     console.log('Searching weather for favorite location:', city);
     this.searchCity(city);
   }
-
   // Private property to track unit internally
   private _unit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default unit
 
@@ -156,23 +294,82 @@ export class WeatherComponent implements OnInit {
     return this._unit;
   }
 
-  // Setter for the unit to update temperature display
-  set unit(value: 'Fahrenheit' | 'Celsius') {
-    this._unit = value;
-  }
+// Setter for the unit to update temperature display
+set unit(value: 'Fahrenheit' | 'Celsius') {
+  this._unit = value;
+  this.convertForecastDataToSelectedUnit();
+  this.convertDailyForecastToSelectedUnit(); // Update daily forecast temperatures
+}
 
   // Method to set temperature unit and update display without exposing unit as a property
   setTemperatureUnit(unit: 'Fahrenheit' | 'Celsius'): void {
     this.unit = unit; // Use setter
   }
 
-  // Helper function to display temperature with the correct unit
-  get displayTemp(): string {
-    const numericTemp = parseFloat(this.temp);
-    const formattedTemp = this.unit === 'Fahrenheit' ? numericTemp : this.convertToCelsius(numericTemp);
-    const unitSymbol = this.unit === 'Fahrenheit' ? '°F' : '°C';
-    return isNaN(formattedTemp) ? 'Huh?' : `${Math.round(formattedTemp)} ${unitSymbol}`;
+// Helper function to display temperature with the correct unit
+get displayTemp(): string {
+  const numericTemp = parseFloat(this.temp);
+  const formattedTemp = this.unit === 'Fahrenheit' ? numericTemp : this.convertToCelsius(numericTemp);
+  const unitSymbol = this.unit === 'Fahrenheit' ? '°F' : '°C';
+  return isNaN(formattedTemp) ? 'Huh?' : `${Math.round(formattedTemp)} ${unitSymbol}`;
+}
+
+convertForecastDataToSelectedUnit(): void {
+  if (this.forecastData && this.forecastData.length > 0) {
+    this.forecastData = this.forecastData.map(day => {
+      // If original temperatures are not set, store them
+      if (!day.temp.originalMax) {
+        day.temp.originalMax = day.temp.max;
+        day.temp.originalMin = day.temp.min;
+      }
+      // Convert based on the selected unit
+      return {
+        ...day,
+        temp: {
+          max: this.unit === 'Fahrenheit' ? day.temp.originalMax : this.convertToCelsius(day.temp.originalMax),
+          min: this.unit === 'Fahrenheit' ? day.temp.originalMin : this.convertToCelsius(day.temp.originalMin),
+          originalMax: day.temp.originalMax,
+          originalMin: day.temp.originalMin
+        }
+      };
+    });
   }
+}
+
+convertDailyForecastToSelectedUnit(): void {
+  if (this.dailyForecast) {
+    // Convert morning temperature
+    if (this.dailyForecast.morning) {
+      if (!this.dailyForecast.morning.originalTemp) {
+        this.dailyForecast.morning.originalTemp = this.dailyForecast.morning.temp; // Store the original Fahrenheit temperature
+      }
+      this.dailyForecast.morning.temp = this.unit === 'Fahrenheit'
+        ? this.dailyForecast.morning.originalTemp
+        : this.convertToCelsius(this.dailyForecast.morning.originalTemp);
+    }
+
+    // Convert noon temperature
+    if (this.dailyForecast.noon) {
+      if (!this.dailyForecast.noon.originalTemp) {
+        this.dailyForecast.noon.originalTemp = this.dailyForecast.noon.temp; // Store the original Fahrenheit temperature
+      }
+      this.dailyForecast.noon.temp = this.unit === 'Fahrenheit'
+        ? this.dailyForecast.noon.originalTemp
+        : this.convertToCelsius(this.dailyForecast.noon.originalTemp);
+    }
+
+    // Convert afternoon temperature
+    if (this.dailyForecast.afternoon) {
+      if (!this.dailyForecast.afternoon.originalTemp) {
+        this.dailyForecast.afternoon.originalTemp = this.dailyForecast.afternoon.temp; // Store the original Fahrenheit temperature
+      }
+      this.dailyForecast.afternoon.temp = this.unit === 'Fahrenheit'
+        ? this.dailyForecast.afternoon.originalTemp
+        : this.convertToCelsius(this.dailyForecast.afternoon.originalTemp);
+    }
+  }
+}
+
 
   // Helper function to convert Fahrenheit to Celsius
   private convertToCelsius(tempFahrenheit: number): number {
