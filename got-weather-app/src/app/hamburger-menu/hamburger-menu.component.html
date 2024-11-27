@@ -62,7 +62,7 @@
           Celsius
         </label>  
       </li>      
-      <li>
+      <li *ngIf="isLoggedIn">
         <button class="menu-button" (click)="emitFavoriteSearch()">Favorite</button>
       </li>
       <li>
@@ -70,7 +70,7 @@
           {{ isLoggedIn ? 'Logout' : 'Login' }}
         </button>
       </li>
-      <li>
+      <li *ngIf="!isLoggedIn">
         <button (click)="navigateToCreate()" class="menu-button">Create Account</button>
       </li>
     </ul>
