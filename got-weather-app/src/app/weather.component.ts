@@ -90,6 +90,86 @@ export class WeatherComponent implements OnInit {
     if (this.hamburgerMenu) {
       this.hamburgerMenu.setUnit('Fahrenheit');
     }
+      console.log(this.selectedSignal);
+      this.http
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
+            console.log('Current Weather Data:', data);
+            this.renderDOM(data);
+          },
+          error: (err) => {
+            console.error('Error fetching current weather:', err);
+            alert('City not found. Please try a different city.');
+          },
+        });
+    this.http
+        .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+        .subscribe({
+          next: (data: any) => {
+            console.log('Current Weather Data for 7-day forecast:', data);
+            const lat = data.coord.lat;
+            const lon = data.coord.lon;
+            console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+
+            // Use WeatherService to fetch the 7-day forecast
+            this.weatherService.get7DayForecast(lat, lon).subscribe({
+              next: (forecastData: any) => {
+                console.log('7-Day Forecast Data:', forecastData);
+                this.forecastData = forecastData.daily;
+              },
+              error: (err) => console.error('Error fetching 7-day forecast:', err),
+            });
+          },
+          error: (err) => {
+            console.error('Error fetching current weather for 7-day forecast:', err);
+          },
+        });
+
+        this.http
+    .get(`${this.apiUrl}/weather?q=${cityName}&appid=${this.apiKey}&units=imperial`)
+    .subscribe({
+      next: (data: any) => {
+        console.log('Current Weather Data:', data);
+
+        // Get coordinates for hourly forecast
+        const lat = data.coord.lat;
+        const lon = data.coord.lon;
+        console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+
+        // Use WeatherService to fetch hourly forecast using One Call API
+        this.weatherService.get7DayForecast(lat, lon).subscribe({
+          next: (forecastData: any) => {
+            if (forecastData.hourly && forecastData.hourly.length > 0) {
+              // Filter temperatures for 7 AM, 12 PM, and 5 PM
+              this.dailyForecast = {
+                morning: forecastData.hourly.find((hour: any) => new Date(hour.dt * 1000).getHours() === 7),
+                noon: forecastData.hourly.find((hour: any) => new Date(hour.dt * 1000).getHours() === 12),
+                afternoon: forecastData.hourly.find((hour: any) => new Date(hour.dt * 1000).getHours() === 17),
+
+              };
+              console.log('Daily Hourly Forecast Data:', this.dailyForecast);
+            } else {
+              console.error('No hourly forecast data found');
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching daily forecast:', err);
+            alert('Error fetching daily forecast. Please try again later.');
+          },
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching current weather for daily forecast:', err);
+      },
+    });
+  
+  }
+  /* searchCity(cityName: string) {
+    this.selectedUnit = 'Fahrenheit';
+    if (this.hamburgerMenu) {
+      this.hamburgerMenu.setUnit('Fahrenheit');
+    }
     if (this.selectedSignal === 'current') {
       console.log(this.selectedSignal);
       this.http
@@ -196,7 +276,7 @@ export class WeatherComponent implements OnInit {
       },
     });
     }
-  }
+  } */
   
 
   private renderDOM(weatherData: any): void {
