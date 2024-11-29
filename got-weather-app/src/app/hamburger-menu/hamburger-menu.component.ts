@@ -28,7 +28,7 @@ export class HamburgerMenuComponent {
 
   ngOnInit() {
     // Subscribe to authentication state changes
-    this.authService.isLoggedIn$.subscribe((loggedIn) => {
+    this.authService.isLoggedIn$.subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
     });
   }

@@ -113,7 +113,6 @@ app.post('/checkUserExists', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-  console.log("Received login request:", req.body);
   const { usernameOrEmail, password } = req.body;
 
   if (!usernameOrEmail || !password) {
@@ -127,7 +126,8 @@ app.post('/login', (req, res) => {
     }
 
     if (results.length > 0) {
-      res.status(200).send("Login successful");
+      // Return username in JSON format
+      res.status(200).json({ message: "Login successful", username: results[0].username });
     } else {
       res.status(401).send("Invalid credentials");
     }

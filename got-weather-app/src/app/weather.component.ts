@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common'; // Import CommonModule
 import { FooterComponent } from './footer.component';
 import { WeatherService } from './weather.service';
 import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.component';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'weather',
@@ -20,6 +21,7 @@ export class WeatherComponent implements OnInit {
   city: string = '';
   description: string = '';
   imageClass: string = '';
+  username: string | null = null;
   forecastData: any[] = []; //Array to store the 7-day forecast
   private _selectedSignal: 'current' | '7day' | 'daily' = 'current'; // Default signal
   selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
@@ -29,11 +31,12 @@ export class WeatherComponent implements OnInit {
   private readonly apiKey = 'd474509725247f01f4f5b322d067dd8b';
   private readonly apiUrl = 'https://api.openweathermap.org/data/2.5';
 
-  constructor(private http: HttpClient, private weatherService: WeatherService) {}
+  constructor(private http: HttpClient, private weatherService: WeatherService, private authService: AuthService) {}
   @ViewChild(HamburgerMenuComponent) hamburgerMenu!: HamburgerMenuComponent;
 
 
   ngOnInit(): void {
+    this.username = this.authService.getCurrentUser();
     this.checkLocationPermission();
   }
 

@@ -8,27 +8,36 @@ export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  private currentUser: string | null = null; // Track the current user
+  private currentUser: string | null = null;
+
+  constructor() {
+    // Check if user is already logged in on initialization
+    const user = localStorage.getItem('loggedInUser');
+    if (user) {
+      this.currentUser = user;
+      this.isLoggedInSubject.next(true);
+    }
+  }
 
   login(user: string) {
-    this.currentUser = user; // Set the logged-in user
-    this.isLoggedInSubject.next(true); // Notify subscribers that user is logged in
-    localStorage.setItem('loggedInUser', user); // Persist user session
+    this.currentUser = user;
+    this.isLoggedInSubject.next(true);
+    localStorage.setItem('loggedInUser', user);
   }
 
   logout() {
-    this.currentUser = null; // Clear the logged-in user
-    this.isLoggedInSubject.next(false); // Notify subscribers that user is logged out
-    localStorage.removeItem('loggedInUser'); // Clear session
+    this.currentUser = null;
+    this.isLoggedInSubject.next(false);
+    localStorage.removeItem('loggedInUser');
   }
 
-  isAuthenticated() {
-    return this.isLoggedInSubject.value; // Get current authentication state
+  isAuthenticated(): boolean {
+    return this.isLoggedInSubject.value;
   }
 
   getCurrentUser(): string | null {
     if (!this.currentUser) {
-      this.currentUser = localStorage.getItem('loggedInUser'); // Retrieve from storage
+      this.currentUser = localStorage.getItem('loggedInUser');
     }
     return this.currentUser;
   }

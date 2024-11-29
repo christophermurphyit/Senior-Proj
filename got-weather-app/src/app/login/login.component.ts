@@ -29,20 +29,16 @@ export class LoginComponent {
       return;
     }
   
-    // Send login data to the backend
-    this.http.post(
+    this.http.post<any>(
       'http://localhost:5001/login',
       {
         usernameOrEmail: this.usernameOrEmail,
         password: this.password,
-      },
-      { responseType: 'text' }
+      }
     ).subscribe({
-      next: (response: string) => {
-        if (response === 'Login successful') {
-          alert('Login Successful!');
-          this.message = 'Login successful!';
-          this.authService.login(this.usernameOrEmail); // Pass the username/email to AuthService
+      next: (response) => {
+        if (response.message === 'Login successful') {
+          this.authService.login(response.username); // Store the username
           this.router.navigate(['/home']); // Redirect to homepage
         } else {
           this.message = 'Invalid username or password.';
