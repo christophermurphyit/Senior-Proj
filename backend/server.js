@@ -126,8 +126,20 @@ app.post('/login', (req, res) => {
     }
 
     if (results.length > 0) {
-      // Return username in JSON format
-      res.status(200).json({ message: "Login successful", username: results[0].username });
+      const userId = results[0].user_id;
+
+      // Update the latest_login_timestamp
+      const updateSql = 'UPDATE ACCOUNT_T SET latest_login_timestamp = NOW() WHERE user_id = ?';
+      db.query(updateSql, [userId], (updateErr) => {
+        if (updateErr) {
+          console.error('Error updating login timestamp:', updateErr);
+          // You may choose to handle this error differently
+          return res.status(500).send("Server error occurred while updating login timestamp.");
+        }
+
+        // Return username in JSON format
+        res.status(200).json({ message: "Login successful", username: results[0].username });
+      });
     } else {
       res.status(401).send("Invalid credentials");
     }
