@@ -55,6 +55,19 @@ app.post('/createAccount', (req, res) => {
     return res.status(400).json({ message: "All fields are required." });
   }
 
+  // Email validation
+  if (!email.includes('@')) {
+    return res.status(400).json({ message: "Please enter a valid email address." });
+  }
+
+  // Password validation
+  const passwordRegex = /^(?=.*\d).{6,}$/; // At least 6 characters and at least one number
+  if (!passwordRegex.test(password)) {
+    return res.status(400).json({
+      message: "Please enter a Password with at least 6 characters including at least one number."
+    });
+  }
+
   const checkSql = 'SELECT * FROM ACCOUNT_T WHERE username = ? OR user_email = ?';
   db.query(checkSql, [username, email], (err, results) => {
     if (err) {
@@ -70,7 +83,6 @@ app.post('/createAccount', (req, res) => {
       if (err) {
         return res.status(500).json({ message: err.message });
       }
-      // Respond with JSON
 
       console.log("Insert successful. Sending 201 response...");
       try {

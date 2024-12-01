@@ -20,7 +20,7 @@
           <label for="favoriteLocation">Favorite Location:</label>
           <input type="text" id="favoriteLocation" name="favoriteLocation" [(ngModel)]="favoriteLocation">
         </div>
-        <button type="submit" [disabled]="!loginForm.valid">Create Account</button>
+        <button type="submit" [disabled]="!loginForm.valid || isValidating">Create Account</button>
       </form>
       <div *ngIf="message" class="error-message">{{ message }}</div>
     </div>

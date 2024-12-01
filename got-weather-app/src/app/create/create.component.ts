@@ -29,25 +29,38 @@ export class CreateComponent {
       this.message = "All fields are required.";
       return;
     }
-
- this.isValidating = true; // Set loading state
-  this.validateLocation(this.favoriteLocation).subscribe({
-    next: (isValid) => {
-      this.isValidating = false; // Reset loading state
-      if (!isValid) {
-        this.message = "Invalid favorite location. Please enter a valid location.";
-        return;
-      }
-
-      // Continue with account creation
-      this.createAccount();
-    },
-    error: () => {
-      this.isValidating = false; // Reset loading state
-      this.message = "Error validating location. Please try again.";
+  
+    // Email validation
+    if (!this.email.includes('@')) {
+      this.message = "Please enter a valid email address.";
+      return;
     }
-  });
-}
+  
+    // Password validation
+    const passwordRegex = /^(?=.*\d).{6,}$/; // At least 6 characters and at least one number
+    if (!passwordRegex.test(this.password)) {
+      this.message = "Please enter a Password with at least 6 characters including at least one number.";
+      return;
+    }
+  
+    this.isValidating = true; // Set loading state
+    this.validateLocation(this.favoriteLocation).subscribe({
+      next: (isValid) => {
+        this.isValidating = false; // Reset loading state
+        if (!isValid) {
+          this.message = "Invalid favorite location. Please enter a valid location.";
+          return;
+        }
+  
+        // Continue with account creation
+        this.createAccount();
+      },
+      error: () => {
+        this.isValidating = false; // Reset loading state
+        this.message = "Error validating location. Please try again.";
+      }
+    });
+  }
 
 private createAccount() {
     this.http.post('http://localhost:5001/createAccount', {
