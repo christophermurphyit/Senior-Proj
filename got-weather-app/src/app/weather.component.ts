@@ -19,6 +19,7 @@ import { AuthService } from './auth.service';
 export class WeatherComponent implements OnInit {
   temp: string = '';
   city: string = '';
+  realCityName: string = '';
   description: string = '';
   imageClass: string = '';
   username: string | null = null;
@@ -284,9 +285,11 @@ export class WeatherComponent implements OnInit {
 
   private renderDOM(weatherData: any): void {
     console.log('Processing weather data:', weatherData); // Log the weather data
+    console.log('Weather data received:', weatherData); // Log to confirm data is received
     const temp = weatherData.main.temp.toFixed();
     const conditions = weatherData.weather[0].main;
 
+    this.realCityName = weatherData.name;
     this.city = this.determineCity(temp, conditions);
     this.temp = this.determineTempMessage(this.city, temp, conditions);
     this.description = this.determineDescription(this.city);
