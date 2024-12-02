@@ -21,7 +21,7 @@ header {
   
   /* Welcome message styling */
   .welcome-message {
-    font-size: 1.2em;
+    font-size: 1em;
     font-weight: bold;
     color: #fff;
   }
@@ -134,7 +134,6 @@ header {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    /* CHATGPT SCROLLING TEST*/
     max-height: calc(85vh - 10vh - 5vh); /* Fit within main section */
 }
 
@@ -208,7 +207,6 @@ header {
   }
 
 
-/* CHATGPT SCROLLING TEST*/
 #image-container {
     background-size: cover;
     background-repeat: no-repeat;
