@@ -38,6 +38,7 @@ export class HamburgerMenuComponent {
       alert('You are being logged out.');
       this.authService.logout(); // Log out the user
       this.router.navigate(['/']); // Redirect to homepage
+      window.location.reload();
     } else {
       this.router.navigate(['/login']); // Redirect to login page
     }
