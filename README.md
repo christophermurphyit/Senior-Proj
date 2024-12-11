@@ -6,7 +6,7 @@ You can save your favorite location, search by City Name, and have different for
 ### Sample Images:
 
 Fairly Pleasant?
-<img width="1408" alt="Screen Shot 2024-12-11 at 3 00 10 AM" src="./seniordesign-weather/images/readme-image-example.png">
+<img width="1408" alt="Screen Shot 2024-12-11 at 3 00 10 AM" src="./images/readme-image-example.png">
 
 ### Installation
 
