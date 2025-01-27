@@ -227,41 +227,63 @@ header {
 /* Loading Image */
 .bg-image {
     background: url("./images/loading-bg.jpg");
-    color: #f1e8d6;
+    color: #4e4e4e;
     opacity: 70%;
 }
 
 /* Cold-day backgrounds */
 .winterfell-bg {
     background: url("./images/winterfell.jpg");
-    color: #fcfbf9;
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
 }
 
 /* Pretty day backgrounds 60-80f */
 .highgarden-bg {
     background: url("./images/highgarden.jpg");
-    color: #fcfbf9;
-    text-shadow: rgb(3, 3, 3) 1px 0 10px;
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
 }
 
 .riverrun-bg {
     background: url("./images/riverrun.png");
-    color: #fcfbf9;
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
 
-}
+}   
 
 .kingslanding-bg {
     background: url("./images/kingslanding.jpg");
-    color: #fcfbf9;
-    text-shadow: rgb(3, 3, 3) 1px 0 10px;
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
 }
 
 
 /* Forest or Foggy Day Backgrounds */
 .north-bg {
     background: url("./images/North.png");
-    color: #fcfbf9;
-}
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */}
 
 .dagobah-bg {
     background: url("./images/dagobah.jpg");
@@ -270,25 +292,43 @@ header {
 /* Rainy Backgrounds */
 .stormsend-bg {
     background: url("./images/storms-end.png");
-    color: #fcfbf9;
-    text-shadow: rgb(3, 3, 3) 1px 0 10px;
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
 }
 
 .castleblack-bg {
     background: url("./images/castle_black.jpg");
-    color: #fcfbf9;
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
 }
 
 /* Really hot day Background */
 .dorne-bg {
     background: url("./images/dorne.jpg");
-    color: #fcfbf9;
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
 }
 
 .slaversbay-bg {
     background: url("./images/slavers_bay.jpg");
-    color: #ffffff;
-    text-shadow: rgb(0, 0, 0) 1px 0 10px;
+    color: #f0ead6;
+    text-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
 }
 
 .current-weather {
