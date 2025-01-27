@@ -419,5 +419,17 @@ header {
     color: #000000;
   }
   
-  
+  /* Add a class for Cinzel font */
+.cinzel {
+  font-family: 'Cinzel', serif;
+  font-weight: 400; /* Adjust weight as needed (400 to 900) */
+}
+
+/* Example usage in existing elements */
+.center_item_2 .city_name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700; /* Bold weight for emphasis */
+  letter-spacing: 2px; /* Add letter spacing if desired */
+}
+
   
