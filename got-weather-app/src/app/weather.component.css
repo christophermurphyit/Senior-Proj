@@ -138,12 +138,12 @@ header {
 }
 
 .center_item_1 {
-    font-weight: 500;
-    font-size: 2.5rem;
+    font-weight: 900;
+    font-size: 3rem;
     text-transform: uppercase;
     text-align: center;
     margin-bottom: -145px; /* Move closer to city name */
-    transform: translateX(-150px); /* Move farther right */
+    transform: translateX(-240px); /* Move farther right */
 }
 
 .its_like {
@@ -165,12 +165,12 @@ header {
 }
 
 .center_item_3 {
-    font-weight: 500;
-    font-size: 2.5rem;
+    font-weight: 900;
+    font-size: 3rem;
     text-transform: uppercase;
     text-align: center;
     margin-top: -145px; /* Move closer to city name */
-    transform: translateX(480px); /* Move farther left */
+    transform: translateX(700px); /* Move farther left */
 }
 
 .out_there {
@@ -221,7 +221,7 @@ header {
 .top_container, .center_container, .bottom_container {
     max-height: 100%; /* Prevents overflow beyond viewport */
     max-width: 100%;
-    overflow: hidden;
+    overflow: visible;
 }
 /* CHATGPT SCROLLING TEST END*/
 
@@ -431,5 +431,18 @@ header {
   font-weight: 700; /* Bold weight for emphasis */
   letter-spacing: 2px; /* Add letter spacing if desired */
 }
+
+.center_item_1 {
+  font-family: 'Cinzel', serif;
+  font-weight: 700; /* Bold weight for emphasis */
+  letter-spacing: 2px; /* Add letter spacing if desired */
+}
+
+.center_item_3 {
+  font-family: 'Cinzel', serif;
+  font-weight: 700; /* Bold weight for emphasis */
+  letter-spacing: 2px; /* Add letter spacing if desired */
+}
+
 
   
