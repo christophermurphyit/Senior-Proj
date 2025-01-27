@@ -217,6 +217,7 @@ export class WeatherComponent implements OnInit {
 
   private determineCity(temp: number, conditions: string): string {
     let city = '';
+    temp = 65;
 
     if (conditions === 'Rain' || conditions === 'Thunderstorm') {
       city = "storm's end";

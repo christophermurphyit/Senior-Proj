@@ -139,11 +139,11 @@ header {
 
 .center_item_1 {
     font-weight: 500;
-    font-size: 1.3rem;
+    font-size: 2.5rem;
     text-transform: uppercase;
     text-align: center;
-    margin-bottom: -90px; /* Move closer to city name */
-    transform: translateX(50px); /* Move farther right */
+    margin-bottom: -145px; /* Move closer to city name */
+    transform: translateX(-150px); /* Move farther right */
 }
 
 .its_like {
@@ -152,10 +152,11 @@ header {
 }
 
 .center_item_2 {
-    font-weight: 400;
-    font-size: 6em;
+    font-weight: 500;
+    font-size: 7em;
     text-transform: uppercase;
     text-align: center;
+    letter-spacing: -50px;
 }
 
 .city_name {
@@ -165,11 +166,11 @@ header {
 
 .center_item_3 {
     font-weight: 500;
-    font-size: 1.3rem;
+    font-size: 2.5rem;
     text-transform: uppercase;
     text-align: center;
-    margin-top: -90px; /* Move closer to city name */
-    transform: translateX(-50px); /* Move farther left */
+    margin-top: -145px; /* Move closer to city name */
+    transform: translateX(480px); /* Move farther left */
 }
 
 .out_there {
@@ -227,7 +228,7 @@ header {
 /* Loading Image */
 .bg-image {
     background: url("./images/loading-bg.jpg");
-    color: #4e4e4e;
+    color: #ffffff;
     opacity: 70%;
 }
 
