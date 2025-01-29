@@ -22,6 +22,8 @@ export class WeatherComponent implements OnInit {
   realCityName: string = '';
   description: string = '';
   imageClass: string = '';
+  public localTime: string = '';
+  private timezoneOffset: number = 0;
   username: string | null = null;
   forecastData: any[] = []; //Array to store the 7-day forecast
   private _selectedSignal: 'current' | '7day' | 'daily' = 'current'; // Default signal
@@ -39,6 +41,14 @@ export class WeatherComponent implements OnInit {
   ngOnInit(): void {
     this.username = this.authService.getCurrentUser();
     this.checkLocationPermission();
+
+    setInterval(() => {
+      const now = new Date();
+      const cityTime = new Date(
+        now.getTime() + (this.cityTimezoneOffset + now.getTimezoneOffset() * 60) * 1000
+      );
+      this.localTime = cityTime.toLocaleString('en-US', { hour12: true });
+  }, 1000);
   }
 
   private checkLocationPermission(): void {
@@ -275,7 +285,16 @@ export class WeatherComponent implements OnInit {
     }
   }
 
+  private cityTimezoneOffset: number = 0;
+  
   performSearch(): void {
+    const city = (document.getElementById('city-search') as HTMLInputElement).value;
+    this.http.get('https://api.openweathermap.org/data/2.5').subscribe((data: any) => {
+      this.realCityName = data.name;
+      this.description = data.weather[0].description;
+      // Use the existing determineCity method to set the imageClass, etc.
+      this.city = this.determineCity(data.main.temp, data.weather[0].main);
+    })
     const searchInput = (document.getElementById('city-search') as HTMLInputElement).value;
     if (searchInput) {
       this.searchCity(searchInput);
