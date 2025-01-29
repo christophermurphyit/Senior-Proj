@@ -120,7 +120,7 @@ header {
 .top_container {
     position: fixed;
     left: 10%;
-    top: 14%;
+    top: 8%;
     transform: translate(-20%, -20%);
     font-size: 2.3em;
     font-weight: 400;
