@@ -223,9 +223,10 @@ header {
 
 .bottom_item_2 {
     position: relative;
-    font-size: 1em;
+    font-size: 3em;
     text-align: right; /* Align text to the right */
-    padding-right: 5%; /* Increase the padding to push the text farther right */
+    padding-right: 15%; /* Increase the padding to push the text farther right */
+    width: 400px;
   }
 
 
