@@ -388,8 +388,8 @@ header {
     flex-wrap: nowrap; /* Ensure the boxes are in a single row */
     justify-content: flex-start; /* Align boxes to the left */
     position: fixed; /* Fix position on the screen */
-    bottom: 10%; /* Increase the value to move higher */
-    left: 1%; /* Position farther left */
+    bottom: 7%; /* Increase the value to move higher */
+    left: 2%; /* Position farther left */
     margin: 0; /* Remove any extra margin */
     padding: 30px; /* Add padding for spacing */
     gap: 20px; /* Increase space between boxes for a better look */
@@ -403,10 +403,10 @@ header {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow for more depth */
     width: 100px; /* Increase width for bigger cards */
     text-align: center; /* Center-align the text inside the cards */
-    font-size: 1.1em; /* Increase font size for better readability */
+    font-size: 1.3em; /* Increase font size for better readability */
     transition: transform 0.2s ease-in-out;
     min-height: 100px;
-    min-width: 120px;
+    min-width: 170px;
   }
   
   .daily-forecast-card:hover {
