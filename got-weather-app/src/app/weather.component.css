@@ -400,7 +400,11 @@ header {
     background: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
     padding: 20px; /* Increase padding for bigger cards */
     border-radius: 12px; /* Increase rounding of corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow for more depth */
+    box-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
     width: 100px; /* Increase width for bigger cards */
     text-align: center; /* Center-align the text inside the cards */
     font-size: 1.3em; /* Increase font size for better readability */
