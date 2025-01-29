@@ -6,31 +6,40 @@
 
 /* Header styling */
 header {
-    background-color: #111;
-    color: #fff;
-    padding: 10px; /* Adjusted padding for better spacing */
-    box-sizing: border-box;
-  }
+  background-color: #111;
+  color: #fff;
+  padding: 10px; /* Keep padding fixed */
+  box-sizing: border-box;
+  height: 60px; /* Set a fixed height */
+  display: flex;
+  align-items: center; /* Ensures content stays centered vertically */
+  overflow: hidden; /* Prevents the text from expanding the header */
+}
   
   /* Flex container for header content */
   .header-content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+  align-items: center;
+  justify-content: space-between; /* Keeps items at both ends */
+  width: 100%;
   }
   
   /* Welcome message styling */
   .welcome-message {
-    font-size: 1em;
-    font-weight: bold;
-    color: #fff;
+    font-size: 2.3rem;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1;
+  white-space: nowrap;
   }
   
   /* New styles for header-search */
   .header-search {
-    flex-grow: 1; /* Allow it to take up available space */
     display: flex;
-    justify-content: center; /* Center the search bar */
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Takes up space between the welcome message and right side */
+  position: relative;
   }
   
   /* Right side of the header */
@@ -178,6 +187,27 @@ header {
     padding-right: 12em;
 }
 
+.flavor_text {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 3%;
+  bottom: 22%;
+  font-size: 2.2em;
+  font-weight: 400;
+}
+
+
+.flavor_text_1 {
+  position: relative;
+  font-size: 1.3em;
+  font-weight: 400;
+  flex-wrap: wrap;
+  flex-grow: 2;
+  max-width: 35rem;
+  padding-bottom: 2rem;
+}
+
 /* Start Bottom Container */
 .bottom_container {
     display: flex;
@@ -190,15 +220,6 @@ header {
     font-weight: 400;
 }
 
-.bottom_item_1 {
-    position: relative;
-    font-size: 1.3em;
-    font-weight: 400;
-    flex-wrap: wrap;
-    flex-grow: 2;
-    max-width: 15rem;
-    padding-bottom: 2rem;
-}
 
 .bottom_item_2 {
     position: relative;
