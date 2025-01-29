@@ -119,10 +119,10 @@ header {
 
 .top_container {
     position: fixed;
-    left: 8%;
-    top: 12%;
+    left: 10%;
+    top: 14%;
     transform: translate(-20%, -20%);
-    font-size: 1.2em;
+    font-size: 1.5em;
     font-weight: 400;
 }
 
@@ -354,7 +354,11 @@ header {
     background: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
     padding: 8px; /* Reduce padding for smaller cards */
     border-radius: 8px; /* Slight rounding of corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    box-shadow: 
+    -1px -1px 0 black, /* Top-left */
+    1px -1px 0 black,  /* Top-right */
+    -1px 1px 0 black,  /* Bottom-left */
+    1px 1px 0 black;   /* Bottom-right */
     width: 100px; /* Smaller width */
     text-align: center; /* Center-align the text inside the cards */
     font-size: 0.9em;  /* Adjust font size for smaller cards */
