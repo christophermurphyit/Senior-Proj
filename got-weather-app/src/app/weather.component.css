@@ -361,9 +361,10 @@ header {
     1px 1px 0 black;   /* Bottom-right */
     width: 100px; /* Smaller width */
     text-align: center; /* Center-align the text inside the cards */
-    font-size: 0.9em;  /* Adjust font size for smaller cards */
+    font-size: 1.1em;  /* Adjust font size for smaller cards */
     transition: transform 0.2s ease-in-out;
     min-height: 100px;
+    min-width: 120px;
     padding: 20px;
   }
   
@@ -371,12 +372,10 @@ header {
     transform: scale(1.05); /* Slight zoom effect on hover */
   }
   
-/*.forecast-date {
-    font-weight: bold;
-    margin-bottom: 4px;
-    color: #000000;
-    font-size: 0.85em;
-  }*/
+.forecast-date {
+  font-size: 1.3em;  /* Adjust font size for smaller cards */
+
+  }
   
   /*.forecast-temp {
     font-size: 0.9em; 
