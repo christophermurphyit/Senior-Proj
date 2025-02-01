@@ -7,13 +7,13 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: 24px;
-    width: 30px;
+    height: 35px;
+    width: 36px;
     z-index: 1000; /* Ensure it's above other elements */
   }
   
   .hamburger .bar {
-    height: 3px;
+    height: 4px;
     width: 100%;
     background-color: #fff;
     border-radius: 3px;
