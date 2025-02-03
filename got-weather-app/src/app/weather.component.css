@@ -236,7 +236,7 @@ header {
     background-repeat: no-repeat;
     background-position: center;
     width: 100vw; /* Full width */
-    height: 90vh; /* Adjusted to fit with header and footer */
+    height: 93vh; /* Adjusted to fit with header and footer */
     position: relative;
     overflow: hidden;
 }
