@@ -127,14 +127,29 @@ header {
  Begin page content
 } */
 
-.top_container {
+/* .top_container {
     position: fixed;
-    left: 10%;
+    left: 18%;
     top: 8%;
     transform: translate(-20%, -20%);
     font-size: 2.3em;
     font-weight: 400;
+    max-width: 20%; 
+} */
+
+.top_container {
+  display: flex; /* Enables flexbox */
+  flex-wrap: wrap; /* Allows content to wrap to a new line */
+  justify-content: center; /* Centers content */
+  position: relative; /* Allows normal document flow */
+  left: -30%;
+  top: -2%;
+  max-width: 35%; /* Adjusts the max width before wrapping */
+  font-size: 2.3em;
+  font-weight: 400;
+  margin: 20px auto; /* Centers the container */
 }
+
 
 /* Start Center Container */
 .center_container {
@@ -241,12 +256,11 @@ header {
     overflow: hidden;
 }
 
-.top_container, .center_container, .bottom_container {
+.center_container, .bottom_container {
     max-height: 100%; /* Prevents overflow beyond viewport */
     max-width: 100%;
     overflow: visible;
 }
-/* CHATGPT SCROLLING TEST END*/
 
 /* Loading Image */
 .bg-image {
