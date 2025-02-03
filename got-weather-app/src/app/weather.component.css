@@ -252,7 +252,7 @@ header {
     background-position: center;
     width: 100vw; /* Full width */
     height: 93vh; /* Adjusted to fit with header and footer */
-    position: absolute; /*Was relative, may cause scrolling problems */
+    position: relative; /*Was relative, may cause scrolling problems */
     overflow: hidden;
 }
 
@@ -414,12 +414,6 @@ header {
 
   }
   
-  /*.forecast-temp {
-    font-size: 0.9em; 
-    font-weight: bold;
-    color: #000000;
-  }*/
-
   .daily-forecast-container {
     display: flex;
     flex-wrap: nowrap; /* Ensure the boxes are in a single row */
