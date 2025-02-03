@@ -1,0 +1,90 @@
+<div class="background-image">
+  <button type="button" (click)="goHome()" class="home-button">Home</button>
+
+  <div class="overlay">
+    <div class="login-container">
+      <h2>Account Info</h2>
+
+      <!-- READ-ONLY VIEW (when not editing) -->
+      <div *ngIf="!isEditing" class="info-section">
+        <div class="info-bubble">
+          <span class="info-label">Email:</span>
+          <span class="info-text">{{ currentEmail }}</span>
+        </div>
+        <div class="info-bubble">
+          <span class="info-label">Username:</span>
+          <span class="info-text">{{ currentUsername }}</span>
+        </div>
+        <div class="info-bubble">
+          <span class="info-label">Favorite Location:</span>
+          <span class="info-text">{{ currentFavoriteLocation }}</span>
+        </div>
+
+        <button (click)="toggleEdit()">Edit</button>
+      </div>
+
+      <!-- EDIT MODE -->
+      <form *ngIf="isEditing" (ngSubmit)="onSubmit()" #accountForm="ngForm">
+        <div class="form-group">
+          <label for="newEmail">New Email:</label>
+          <input
+            type="email"
+            id="newEmail"
+            name="newEmail"
+            [(ngModel)]="newEmail"
+            placeholder="Enter new email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="newUsername">New Username:</label>
+          <input
+            type="text"
+            id="newUsername"
+            name="newUsername"
+            [(ngModel)]="newUsername"
+            placeholder="Enter new username"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="newFavoriteLocation">New Favorite Location:</label>
+          <input
+            type="text"
+            id="newFavoriteLocation"
+            name="newFavoriteLocation"
+            [(ngModel)]="newFavoriteLocation"
+            placeholder="Enter new favorite location"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword">New Password:</label>
+          <input
+            type="password"
+            id="newPassword"
+            name="newPassword"
+            [(ngModel)]="newPassword"
+            placeholder="Enter new password"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="confirmNewPassword">Confirm New Password:</label>
+          <input
+            type="password"
+            id="confirmNewPassword"
+            name="confirmNewPassword"
+            [(ngModel)]="confirmNewPassword"
+            placeholder="Confirm new password"
+          />
+        </div>
+
+        <button type="submit" [disabled]="isSubmitting">Update Account</button>
+        <button type="button" (click)="cancelEdit()">Cancel</button>
+      </form>
+
+      <div *ngIf="message" class="error-message">{{ message }}</div>
+    </div>
+  </div>
+</div>
