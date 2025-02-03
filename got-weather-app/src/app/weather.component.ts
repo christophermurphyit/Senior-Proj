@@ -47,7 +47,7 @@ export class WeatherComponent implements OnInit {
       const cityTime = new Date(
         now.getTime() + (this.cityTimezoneOffset + now.getTimezoneOffset() * 60) * 1000
       );
-      this.localTime = cityTime.toLocaleString('en-US', { hour12: true });
+      this.localTime = `Local Time: ${cityTime.toLocaleString('en-US', { hour12: true })}`;
   }, 1000);
   }
 
@@ -295,7 +295,6 @@ export class WeatherComponent implements OnInit {
       // Use the existing determineCity method to set the imageClass, etc.
       this.city = this.determineCity(data.main.temp, data.weather[0].main);
       this.cityTimezoneOffset = data.timezone;
-      this.updateDateTime();
     })
     const searchInput = (document.getElementById('city-search') as HTMLInputElement).value;
     if (searchInput) {
@@ -303,12 +302,7 @@ export class WeatherComponent implements OnInit {
     }
   }
 
-  updateDateTime(): void {
-    const now = new Date();
-    const localTimeDate = new Date(now.getTime() + this.cityTimezoneOffset * 1000);
-    // Convert the date to a readable format as needed
-    this.localTime = localTimeDate.toLocaleString();
-  }
+
 
   onFavoriteSearch(city: string): void {
     // Handle the favorite search
