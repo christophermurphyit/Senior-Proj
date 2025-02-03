@@ -289,16 +289,25 @@ export class WeatherComponent implements OnInit {
   
   performSearch(): void {
     const city = (document.getElementById('city-search') as HTMLInputElement).value;
-    this.http.get('https://api.openweathermap.org/data/2.5').subscribe((data: any) => {
+    this.http.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=d474509725247f01f4f5b322d067dd8b&units=imperial`).subscribe((data: any) => {
       this.realCityName = data.name;
       this.description = data.weather[0].description;
       // Use the existing determineCity method to set the imageClass, etc.
       this.city = this.determineCity(data.main.temp, data.weather[0].main);
+      this.cityTimezoneOffset = data.timezone;
+      this.updateDateTime();
     })
     const searchInput = (document.getElementById('city-search') as HTMLInputElement).value;
     if (searchInput) {
       this.searchCity(searchInput);
     }
+  }
+
+  updateDateTime(): void {
+    const now = new Date();
+    const localTimeDate = new Date(now.getTime() + this.cityTimezoneOffset * 1000);
+    // Convert the date to a readable format as needed
+    this.localTime = localTimeDate.toLocaleString();
   }
 
   onFavoriteSearch(city: string): void {
