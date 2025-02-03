@@ -35,7 +35,8 @@
 <div class="bg-image" [ngClass]="imageClass" id="image-container">
   <section class="top_container">
     <p id="temp">The temperature in {{realCityName || 'your location'}} is currently {{ displayTemp || 'Huh?' }} with wind speeds of 
-      {{ windSpeed || 'unknown' }} mph.</p>
+      {{ windSpeed || 'unknown' }} mph. The local time is {{ localTime || 'calculating...' }}.
+    </p> 
   </section>
 
   <section class="center_container">

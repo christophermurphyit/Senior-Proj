@@ -28,6 +28,8 @@ export class WeatherComponent implements OnInit {
   selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
   dailyForecast: any;
   windSpeed: number | null = null;
+  localTime: string = ''; // Declare localTime as a string
+
 
 
 
@@ -65,6 +67,33 @@ export class WeatherComponent implements OnInit {
           console.log('Weather data received:', data); // Log to confirm data is received
           this.windSpeed = Math.round(data.wind?.speed);
           console.log('API Wind Speed (m/s):', data.wind?.speed);
+            // Get the current UTC time
+        const utcTime = new Date();
+
+        // Convert timezone offset from seconds to hours
+        const timezoneOffsetHours = data.timezone / 3600; // Convert seconds to hours
+
+        // Manually calculate the local time using UTC hours
+        const localTime = new Date(utcTime.getTime() + data.timezone * 1000);
+
+        // Log time details for debugging
+        console.log("Timezone Offset (seconds):", data.timezone);
+        console.log("Timezone Offset (hours):", timezoneOffsetHours);
+        console.log("UTC Time:", utcTime.toISOString());
+        console.log("Computed Local Time:", localTime.toISOString());
+
+        // Format the time manually
+        const hours = localTime.getUTCHours(); // Get UTC-based hour
+        const minutes = localTime.getUTCMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = ((hours + 11) % 12 + 1); // Converts 24-hour format to 12-hour format
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        
+        this.localTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
+
+        console.log(`Corrected Local Time for ${data.name}:`, this.localTime);
+
+
           this.renderDOM(data);
         },
         error: () => alert('Error fetching weather data. Please try again later.'),
@@ -133,6 +162,31 @@ export class WeatherComponent implements OnInit {
             console.log('Current Weather Data:', data);
             this.windSpeed = Math.round(data.wind?.speed);
             console.log('API Wind Speed (m/s):', data.wind?.speed);
+             // Get the current UTC time
+        const utcTime = new Date();
+
+        // Convert timezone offset from seconds to hours
+        const timezoneOffsetHours = data.timezone / 3600; // Convert seconds to hours
+
+        // Manually calculate the local time using UTC hours
+        const localTime = new Date(utcTime.getTime() + data.timezone * 1000);
+
+        // Log time details for debugging
+        console.log("Timezone Offset (seconds):", data.timezone);
+        console.log("Timezone Offset (hours):", timezoneOffsetHours);
+        console.log("UTC Time:", utcTime.toISOString());
+        console.log("Computed Local Time:", localTime.toISOString());
+
+        // Format the time manually
+        const hours = localTime.getUTCHours(); // Get UTC-based hour
+        const minutes = localTime.getUTCMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = ((hours + 11) % 12 + 1); // Converts 24-hour format to 12-hour format
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        
+        this.localTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
+
+        console.log(`Corrected Local Time for ${data.name}:`, this.localTime);
             this.renderDOM(data);
           },
           error: (err) => {
