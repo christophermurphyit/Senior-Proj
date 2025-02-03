@@ -237,7 +237,7 @@ header {
     background-position: center;
     width: 100vw; /* Full width */
     height: 93vh; /* Adjusted to fit with header and footer */
-    position: relative;
+    position: absolute; /*Was relative, may cause scrolling problems */
     overflow: hidden;
 }
 
