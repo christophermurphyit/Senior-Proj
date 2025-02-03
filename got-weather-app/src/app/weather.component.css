@@ -251,7 +251,7 @@ header {
     background-repeat: no-repeat;
     background-position: center;
     width: 100vw; /* Full width */
-    height: 93vh; /* Adjusted to fit with header and footer */
+    height: 92vh; /* Adjusted to fit with header and footer */
     position: relative; /*Was relative, may cause scrolling problems */
     overflow: hidden;
 }
@@ -378,7 +378,7 @@ header {
     flex-wrap: nowrap; /* Ensure the boxes are in a single row */
     justify-content: flex-start; /* Align boxes to the left */
     position: fixed; /* Fix position on the screen */
-    bottom: 10%; /* Increase the value to move higher */
+    bottom: 7%; /* Increase the value to move higher */
     left: 2%; /* Position farther left */
     margin: 0; /* Remove any extra margin */
     padding: 10px; /* Add padding for spacing */
