@@ -58,8 +58,8 @@ header {
 
 .bottom-right-clock {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  top: 10px;
+  left: 10px;
   background-color: #fff;
   color: #333;
   padding: 8px 12px;
