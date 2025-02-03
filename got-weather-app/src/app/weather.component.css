@@ -144,7 +144,7 @@ header {
   position: relative; /* Allows normal document flow */
   left: -30%;
   top: -2%;
-  max-width: 35%; /* Adjusts the max width before wrapping */
+  max-width: 37%; /* Adjusts the max width before wrapping */
   font-size: 2.3em;
   font-weight: 400;
   margin: 20px auto; /* Centers the container */
