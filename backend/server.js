@@ -162,3 +162,120 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// 1) For fetching user info (excluding password):
+app.get('/getAccountInfo', (req, res) => {
+  const { usernameOrEmail } = req.query;
+  if (!usernameOrEmail) {
+    return res.status(400).json({ message: 'Username or email is required.' });
+  }
+
+  const sql = `
+    SELECT user_email, username, favorite_location
+    FROM ACCOUNT_T
+    WHERE username = ? OR user_email = ?
+    LIMIT 1
+  `;
+  db.query(sql, [usernameOrEmail, usernameOrEmail], (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ message: 'Server error occurred.' });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const { user_email, username, favorite_location } = results[0];
+    return res.status(200).json({
+      email: user_email,
+      username: username,
+      favoriteLocation: favorite_location,
+    });
+  });
+});
+
+// 2) For updating user info (including new password), if you haven't already:
+app.put('/updateAccount', (req, res) => {
+  const {
+    currentUsernameOrEmail,
+    newEmail,
+    newUsername,
+    newFavoriteLocation,
+    currentPassword,
+    newPassword
+  } = req.body;
+
+  if (!currentUsernameOrEmail || !currentPassword) {
+    return res.status(400).json({ message: 'Missing required fields.' });
+  }
+
+  // 2.1) Check current password
+  const selectSql = `
+    SELECT user_id, user_password 
+    FROM ACCOUNT_T
+    WHERE (username = ? OR user_email = ?)
+    LIMIT 1
+  `;
+  db.query(selectSql, [currentUsernameOrEmail, currentUsernameOrEmail], (err, results) => {
+    if (err) {
+      console.error('Error fetching user info:', err);
+      return res.status(500).json({ message: 'Server error' });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const user = results[0];
+    if (user.user_password !== currentPassword) {
+      return res.status(401).json({ message: 'Invalid password.' });
+    }
+
+    // 2.2) Prepare updates
+    const updateFields = [];
+    const params = [];
+
+    if (newEmail) {
+      updateFields.push('user_email = ?');
+      params.push(newEmail.trim());
+    }
+    if (newUsername) {
+      updateFields.push('username = ?');
+      params.push(newUsername.trim());
+    }
+    if (newFavoriteLocation) {
+      updateFields.push('favorite_location = ?');
+      params.push(newFavoriteLocation.trim());
+    }
+    if (newPassword && newPassword.trim() !== '') {
+      // Example password validation
+      const passwordRegex = /^(?=.*\d).{6,}$/;
+      if (!passwordRegex.test(newPassword)) {
+        return res.status(400).json({
+          message: 'Please choose a password with at least 6 characters including at least one number.'
+        });
+      }
+      updateFields.push('user_password = ?');
+      params.push(newPassword.trim());
+    }
+
+    if (updateFields.length === 0) {
+      return res.status(200).json({ message: 'No changes submitted.' });
+    }
+
+    // 2.3) Perform the UPDATE
+    const updateSql = `
+      UPDATE ACCOUNT_T
+      SET ${updateFields.join(', ')}
+      WHERE user_id = ?
+    `;
+    params.push(user.user_id);
+
+    db.query(updateSql, params, (updateErr) => {
+      if (updateErr) {
+        console.error('Error updating account:', updateErr);
+        return res.status(500).json({ message: 'Server error while updating account' });
+      }
+      return res.status(200).json({ message: 'Account updated successfully!' });
+    });
+  });
+});

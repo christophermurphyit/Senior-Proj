@@ -1,0 +1,137 @@
+/* 1) Basic resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2) Background: reuse your GOT image or any desired background */
+.background-image {
+  background-image: url('../images/rhaegal-jon-snow-game-of-thrones-1lfonq1b2k5v53q7.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 3) Semi-transparent overlay */
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 4) Container: use .login-container from your create page so it matches */
+.login-container {
+  max-width: 400px; /* a bit wider than default */
+  width: 100%;
+  padding: 25px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* 5) Title styling */
+h2 {
+  color: #000;
+  margin-bottom: 20px;
+  font-size: 1.4em; /* slightly larger than normal */
+}
+
+/* 6) Read-only “info-bubble” blocks */
+.info-section {
+  margin-top: 10px;
+  margin-bottom: 20px; /* spacing around the read-only info */
+}
+
+.info-bubble {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 15px;
+  text-align: left;       /* label and text left-aligned inside the bubble */
+  font-size: 1.1em;       /* bigger text for readability */
+  line-height: 1.4;
+}
+
+.info-label {
+  font-weight: bold;
+  margin-right: 6px;
+}
+
+
+/* 7) Form groups for edit mode */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+  font-size: 1.1em;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #1e1b1b;
+  font-weight: bold;
+}
+
+/* 8) Inputs: same style as create page, but bigger font */
+input[type='text'],
+input[type='email'],
+input[type='password'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1.05em;
+}
+
+/* 9) Buttons: full width, matching create page style */
+button[type='submit'],
+button[type='button'] {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #5a67d8;
+  color: #fff;
+  font-size: 1.05em;
+  cursor: pointer;
+}
+
+button[type='submit']:disabled {
+  background-color: #9a9a9a;
+  cursor: not-allowed;
+}
+
+/* 10) The “Back” home button in the top-left corner */
+.home-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  background-color: #353535;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+/* 11) Error message styling */
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 1.05em;
+}
