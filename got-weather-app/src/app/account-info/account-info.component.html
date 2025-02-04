@@ -1,5 +1,5 @@
 <div class="background-image">
-  <button type="button" (click)="goHome()" class="home-button">Home</button>
+  <button type="button" (click)="goHome()" class="home-button">Back</button>
 
   <div class="overlay">
     <div class="login-container">
@@ -25,6 +25,13 @@
 
       <!-- EDIT MODE -->
       <form *ngIf="isEditing" (ngSubmit)="onSubmit()" #accountForm="ngForm">
+
+        <!-- The friendly message you mentioned -->
+        <div class="info-message">
+          <strong>Would you like to change any of your information?</strong> 
+          Go ahead! Just leave whatever you do not want to change alone.
+        </div>
+
         <div class="form-group">
           <label for="newEmail">New Email:</label>
           <input

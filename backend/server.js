@@ -194,7 +194,7 @@ app.get('/getAccountInfo', (req, res) => {
   });
 });
 
-// 2) For updating user info (including new password), if you haven't already:
+// 2) For updating user info (including new password)
 app.put('/updateAccount', (req, res) => {
   const {
     currentUsernameOrEmail,
@@ -211,7 +211,7 @@ app.put('/updateAccount', (req, res) => {
 
   // 2.1) Check current password
   const selectSql = `
-    SELECT user_id, user_password 
+    SELECT user_id, user_password, user_email, username, favorite_location
     FROM ACCOUNT_T
     WHERE (username = ? OR user_email = ?)
     LIMIT 1
@@ -226,28 +226,32 @@ app.put('/updateAccount', (req, res) => {
     }
 
     const user = results[0];
+
+    // Check password
     if (user.user_password !== currentPassword) {
       return res.status(401).json({ message: 'Invalid password.' });
     }
 
-    // 2.2) Prepare updates
+    // 2.2) Compare old vs. new, only update if different
     const updateFields = [];
     const params = [];
 
-    if (newEmail) {
+    if (newEmail && newEmail.trim() !== '' && newEmail.trim() !== user.user_email) {
       updateFields.push('user_email = ?');
       params.push(newEmail.trim());
     }
-    if (newUsername) {
+    if (newUsername && newUsername.trim() !== '' && newUsername.trim() !== user.username) {
       updateFields.push('username = ?');
       params.push(newUsername.trim());
     }
-    if (newFavoriteLocation) {
+    if (newFavoriteLocation && newFavoriteLocation.trim() !== '' 
+        && newFavoriteLocation.trim() !== user.favorite_location) {
       updateFields.push('favorite_location = ?');
       params.push(newFavoriteLocation.trim());
     }
-    if (newPassword && newPassword.trim() !== '') {
-      // Example password validation
+
+    // If newPassword is provided AND different from the old password
+    if (newPassword && newPassword.trim() !== '' && newPassword.trim() !== user.user_password) {
       const passwordRegex = /^(?=.*\d).{6,}$/;
       if (!passwordRegex.test(newPassword)) {
         return res.status(400).json({
@@ -258,6 +262,7 @@ app.put('/updateAccount', (req, res) => {
       params.push(newPassword.trim());
     }
 
+    // If nothing changed, skip
     if (updateFields.length === 0) {
       return res.status(200).json({ message: 'No changes submitted.' });
     }
