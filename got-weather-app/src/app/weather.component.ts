@@ -50,7 +50,7 @@ export class WeatherComponent implements OnInit {
       const cityTime = new Date(
         now.getTime() + (this.cityTimezoneOffset + now.getTimezoneOffset() * 60) * 1000
       );
-      this.localTime = `Local Time: ${cityTime.toLocaleString('en-US', { hour12: true })}`;
+      this.localTime = `Location Time: ${cityTime.toLocaleString('en-US', { hour12: true })}`;
   }, 1000);
   }
 

@@ -159,7 +159,7 @@ header {
     display: flex;
     flex-direction: column;
     left: 50%;
-    top: 50%;
+    top: 45%;
     transform: translate(-50%, -50%);
     max-height: calc(85vh - 10vh - 5vh); /* Fit within main section */
 }
@@ -323,7 +323,8 @@ header {
     -1px -1px 0 black, /* Top-left */
     1px -1px 0 black,  /* Top-right */
     -1px 1px 0 black,  /* Bottom-left */
-    1px 1px 0 black;   /* Bottom-right */}
+    1px 1px 0 black;   /* Bottom-right */
+}
 
 .dagobah-bg {
     background: url("./images/dagobah.jpg");
