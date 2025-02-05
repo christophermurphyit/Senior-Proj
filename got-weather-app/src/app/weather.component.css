@@ -68,8 +68,8 @@ header {
 
 .bottom-right-clock {
   position: absolute;
-  top: 90px;
-  right: 300px;
+  top: -5px;
+  right: 70px;
   background-color: #fff;
   color: #333;
   padding: 8px 12px;
@@ -138,15 +138,6 @@ header {
  Begin page content
 } */
 
-/* .top_container {
-    position: fixed;
-    left: 18%;
-    top: 8%;
-    transform: translate(-20%, -20%);
-    font-size: 2.3em;
-    font-weight: 400;
-    max-width: 20%; 
-} */
 
 .top_container {
   display: flex; /* Enables flexbox */
