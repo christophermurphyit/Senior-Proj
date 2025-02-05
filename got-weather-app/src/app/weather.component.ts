@@ -30,7 +30,6 @@ export class WeatherComponent implements OnInit {
   selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
   dailyForecast: any;
   windSpeed: number | null = null;
-  localTime: string = ''; // Declare localTime as a string
 
 
 
