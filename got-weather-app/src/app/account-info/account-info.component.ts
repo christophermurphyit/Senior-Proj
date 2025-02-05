@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
+import { map, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-account-info',
@@ -25,6 +26,9 @@ export class AccountInfoComponent implements OnInit {
   newPassword = '';
   confirmNewPassword = '';
 
+  // Current password required for verification
+  currentPassword = '';
+
   // UI states
   isEditing = false;
   isSubmitting = false;
@@ -43,14 +47,14 @@ export class AccountInfoComponent implements OnInit {
     // 1. Make sure user is logged in
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
-      // Not logged in? Send them to login.
+      // Not logged in? redirect to /login
       this.router.navigate(['/login']);
       return;
     }
 
     this.currentUsernameOrEmail = currentUser;
 
-    // 2. Fetch the current info from the server
+    // 2. Fetch current info
     this.http
       .get(`http://localhost:5001/getAccountInfo?usernameOrEmail=${currentUser}`)
       .subscribe({
@@ -69,56 +73,99 @@ export class AccountInfoComponent implements OnInit {
   // Toggles edit mode on/off
   toggleEdit() {
     this.isEditing = true;
-
-    // Pre-fill the "edit" fields with the current info
+    // Pre-fill from existing data
     this.newEmail = this.currentEmail;
     this.newUsername = this.currentUsername;
     this.newFavoriteLocation = this.currentFavoriteLocation;
 
-    // Clear out any old password entries
     this.newPassword = '';
     this.confirmNewPassword = '';
+    this.currentPassword = '';
   }
 
-  // If user clicks "Cancel", just revert to view mode
+  // Cancel button
   cancelEdit() {
     this.isEditing = false;
     this.message = '';
 
-    // Optionally, re-sync the newX fields to current info
-    // or just let them remain (they won't matter once we hide them)
+    // Re-sync fields
     this.newEmail = this.currentEmail;
     this.newUsername = this.currentUsername;
     this.newFavoriteLocation = this.currentFavoriteLocation;
     this.newPassword = '';
     this.confirmNewPassword = '';
+    this.currentPassword = '';
+  }
+
+  // Validate location (like create.component)
+  private validateLocation(location: string) {
+    const apiKey = 'd474509725247f01f4f5b322d067dd8b';
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=imperial`;
+
+    return this.http.get(url).pipe(
+      map((response: any) => !!response.weather),
+      catchError(() => of(false)) // If error, invalid city
+    );
   }
 
   onSubmit() {
     // 1. Confirm user wants to proceed
-    const isSure = confirm(
-      'Are you sure you want to update your account information?'
-    );
-    if (!isSure) {
-      return;
-    }
+    const isSure = confirm('Are you sure you want to update your account information?');
+    if (!isSure) return;
 
-    // 2. If a new password is provided, verify confirmNewPassword
+    // 2. Validate new password (if provided)
     if (this.newPassword || this.confirmNewPassword) {
       if (this.newPassword !== this.confirmNewPassword) {
         this.message = 'New password and confirmation do not match.';
         return;
       }
+      // If they typed a new password, must meet your create rules
+      const passwordRegex = /^(?=.*\d).{6,}$/; 
+      if (this.newPassword && !passwordRegex.test(this.newPassword)) {
+        this.message = 'Please enter a Password with at least 6 characters including at least one number.';
+        return;
+      }
     }
 
-    // 3. Prompt for current password
-    const currentPassword = prompt('Please enter your *current* password:');
-    if (!currentPassword) {
-      this.message = 'Update canceled. No current password provided.';
+    // 3. Validate new email if user changed it
+    const changedEmail = this.newEmail.trim();
+    if (changedEmail && changedEmail !== this.currentEmail && !changedEmail.includes('@')) {
+      this.message = 'Please enter a valid email address.';
       return;
     }
 
-    // 4. Send update request to server
+    // 4. Check current password
+    if (!this.currentPassword.trim()) {
+      this.message = 'Please enter your current password.';
+      return;
+    }
+
+    // 5. Validate new favorite location if changed
+    const newLoc = this.newFavoriteLocation.trim();
+    if (newLoc && newLoc !== this.currentFavoriteLocation) {
+      this.isSubmitting = true;
+      this.validateLocation(newLoc).subscribe({
+        next: (isValid: boolean) => {
+          this.isSubmitting = false;
+          if (!isValid) {
+            this.message = 'Invalid favorite location. Please enter a valid location.';
+            return;
+          }
+          // Valid location => proceed
+          this.submitUpdate();
+        },
+        error: () => {
+          this.isSubmitting = false;
+          this.message = 'Error validating location. Please try again.';
+        },
+      });
+    } else {
+      // If location unchanged or empty, skip location validation
+      this.submitUpdate();
+    }
+  }
+
+  private submitUpdate(): void {
     this.isSubmitting = true;
     this.http
       .put('http://localhost:5001/updateAccount', {
@@ -127,27 +174,28 @@ export class AccountInfoComponent implements OnInit {
         newUsername: this.newUsername.trim() || '',
         newFavoriteLocation: this.newFavoriteLocation.trim() || '',
         newPassword: this.newPassword.trim() || '',
-        currentPassword: currentPassword.trim(),
+        currentPassword: this.currentPassword.trim(),
       })
       .subscribe({
         next: (response: any) => {
           this.isSubmitting = false;
-          alert(response.message); // "Account updated successfully!"
-          // Update our "current" info after success:
-          this.currentEmail = this.newEmail;
-          this.currentUsername = this.newUsername;
-          this.currentFavoriteLocation = this.newFavoriteLocation;
+          alert(response.message); // e.g. "Account updated successfully!"
 
-          // Turn off edit mode
-          this.isEditing = false;
-
-          // Clear the new password fields
+          // Clear out password fields
           this.newPassword = '';
           this.confirmNewPassword = '';
-          this.message = '';
+          this.currentPassword = '';
+
+          // Optionally logout & go home
+          this.authService.logout();
+          this.router.navigate(['/home']);
         },
         error: (error) => {
           this.isSubmitting = false;
+          if (error.status === 401) {
+            this.message = 'Invalid current password. Please try again.';
+            return;
+          }
           if (error.error && error.error.message) {
             this.message = error.error.message;
           } else {
@@ -157,7 +205,7 @@ export class AccountInfoComponent implements OnInit {
       });
   }
 
-  goHome() {
+  goHome(): void {
     this.router.navigate(['/home']);
   }
 }

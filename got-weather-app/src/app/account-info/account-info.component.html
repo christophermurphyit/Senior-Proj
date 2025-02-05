@@ -26,7 +26,6 @@
       <!-- EDIT MODE -->
       <form *ngIf="isEditing" (ngSubmit)="onSubmit()" #accountForm="ngForm">
 
-        <!-- The friendly message you mentioned -->
         <div class="info-message">
           <strong>Would you like to change any of your information?</strong> 
           Go ahead! Just leave whatever you do not want to change alone.
@@ -84,6 +83,19 @@
             name="confirmNewPassword"
             [(ngModel)]="confirmNewPassword"
             placeholder="Confirm new password"
+          />
+        </div>
+
+        <!-- *** The required current password field *** -->
+        <div class="form-group">
+          <label for="currentPassword">Current Password:</label>
+          <input
+            type="password"
+            id="currentPassword"
+            name="currentPassword"
+            [(ngModel)]="currentPassword"
+            placeholder="Enter your current password"
+            required
           />
         </div>
 
