@@ -66,6 +66,11 @@ export class HamburgerMenuComponent {
     this.router.navigate(['/create-account']); // Navigate to the login page
   }
 
+  navigateToAccount() {
+    this.isMenuOpen = false; // Optional: close the menu after navigation
+    this.router.navigate(['/account']); // Navigate to the login page
+  }
+
   emitFavoriteSearch() {
     const loggedInUser = this.authService.getCurrentUser();
     if (!loggedInUser) {

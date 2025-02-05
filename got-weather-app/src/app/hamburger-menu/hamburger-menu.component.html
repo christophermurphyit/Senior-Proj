@@ -65,6 +65,9 @@
       <li *ngIf="isLoggedIn">
         <button class="menu-button" (click)="emitFavoriteSearch()">Favorite</button>
       </li>
+      <li *ngIf="isLoggedIn">
+        <button (click)="navigateToAccount()" class="menu-button">Account</button>
+      </li>
       <li>
         <button class="menu-button" (click)="handleAuthAction()">
           {{ isLoggedIn ? 'Logout' : 'Login' }}
