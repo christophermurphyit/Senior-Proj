@@ -4,7 +4,6 @@
       <p>Welcome, {{ username || 'Guest' }}!</p>
     </div>
 
-    <!-- New container for the search bar -->
     <div class="header-search">
       <div class="header_container">
         <p>Click me to search:</p>
@@ -37,7 +36,9 @@
 
 <div class="bg-image" [ngClass]="imageClass" id="image-container">
   <section class="top_container">
-    <p id="temp">The temperature in {{realCityName || 'your location'}} is currently {{ displayTemp || 'Huh?' }}</p>
+    <p id="temp">The temperature in {{realCityName || 'your location'}} is currently {{ displayTemp || 'Huh?' }} with wind speeds of 
+      {{ windSpeed || 'unknown' }} mph.
+    </p> 
   </section>
 
   <section class="center_container">
@@ -52,12 +53,7 @@
     </div>
   </section>
 
-  <!-- <div class="current-weather">
-   Display current weather information 
-  <h2>Weather in {{ city }}</h2>
-  <p>Temperature: {{ temp }}</p>
-  <p>Description: {{ description }}</p>
-</div> -->
+
 <div *ngIf="selectedSignal === '7day'" class="forecast-container">
   <div *ngFor="let day of forecastData" class="forecast-card">
     <p class="forecast-date">{{ day.dt * 1000 | date:'EEE, MMM d' }}</p> <!-- Day and date -->
@@ -88,24 +84,17 @@
   </div>
 </div>
 
-<!--
-<div class="forecast-container">
-  <h3>7-Day Forecast</h3>
-  <div *ngFor="let day of forecastData" class="forecast-card">
-    <p>Date: {{ day.dt | date }}</p>
-    <p>Temperature: {{ day.temp.day }} °F</p>
-    <p>Condition: {{ day.weather[0].description }}</p>
-  </div>
-</div>
--->
-<!-- Loop through forecastData to display each day's forecast, meant for lines 51 to 58 -->
 
+<section class="flavor_text">
+  <div class="flavor_text_1">
+    <p id="description">{{ description || 'Loading up...' }}</p>
+  </div>
+</section>
+  
   <section class="bottom_container">
-    <div class="bottom_item_1">
-      <p id="description">{{ description || 'Loading up...' }}</p>
-    </div>
-    <div class="bottom_item_2">
-      <p>Winter is coming.</p>
+    
+     <div class="bottom_item_2">
+    <!----  <p>Winter is coming.</p> -->
     </div>
   </section>
 </div>

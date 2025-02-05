@@ -5,11 +5,14 @@ import { CreateComponent } from './app/create/create.component';  // Import Crea
 import { WeatherComponent } from './app/weather.component';  // Import WeatherComponent
 import { provideHttpClient } from '@angular/common/http';
 import { LoginComponent } from './app/login/login.component';
+import { AccountInfoComponent } from './app/account-info/account-info.component';
+
 
 const routes: Routes = [
   { path: 'home', component: WeatherComponent},  // Main page for your app
   { path: 'create-account', component: CreateComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'account', component: AccountInfoComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }  // Redirect root to /home
 ];
 

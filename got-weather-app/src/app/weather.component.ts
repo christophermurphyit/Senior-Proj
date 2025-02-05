@@ -29,6 +29,10 @@ export class WeatherComponent implements OnInit {
   private _selectedSignal: 'current' | '7day' | 'daily' = 'current'; // Default signal
   selectedUnit: 'Fahrenheit' | 'Celsius' = 'Fahrenheit'; // Default to Fahrenheit
   dailyForecast: any;
+  windSpeed: number | null = null;
+  localTime: string = ''; // Declare localTime as a string
+
+
 
 
   private readonly apiKey = 'd474509725247f01f4f5b322d067dd8b';
@@ -71,6 +75,8 @@ export class WeatherComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           console.log('Weather data received:', data); // Log to confirm data is received
+          this.windSpeed = Math.round(data.wind?.speed);
+          console.log('API Wind Speed (m/s):', data.wind?.speed);
           this.renderDOM(data);
         },
         error: () => alert('Error fetching weather data. Please try again later.'),
@@ -137,6 +143,8 @@ export class WeatherComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             console.log('Current Weather Data:', data);
+            this.windSpeed = Math.round(data.wind?.speed);
+            console.log('API Wind Speed (m/s):', data.wind?.speed);
             this.renderDOM(data);
           },
           error: (err) => {
