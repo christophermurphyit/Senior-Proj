@@ -26,6 +26,9 @@ db.connect((err) => {
   console.log('Connected to database.');
 });
 
+// =============================
+//  GET /getFavoriteLocation
+// =============================
 app.get('/getFavoriteLocation', (req, res) => {
   const { usernameOrEmail } = req.query;
 
@@ -47,7 +50,9 @@ app.get('/getFavoriteLocation', (req, res) => {
   });
 });
 
-
+// =============================
+//  POST /createAccount
+// =============================
 app.post('/createAccount', (req, res) => {
   const { email, username, password, favoriteLocation } = req.body;
 
@@ -95,6 +100,9 @@ app.post('/createAccount', (req, res) => {
   });
 });
 
+// =============================
+//  POST /checkUserExists
+// =============================
 app.post('/checkUserExists', (req, res) => {
   const { email, username, password, favoriteLocation } = req.body;
 
@@ -122,8 +130,9 @@ app.post('/checkUserExists', (req, res) => {
   });
 });
 
-
-
+// =============================
+//  POST /login
+// =============================
 app.post('/login', (req, res) => {
   const { usernameOrEmail, password } = req.body;
 
@@ -145,7 +154,6 @@ app.post('/login', (req, res) => {
       db.query(updateSql, [userId], (updateErr) => {
         if (updateErr) {
           console.error('Error updating login timestamp:', updateErr);
-          // You may choose to handle this error differently
           return res.status(500).send("Server error occurred while updating login timestamp.");
         }
 
@@ -163,7 +171,9 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// 1) For fetching user info (excluding password):
+// =============================
+//  GET /getAccountInfo
+// =============================
 app.get('/getAccountInfo', (req, res) => {
   const { usernameOrEmail } = req.query;
   if (!usernameOrEmail) {
@@ -194,7 +204,9 @@ app.get('/getAccountInfo', (req, res) => {
   });
 });
 
-// 2) For updating user info (including new password)
+// =============================
+//  PUT /updateAccount
+// =============================
 app.put('/updateAccount', (req, res) => {
   const {
     currentUsernameOrEmail,
@@ -209,7 +221,6 @@ app.put('/updateAccount', (req, res) => {
     return res.status(400).json({ message: 'Missing required fields.' });
   }
 
-  // 2.1) Check current password
   const selectSql = `
     SELECT user_id, user_password, user_email, username, favorite_location
     FROM ACCOUNT_T
@@ -232,7 +243,7 @@ app.put('/updateAccount', (req, res) => {
       return res.status(401).json({ message: 'Invalid password.' });
     }
 
-    // 2.2) Compare old vs. new, only update if different
+    // Only update changed fields
     const updateFields = [];
     const params = [];
 
@@ -267,7 +278,6 @@ app.put('/updateAccount', (req, res) => {
       return res.status(200).json({ message: 'No changes submitted.' });
     }
 
-    // 2.3) Perform the UPDATE
     const updateSql = `
       UPDATE ACCOUNT_T
       SET ${updateFields.join(', ')}
@@ -282,5 +292,34 @@ app.put('/updateAccount', (req, res) => {
       }
       return res.status(200).json({ message: 'Account updated successfully!' });
     });
+  });
+});
+
+// =============================
+//  PUT /updateUserLocation
+// =============================
+app.put('/updateUserLocation', (req, res) => {
+  const { usernameOrEmail, newLocation } = req.body;
+
+  if (!usernameOrEmail || !newLocation) {
+    return res.status(400).json({ message: 'usernameOrEmail and newLocation are required.' });
+  }
+
+  const sql = `
+    UPDATE ACCOUNT_T
+    SET user_location = ?
+    WHERE username = ? OR user_email = ?
+  `;
+
+  db.query(sql, [newLocation, usernameOrEmail, usernameOrEmail], (err, result) => {
+    if (err) {
+      console.error('Error updating user location:', err);
+      return res.status(500).json({ message: 'Server error while updating user location.' });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found or no changes made.' });
+    }
+
+    return res.status(200).json({ message: 'User location updated successfully.' });
   });
 });
