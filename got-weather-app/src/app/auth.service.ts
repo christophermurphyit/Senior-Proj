@@ -12,7 +12,7 @@ export class AuthService {
 
   constructor() {
     // Check if user is already logged in on initialization
-    const user = localStorage.getItem('loggedInUser');
+    const user = sessionStorage.getItem('loggedInUser');
     if (user) {
       this.currentUser = user;
       this.isLoggedInSubject.next(true);
@@ -22,13 +22,13 @@ export class AuthService {
   login(user: string) {
     this.currentUser = user;
     this.isLoggedInSubject.next(true);
-    localStorage.setItem('loggedInUser', user);
+    sessionStorage.setItem('loggedInUser', user);
   }
 
   logout() {
     this.currentUser = null;
     this.isLoggedInSubject.next(false);
-    localStorage.removeItem('loggedInUser');
+    sessionStorage.removeItem('loggedInUser');
   }
 
   isAuthenticated(): boolean {
@@ -37,7 +37,7 @@ export class AuthService {
 
   getCurrentUser(): string | null {
     if (!this.currentUser) {
-      this.currentUser = localStorage.getItem('loggedInUser');
+      this.currentUser = sessionStorage.getItem('loggedInUser');
     }
     return this.currentUser;
   }
