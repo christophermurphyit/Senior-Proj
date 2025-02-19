@@ -14,14 +14,3 @@ CREATE TABLE ACCOUNT_T (
     account_creation_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     latest_login_timestamp DATETIME DEFAULT NULL
 );
-
--- Drop existing WEATHER_T table if it exists and create a new one for weather data
-DROP TABLE IF EXISTS WEATHER_T;
-
-CREATE TABLE WEATHER_T (
-    weather_id INT PRIMARY KEY AUTO_INCREMENT,
-    weather_date TIMESTAMP NOT NULL,
-    location VARCHAR(50) NOT NULL,
-    high_temperature FLOAT NOT NULL,
-    low_temperature FLOAT NOT NULL
-);
