@@ -63,7 +63,7 @@ export class CreateComponent {
   }
 
 private createAccount() {
-    this.http.post('http://localhost:5001/createAccount', {
+    this.http.post('/api/createAccount', {
       email: this.email,
       username: this.username,
       password: this.password,
@@ -86,7 +86,7 @@ private createAccount() {
 
   checkUserExists() {
     this.http.post(
-      'http://localhost:5001/checkUserExists',
+      '/api/createAccount',
       {
         email: this.email,
         username: this.username,

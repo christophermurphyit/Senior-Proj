@@ -56,7 +56,7 @@ export class AccountInfoComponent implements OnInit {
 
     // 2. Fetch current info
     this.http
-      .get(`http://localhost:5001/getAccountInfo?usernameOrEmail=${currentUser}`)
+      .get(`/api/getAccountInfo?usernameOrEmail=${currentUser}`)
       .subscribe({
         next: (response: any) => {
           this.currentEmail = response.email;
@@ -168,7 +168,7 @@ export class AccountInfoComponent implements OnInit {
   private submitUpdate(): void {
     this.isSubmitting = true;
     this.http
-      .put('http://localhost:5001/updateAccount', {
+      .put('/api/updateAccount', {
         currentUsernameOrEmail: this.currentUsernameOrEmail,
         newEmail: this.newEmail.trim() || '',
         newUsername: this.newUsername.trim() || '',

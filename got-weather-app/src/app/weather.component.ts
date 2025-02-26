@@ -235,7 +235,7 @@ export class WeatherComponent implements OnInit {
       return;
     }
     this.http
-      .put('http://localhost:5001/updateUserLocation', {
+      .put('/api/updateUserLocation', {
         usernameOrEmail: this.username,
         newLocation: city,
       })

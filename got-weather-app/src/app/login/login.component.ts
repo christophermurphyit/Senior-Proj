@@ -30,7 +30,7 @@ export class LoginComponent {
     }
   
     this.http.post<any>(
-      'http://localhost:5001/login',
+      '/api/login',
       {
         usernameOrEmail: this.usernameOrEmail,
         password: this.password,
