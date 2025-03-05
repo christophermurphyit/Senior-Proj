@@ -29,7 +29,7 @@ db.connect((err) => {
 // =============================
 //  GET /getFavoriteLocation
 // =============================
-app.get('/getFavoriteLocation', (req, res) => {
+app.get('/api/getFavoriteLocation', (req, res) => {
   const { usernameOrEmail } = req.query;
 
   if (!usernameOrEmail) {
@@ -53,7 +53,7 @@ app.get('/getFavoriteLocation', (req, res) => {
 // =============================
 //  POST /createAccount
 // =============================
-app.post('/createAccount', (req, res) => {
+app.post('/api/createAccount', (req, res) => {
   const { email, username, password, favoriteLocation } = req.body;
 
   if (!email || !username || !password || !favoriteLocation) {
@@ -103,7 +103,7 @@ app.post('/createAccount', (req, res) => {
 // =============================
 //  POST /checkUserExists
 // =============================
-app.post('/checkUserExists', (req, res) => {
+app.post('/api/checkUserExists', (req, res) => {
   const { email, username, password, favoriteLocation } = req.body;
 
   if (!email || !username || !password || !favoriteLocation) {
@@ -133,7 +133,7 @@ app.post('/checkUserExists', (req, res) => {
 // =============================
 //  POST /login
 // =============================
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
   const { usernameOrEmail, password } = req.body;
 
   if (!usernameOrEmail || !password) {
@@ -174,7 +174,7 @@ app.listen(PORT, () => {
 // =============================
 //  GET /getAccountInfo
 // =============================
-app.get('/getAccountInfo', (req, res) => {
+app.get('/api/getAccountInfo', (req, res) => {
   const { usernameOrEmail } = req.query;
   if (!usernameOrEmail) {
     return res.status(400).json({ message: 'Username or email is required.' });
@@ -207,7 +207,7 @@ app.get('/getAccountInfo', (req, res) => {
 // =============================
 //  PUT /updateAccount
 // =============================
-app.put('/updateAccount', (req, res) => {
+app.put('/api/updateAccount', (req, res) => {
   const {
     currentUsernameOrEmail,
     newEmail,
@@ -298,7 +298,7 @@ app.put('/updateAccount', (req, res) => {
 // =============================
 //  PUT /updateUserLocation
 // =============================
-app.put('/updateUserLocation', (req, res) => {
+app.put('/api/updateUserLocation', (req, res) => {
   const { usernameOrEmail, newLocation } = req.body;
 
   if (!usernameOrEmail || !newLocation) {
