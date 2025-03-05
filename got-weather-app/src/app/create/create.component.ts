@@ -86,7 +86,7 @@ private createAccount() {
 
   checkUserExists() {
     this.http.post(
-      '/api/createAccount',
+      '/api/checkUserExists',
       {
         email: this.email,
         username: this.username,
