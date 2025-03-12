@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors'); // Import CORS
 
 // Load environment variables from db_cred.env
-dotenv.config({ path: './db_cred.env' });
+dotenv.config({ path: __dirname + '/db_cred.env' });
 
 const app = express();
 app.use(cors()); // Use CORS after initializing `app`
@@ -12,12 +12,12 @@ app.use(express.json());
 
 // ✅ FIXED: Removed duplicate `const db = mysql.createConnection({`
 const db = mysql.createConnection({
-  host: 'gotwdb.c5agiyye63ha.us-west-1.rds.amazonaws.com',
-  user: 'admin',
-  password: '8qE98Gv864LN6Ux',
-  database: 'got_weather_db',
-  port: 3306
-}); // ✅ FIXED: Properly closed the `mysql.createConnection` object
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 3306 // Use default 3306 if not specified
+});
 
 // ✅ FIXED: No unnecessary nesting, this part stays the same
 db.connect((err) => {
