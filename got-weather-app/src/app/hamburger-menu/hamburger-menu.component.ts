@@ -78,7 +78,7 @@ export class HamburgerMenuComponent {
       return;
     }
   
-    this.http.get(`/getFavoriteLocation?usernameOrEmail=${loggedInUser}`).subscribe({
+    this.http.get(`/api/getFavoriteLocation?usernameOrEmail=${loggedInUser}`).subscribe({
       next: (response: any) => {
         if (response.favoriteLocation) {
           this.favoriteSearch.emit(response.favoriteLocation);

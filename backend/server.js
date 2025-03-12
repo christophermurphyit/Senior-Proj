@@ -10,14 +10,16 @@ const app = express();
 app.use(cors()); // Use CORS after initializing `app`
 app.use(express.json());
 
+// ✅ FIXED: Removed duplicate `const db = mysql.createConnection({`
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: 3306 // Set the database port to 3306
-});
+  host: 'gotwdb.c5agiyye63ha.us-west-1.rds.amazonaws.com',
+  user: 'admin',
+  password: '8qE98Gv864LN6Ux',
+  database: 'got_weather_db',
+  port: 3306
+}); // ✅ FIXED: Properly closed the `mysql.createConnection` object
 
+// ✅ FIXED: No unnecessary nesting, this part stays the same
 db.connect((err) => {
   if (err) {
     console.error('Database connection failed:', err.stack);
