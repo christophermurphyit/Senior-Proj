@@ -21,7 +21,6 @@ export class WeatherService {
   // Fetch 7-day forecast data
   get7DayForecast(lat: number, lon: number): Observable<any> {
     const url = `${this.apiUrl}/onecall?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=imperial`;
-    // const url = `${this.apiUrl}/forecast/daily?q=${city}&cnt=7&appid=${this.apiKey}&units=imperial`;
     return this.http.get(url);
   }
 }
