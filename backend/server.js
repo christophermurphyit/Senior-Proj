@@ -28,6 +28,54 @@ db.connect((err) => {
   console.log('Connected to database.');
 });
 
+const axios = require('axios');
+
+app.get('/api/weather', async (req, res) => {
+  const { city, lat, lon } = req.query;
+
+  if (!city && (!lat || !lon)) {
+    return res.status(400).json({ message: 'City or latitude/longitude required.' });
+  }
+
+  try {
+    const apiKey = process.env.WEATHER_API_KEY;
+    let weatherUrl = '';
+
+    if (city) {
+      // Fetch by city name
+      weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=imperial&appid=${apiKey}`;
+    } else {
+      // Fetch by coordinates
+      weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
+    }
+
+    const weatherResponse = await axios.get(weatherUrl);
+    res.status(200).json(weatherResponse.data);
+  } catch (error) {
+    console.error('Error fetching weather:', error.message);
+    res.status(500).json({ message: 'Failed to fetch weather data.' });
+  }
+});
+
+
+app.get('/api/forecast', async (req, res) => {
+  const { lat, lon} = req.query;
+
+  if (!lat || !lon) {
+    return res.status(400).json({ message: 'Latitude and longitude are required.' });
+  }
+
+  try {
+    const apiKey = process.env.WEATHER_API_KEY;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
+    const forecastResponse = await axios.get(forecastUrl);
+    res.status(200).json(forecastResponse.data);
+  } catch (error) {
+    console.error('Error fetching forecast:', error.message);
+    res.status(500).json({ message: 'Failed to fetch forecast data.' });
+  }
+});
+
 // =============================
 //  GET /getFavoriteLocation
 // =============================

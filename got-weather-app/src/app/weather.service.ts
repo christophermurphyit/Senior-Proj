@@ -14,13 +14,13 @@ export class WeatherService {
 
   // Fetch current weather data
   getCurrentWeather(city: string): Observable<any> {
-    const url = `${this.apiUrl}/weather?q=${city}&appid=${this.apiKey}&units=imperial`;
+    const url = `/api/weather?city=${city}`;
     return this.http.get(url);
   }
 
   // Fetch 7-day forecast data
   get7DayForecast(lat: number, lon: number): Observable<any> {
-    const url = `${this.apiUrl}/onecall?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=imperial`;
+    const url = `/api/forecast?lat=${lat}&lon=${lon}`;
     return this.http.get(url);
   }
 }
