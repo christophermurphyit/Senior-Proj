@@ -116,10 +116,10 @@ private createAccount() {
   
 
   validateLocation(location: string) {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=d474509725247f01f4f5b322d067dd8b&units=imperial`;
+    const url = `/api/weather?city=${encodeURIComponent(location)}`;
     return this.http.get(url).pipe(
       map((response: any) => !!response.weather),  // Valid if 'weather' data exists
       catchError(() => of(false))
     );
-  }
+  }  
 }

@@ -99,14 +99,12 @@ export class AccountInfoComponent implements OnInit {
 
   // Validate location (like create.component)
   private validateLocation(location: string) {
-    const apiKey = 'd474509725247f01f4f5b322d067dd8b';
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=imperial`;
-
+    const url = `/api/weather?city=${encodeURIComponent(location)}`;
     return this.http.get(url).pipe(
       map((response: any) => !!response.weather),
       catchError(() => of(false)) // If error, invalid city
     );
-  }
+  }  
 
   onSubmit() {
     // 1. Confirm user wants to proceed
