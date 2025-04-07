@@ -1,7 +1,12 @@
+// Server.js
 const express = require('express');
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
-const cors = require('cors'); // Import CORS
+const cors = require('cors'); 
+const axios = require('axios');
+
+// ADD: import bcrypt to hash/salt passwords
+const bcrypt = require('bcrypt');
 
 // Load environment variables from db_cred.env
 dotenv.config({ path: __dirname + '/db_cred.env' });
@@ -10,16 +15,15 @@ const app = express();
 app.use(cors()); // Use CORS after initializing `app`
 app.use(express.json());
 
-// ✅ FIXED: Removed duplicate `const db = mysql.createConnection({`
+// Create db connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306 // Use default 3306 if not specified
+  port: process.env.DB_PORT || 3306 // default to 3306
 });
 
-// ✅ FIXED: No unnecessary nesting, this part stays the same
 db.connect((err) => {
   if (err) {
     console.error('Database connection failed:', err.stack);
@@ -28,7 +32,9 @@ db.connect((err) => {
   console.log('Connected to database.');
 });
 
-const axios = require('axios');
+/********************************************************************
+ * Weather endpoints
+ ********************************************************************/
 
 app.get('/api/weather', async (req, res) => {
   const { city, lat, lon } = req.query;
@@ -42,10 +48,8 @@ app.get('/api/weather', async (req, res) => {
     let weatherUrl = '';
 
     if (city) {
-      // Fetch by city name
       weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=imperial&appid=${apiKey}`;
     } else {
-      // Fetch by coordinates
       weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
     }
 
@@ -57,9 +61,8 @@ app.get('/api/weather', async (req, res) => {
   }
 });
 
-
 app.get('/api/forecast', async (req, res) => {
-  const { lat, lon} = req.query;
+  const { lat, lon } = req.query;
 
   if (!lat || !lon) {
     return res.status(400).json({ message: 'Latitude and longitude are required.' });
@@ -75,6 +78,10 @@ app.get('/api/forecast', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch forecast data.' });
   }
 });
+
+/********************************************************************
+ * Account endpoints
+ ********************************************************************/
 
 // =============================
 //  GET /getFavoriteLocation
@@ -102,8 +109,9 @@ app.get('/api/getFavoriteLocation', (req, res) => {
 
 // =============================
 //  POST /createAccount
+//  - Hash & salt the password before saving
 // =============================
-app.post('/api/createAccount', (req, res) => {
+app.post('/api/createAccount', async (req, res) => {
   const { email, username, password, favoriteLocation } = req.body;
 
   if (!email || !username || !password || !favoriteLocation) {
@@ -116,43 +124,57 @@ app.post('/api/createAccount', (req, res) => {
   }
 
   // Password validation
-  const passwordRegex = /^(?=.*\d).{6,}$/; // At least 6 characters and at least one number
+  const passwordRegex = /^(?=.*\d).{6,}$/; 
   if (!passwordRegex.test(password)) {
     return res.status(400).json({
       message: "Please enter a Password with at least 6 characters including at least one number."
     });
   }
 
+  // Check if user or email already exists
   const checkSql = 'SELECT * FROM ACCOUNT_T WHERE username = ? OR user_email = ?';
-  db.query(checkSql, [username, email], (err, results) => {
+  db.query(checkSql, [username, email], async (err, results) => {
     if (err) {
       return res.status(500).json({ message: err.message });
     }
-
     if (results.length > 0) {
       return res.status(409).json({ message: "Username or email already exists." });
     }
 
-    const insertSql = 'INSERT INTO ACCOUNT_T (user_email, username, user_password, favorite_location) VALUES (?, ?, ?, ?)';
-    db.query(insertSql, [email, username, password, favoriteLocation], (err) => {
-      if (err) {
-        return res.status(500).json({ message: err.message });
-      }
+    try {
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-      console.log("Insert successful. Sending 201 response...");
-      try {
-        res.status(201).json({ message: "Account created successfully" });
-        console.log("201 response sent to client.");
-      } catch (error) {
-        console.error("Error while sending 201 response:", error);
-      }
-    });
+      const insertSql = `
+        INSERT INTO ACCOUNT_T (user_email, username, user_password, favorite_location)
+        VALUES (?, ?, ?, ?)
+      `;
+      db.query(insertSql, [email, username, hashedPassword, favoriteLocation], (insertErr) => {
+        if (insertErr) {
+          return res.status(500).json({ message: insertErr.message });
+        }
+
+        console.log("Insert successful. Sending 201 response...");
+        try {
+          res.status(201).json({ message: "Account created successfully" });
+          console.log("201 response sent to client.");
+        } catch (error) {
+          console.error("Error while sending 201 response:", error);
+        }
+      });
+    } catch (hashError) {
+      console.error("Error while hashing password:", hashError);
+      return res.status(500).json({ message: "Error hashing password." });
+    }
   });
 });
 
 // =============================
 //  POST /checkUserExists
 // =============================
+// (This currently checks plain text fields. If you truly want to 
+//  check hashed password, you'll need to compare with bcrypt. 
+//  Or you can deprecate /checkUserExists, depending on your usage.)
 app.post('/api/checkUserExists', (req, res) => {
   const { email, username, password, favoriteLocation } = req.body;
 
@@ -160,10 +182,10 @@ app.post('/api/checkUserExists', (req, res) => {
     return res.status(400).json({ message: "All fields are required." });
   }
 
-  const checkSql = `SELECT * FROM ACCOUNT_T 
-                    WHERE user_email = ? 
-                    AND username = ? 
-                    AND user_password = ? 
+  const checkSql = `SELECT * FROM ACCOUNT_T
+                    WHERE user_email = ?
+                    AND username = ?
+                    AND user_password = ?
                     AND favorite_location = ?`;
 
   db.query(checkSql, [email, username, password, favoriteLocation], (err, results) => {
@@ -182,6 +204,7 @@ app.post('/api/checkUserExists', (req, res) => {
 
 // =============================
 //  POST /login
+//  - Compare the hashed password
 // =============================
 app.post('/api/login', (req, res) => {
   const { usernameOrEmail, password } = req.body;
@@ -190,32 +213,48 @@ app.post('/api/login', (req, res) => {
     return res.status(400).send("Username/email and password are required.");
   }
 
-  const sql = 'SELECT * FROM ACCOUNT_T WHERE (username = ? OR user_email = ?) AND user_password = ?';
-  db.query(sql, [usernameOrEmail, usernameOrEmail, password], (err, results) => {
+  // Find user by username or email
+  const sql = 'SELECT * FROM ACCOUNT_T WHERE username = ? OR user_email = ?';
+  db.query(sql, [usernameOrEmail, usernameOrEmail], (err, results) => {
     if (err) {
       return res.status(500).send("Server error occurred.");
     }
 
-    if (results.length > 0) {
-      const userId = results[0].user_id;
+    if (results.length === 0) {
+      // No user found
+      return res.status(401).send("Invalid credentials");
+    }
 
-      // Update the latest_login_timestamp
+    const user = results[0];
+
+    // Compare the incoming password with the hashed password in user_password
+    bcrypt.compare(password, user.user_password, (compareErr, isMatch) => {
+      if (compareErr) {
+        console.error("Error comparing passwords:", compareErr);
+        return res.status(500).send("Server error occurred during password comparison.");
+      }
+
+      if (!isMatch) {
+        // Passwords do not match
+        return res.status(401).send("Invalid credentials");
+      }
+
+      // If matched, update last login timestamp and return success
       const updateSql = 'UPDATE ACCOUNT_T SET latest_login_timestamp = NOW() WHERE user_id = ?';
-      db.query(updateSql, [userId], (updateErr) => {
+      db.query(updateSql, [user.user_id], (updateErr) => {
         if (updateErr) {
           console.error('Error updating login timestamp:', updateErr);
           return res.status(500).send("Server error occurred while updating login timestamp.");
         }
 
-        // Return username in JSON format
-        res.status(200).json({ message: "Login successful", username: results[0].username });
+        // Return username in JSON
+        res.status(200).json({ message: "Login successful", username: user.username });
       });
-    } else {
-      res.status(401).send("Invalid credentials");
-    }
+    });
   });
 });
 
+// Start server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -256,6 +295,8 @@ app.get('/api/getAccountInfo', (req, res) => {
 
 // =============================
 //  PUT /updateAccount
+//  - Compare the current password with the stored hash
+//  - If newPassword is provided, hash before saving
 // =============================
 app.put('/api/updateAccount', (req, res) => {
   const {
@@ -271,6 +312,7 @@ app.put('/api/updateAccount', (req, res) => {
     return res.status(400).json({ message: 'Missing required fields.' });
   }
 
+  // 1) Get the user row by username or email
   const selectSql = `
     SELECT user_id, user_password, user_email, username, favorite_location
     FROM ACCOUNT_T
@@ -288,59 +330,72 @@ app.put('/api/updateAccount', (req, res) => {
 
     const user = results[0];
 
-    // Check password
-    if (user.user_password !== currentPassword) {
-      return res.status(401).json({ message: 'Invalid password.' });
-    }
-
-    // Only update changed fields
-    const updateFields = [];
-    const params = [];
-
-    if (newEmail && newEmail.trim() !== '' && newEmail.trim() !== user.user_email) {
-      updateFields.push('user_email = ?');
-      params.push(newEmail.trim());
-    }
-    if (newUsername && newUsername.trim() !== '' && newUsername.trim() !== user.username) {
-      updateFields.push('username = ?');
-      params.push(newUsername.trim());
-    }
-    if (newFavoriteLocation && newFavoriteLocation.trim() !== '' 
-        && newFavoriteLocation.trim() !== user.favorite_location) {
-      updateFields.push('favorite_location = ?');
-      params.push(newFavoriteLocation.trim());
-    }
-
-    // If newPassword is provided AND different from the old password
-    if (newPassword && newPassword.trim() !== '' && newPassword.trim() !== user.user_password) {
-      const passwordRegex = /^(?=.*\d).{6,}$/;
-      if (!passwordRegex.test(newPassword)) {
-        return res.status(400).json({
-          message: 'Please choose a password with at least 6 characters including at least one number.'
-        });
+    // 2) Compare currentPassword with hashed user_password
+    bcrypt.compare(currentPassword, user.user_password, async (compareErr, isMatch) => {
+      if (compareErr) {
+        console.error('Error comparing current passwords:', compareErr);
+        return res.status(500).json({ message: 'Server error while verifying current password.' });
       }
-      updateFields.push('user_password = ?');
-      params.push(newPassword.trim());
-    }
-
-    // If nothing changed, skip
-    if (updateFields.length === 0) {
-      return res.status(200).json({ message: 'No changes submitted.' });
-    }
-
-    const updateSql = `
-      UPDATE ACCOUNT_T
-      SET ${updateFields.join(', ')}
-      WHERE user_id = ?
-    `;
-    params.push(user.user_id);
-
-    db.query(updateSql, params, (updateErr) => {
-      if (updateErr) {
-        console.error('Error updating account:', updateErr);
-        return res.status(500).json({ message: 'Server error while updating account' });
+      if (!isMatch) {
+        return res.status(401).json({ message: 'Invalid password.' });
       }
-      return res.status(200).json({ message: 'Account updated successfully!' });
+
+      // 3) Build the update query
+      const updateFields = [];
+      const params = [];
+
+      if (newEmail && newEmail.trim() !== '' && newEmail.trim() !== user.user_email) {
+        updateFields.push('user_email = ?');
+        params.push(newEmail.trim());
+      }
+      if (newUsername && newUsername.trim() !== '' && newUsername.trim() !== user.username) {
+        updateFields.push('username = ?');
+        params.push(newUsername.trim());
+      }
+      if (newFavoriteLocation && newFavoriteLocation.trim() !== '' 
+          && newFavoriteLocation.trim() !== user.favorite_location) {
+        updateFields.push('favorite_location = ?');
+        params.push(newFavoriteLocation.trim());
+      }
+
+      // 4) If newPassword is provided, hash it and store
+      if (newPassword && newPassword.trim() !== '' && newPassword.trim() !== user.user_password) {
+        const passwordRegex = /^(?=.*\d).{6,}$/;
+        if (!passwordRegex.test(newPassword)) {
+          return res.status(400).json({
+            message: 'Please choose a password with at least 6 characters including at least one number.'
+          });
+        }
+
+        try {
+          const hashedNewPassword = await bcrypt.hash(newPassword.trim(), 10);
+          updateFields.push('user_password = ?');
+          params.push(hashedNewPassword);
+        } catch (hashErr) {
+          console.error('Error hashing new password:', hashErr);
+          return res.status(500).json({ message: 'Error hashing new password.' });
+        }
+      }
+
+      if (updateFields.length === 0) {
+        return res.status(200).json({ message: 'No changes submitted.' });
+      }
+
+      const updateSql = `
+        UPDATE ACCOUNT_T
+        SET ${updateFields.join(', ')}
+        WHERE user_id = ?
+      `;
+      params.push(user.user_id);
+
+      // 5) Execute the update
+      db.query(updateSql, params, (updateErr) => {
+        if (updateErr) {
+          console.error('Error updating account:', updateErr);
+          return res.status(500).json({ message: 'Server error while updating account' });
+        }
+        return res.status(200).json({ message: 'Account updated successfully!' });
+      });
     });
   });
 });
