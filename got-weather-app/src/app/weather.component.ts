@@ -84,7 +84,7 @@ export class WeatherComponent implements OnInit {
   private getCurrentWeather(latitude: number, longitude: number): void {
     console.log('Fetching weather data for location:', latitude, longitude);
   
-    // Current weather — now handled by your backend using lat/lon
+    // Current weather — now handled by backend using lat/lon
     this.http
       .get<any>(`/api/weather?lat=${latitude}&lon=${longitude}`)
       .subscribe({
@@ -145,7 +145,18 @@ export class WeatherComponent implements OnInit {
         this.updateUserLocationInDB(data.name);
   
         // Step 2: Extract lat/lon and use once for both forecasts
-        const { lat, lon } = data.coord;
+        //const { lat, lon } = data.coord;
+        const coord = data.coord;
+
+    if (!coord || coord.lat === undefined || coord.lon === undefined) {
+      console.error('Missing coordinates from weather API response:', coord);
+      alert('Could not determine forecast location.');
+      return;
+    }
+
+    const lat = coord.lat;
+    const lon = coord.lon;
+    console.log('Using coordinates for forecast:', lat, lon);
   
         // 7-day forecast
         this.weatherService.get7DayForecast(lat, lon).subscribe({
