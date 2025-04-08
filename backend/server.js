@@ -6,13 +6,9 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const axios = require('axios');
-<<<<<<< HEAD
 const path = require('path');
-=======
 const jwt = require('jsonwebtoken');
-
-// ADD: import bcrypt to hash/salt passwords
->>>>>>> 857b315 (added jwt components to db_cred.env and added jwt login endpoint)
+const authenticateToken = require('./utils/authMiddleware');
 const bcrypt = require('bcrypt');
 
 // Create the Express app
@@ -227,9 +223,6 @@ app.post('/api/login', (req, res) => {
           console.error('Error updating login timestamp:', updateErr);
           return res.status(500).send("Server error occurred while updating login timestamp.");
         }
-<<<<<<< HEAD
-        res.status(200).json({ message: "Login successful", username: user.username });
-=======
 
 	const token = jwt.sign(
   { userId: user.user_id, username: user.username },
@@ -241,25 +234,24 @@ app.post('/api/login', (req, res) => {
   username: user.username,
   token
 	});
->>>>>>> 857b315 (added jwt components to db_cred.env and added jwt login endpoint)
       });
     });
   });
 });
 
-// Get account info endpoint
-app.get('/api/getAccountInfo', (req, res) => {
-  const { usernameOrEmail } = req.query;
-  if (!usernameOrEmail) {
-    return res.status(400).json({ message: 'Username or email is required.' });
-  }
+// =============================
+//  GET /getAccountInfo
+// =============================
+app.get('/api/getAccountInfo', authenticateToken, (req, res) => {
+  const { userId } = req.user; 
+
   const sql = `
     SELECT user_email, username, favorite_location
     FROM ACCOUNT_T
-    WHERE username = ? OR user_email = ?
+    WHERE user_id = ?
     LIMIT 1
   `;
-  db.query(sql, [usernameOrEmail, usernameOrEmail], (err, results) => {
+  db.query(sql, [userId], (err, results) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ message: 'Server error occurred.' });
