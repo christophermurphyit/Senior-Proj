@@ -6,7 +6,13 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const axios = require('axios');
+<<<<<<< HEAD
 const path = require('path');
+=======
+const jwt = require('jsonwebtoken');
+
+// ADD: import bcrypt to hash/salt passwords
+>>>>>>> 857b315 (added jwt components to db_cred.env and added jwt login endpoint)
 const bcrypt = require('bcrypt');
 
 // Create the Express app
@@ -221,7 +227,21 @@ app.post('/api/login', (req, res) => {
           console.error('Error updating login timestamp:', updateErr);
           return res.status(500).send("Server error occurred while updating login timestamp.");
         }
+<<<<<<< HEAD
         res.status(200).json({ message: "Login successful", username: user.username });
+=======
+
+	const token = jwt.sign(
+  { userId: user.user_id, username: user.username },
+  process.env.JWT_SECRET,
+  { expiresIn: process.env.JWT_EXPIRES_IN });
+
+	res.status(200).json({
+  message: "Login successful",
+  username: user.username,
+  token
+	});
+>>>>>>> 857b315 (added jwt components to db_cred.env and added jwt login endpoint)
       });
     });
   });
