@@ -268,26 +268,32 @@ app.get('/api/getAccountInfo', authenticateToken, (req, res) => {
   });
 });
 
-// Update account endpoint
-app.put('/api/updateAccount', (req, res) => {
+// =============================
+//  PUT /updateAccount
+//  - Compare the current password with the stored hash
+//  - If newPassword is provided, hash before saving
+// =============================
+app.put('/api/updateAccount', authenticateToken, (req, res) => {
+
+  const userId = req.user.userId;
   const {
-    currentUsernameOrEmail,
     newEmail,
     newUsername,
     newFavoriteLocation,
     currentPassword,
     newPassword
   } = req.body;
-  if (!currentUsernameOrEmail || !currentPassword) {
+
+  if (!currentPassword) {
     return res.status(400).json({ message: 'Missing required fields.' });
   }
   const selectSql = `
-    SELECT user_id, user_password, user_email, username, favorite_location
+    SELECT user_password, user_email, username, favorite_location
     FROM ACCOUNT_T
-    WHERE (username = ? OR user_email = ?)
+    WHERE (user_id = ?)
     LIMIT 1
   `;
-  db.query(selectSql, [currentUsernameOrEmail, currentUsernameOrEmail], (err, results) => {
+  db.query(selectSql, [userId], (err, results) => {
     if (err) {
       console.error('Error fetching user info:', err);
       return res.status(500).json({ message: 'Server error' });
@@ -299,18 +305,19 @@ app.put('/api/updateAccount', (req, res) => {
     bcrypt.compare(currentPassword, user.user_password, async (compareErr, isMatch) => {
       if (compareErr) {
         console.error('Error comparing current passwords:', compareErr);
-        return res.status(500).json({ message: 'Server error while verifying current password.' });
+        return res.status(500).json({ message: 'Password comparison failed.' });
       }
       if (!isMatch) {
         return res.status(401).json({ message: 'Invalid password.' });
       }
       const updateFields = [];
       const params = [];
-      if (newEmail && newEmail.trim() !== '' && newEmail.trim() !== user.user_email) {
+
+      if (newEmail && newEmail.trim() !== '' && newEmail !== user.user_email) {
         updateFields.push('user_email = ?');
         params.push(newEmail.trim());
       }
-      if (newUsername && newUsername.trim() !== '' && newUsername.trim() !== user.username) {
+      if (newUsername && newUsername.trim() !== '' && newUsername !== user.username) {
         updateFields.push('username = ?');
         params.push(newUsername.trim());
       }
@@ -318,7 +325,9 @@ app.put('/api/updateAccount', (req, res) => {
         updateFields.push('favorite_location = ?');
         params.push(newFavoriteLocation.trim());
       }
-      if (newPassword && newPassword.trim() !== '' && newPassword.trim() !== user.user_password) {
+
+      // 4) If newPassword is provided, hash it and store
+      if (newPassword && newPassword.trim() !== '') {
         const passwordRegex = /^(?=.*\d).{6,}$/;
         if (!passwordRegex.test(newPassword)) {
           return res.status(400).json({
@@ -342,11 +351,13 @@ app.put('/api/updateAccount', (req, res) => {
         SET ${updateFields.join(', ')}
         WHERE user_id = ?
       `;
-      params.push(user.user_id);
+      params.push(userId);
+
+      // 5) Execute the update
       db.query(updateSql, params, (updateErr) => {
         if (updateErr) {
           console.error('Error updating account:', updateErr);
-          return res.status(500).json({ message: 'Server error while updating account' });
+          return res.status(500).json({ message: 'Server error while updating account. failed to update.' });
         }
         return res.status(200).json({ message: 'Account updated successfully!' });
       });
