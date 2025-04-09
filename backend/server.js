@@ -365,18 +365,24 @@ app.put('/api/updateAccount', authenticateToken, (req, res) => {
   });
 });
 
-// Update user location endpoint
-app.put('/api/updateUserLocation', (req, res) => {
-  const { usernameOrEmail, newLocation } = req.body;
-  if (!usernameOrEmail || !newLocation) {
-    return res.status(400).json({ message: 'usernameOrEmail and newLocation are required.' });
+// =============================
+//  PUT /updateUserLocation
+// =============================
+app.put('/api/updateUserLocation', authenticateToken, (req, res) => {
+  
+	const userId = req.user.userId;
+	const { newLocation } = req.body;
+
+  if (!newLocation || newLocation.trim() === '') {
+    return res.status(400).json({ message: 'New Location are required.' });
   }
   const sql = `
     UPDATE ACCOUNT_T
     SET user_location = ?
-    WHERE username = ? OR user_email = ?
+    WHERE user_id = ?
   `;
-  db.query(sql, [newLocation, usernameOrEmail, usernameOrEmail], (err, result) => {
+
+  db.query(sql, [newLocation.trim(), userId], (err, result) => {
     if (err) {
       console.error('Error updating user location:', err);
       return res.status(500).json({ message: 'Server error while updating user location.' });
