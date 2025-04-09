@@ -52,10 +52,8 @@ export class WeatherComponent implements OnInit {
 
   ngOnInit(): void {
 
-     if (!this.authService.isAuthenticated()) {
-    this.router.navigate(['/login']);
-    return; //Stop execution if not logged in
-  }
+
+    this.isLoggedIn = this.authService.isAuthenticated();
     // Grab the current user if logged in
     this.username = this.authService.getCurrentUser();
 
