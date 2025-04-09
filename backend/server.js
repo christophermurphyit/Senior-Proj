@@ -70,8 +70,15 @@ app.get('/api/forecast', async (req, res) => {
 
   try {
     const apiKey = process.env.WEATHER_API_KEY;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
-    const forecastResponse = await axios.get(forecastUrl);
+    const parsedLat = parseFloat(lat);
+    const parsedLon = parseFloat(lon);
+    
+    if (isNaN(parsedLat) || isNaN(parsedLon)) {
+      return res.status(400).json({ message: 'Invalid coordinates provided.' });
+    }
+    
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${parsedLat}&lon=${parsedLon}&units=imperial&appid=${apiKey}`;
+        const forecastResponse = await axios.get(forecastUrl);
     res.status(200).json(forecastResponse.data);
   } catch (error) {
     console.error('Error fetching forecast:', error.message);
