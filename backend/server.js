@@ -14,7 +14,7 @@ const app = express();
 
 // Load environment variables from db_cred.env (for local development).
 // In production, these variables should be set via EB configuration and the db_cred.env file will not be deployed.
-dotenv.config({ path: __dirname + '/db_cred.env' });
+dotenv.config({ path: __dirname + '/process.env' });
 
 // Middleware configuration
 app.use(cors());
@@ -69,9 +69,11 @@ app.get('/api/weather', async (req, res) => {
 // Forecast endpoint
 app.get('/api/forecast', async (req, res) => {
   const { lat, lon } = req.query;
+
   if (!lat || !lon) {
     return res.status(400).json({ message: 'Latitude and longitude are required.' });
   }
+
   try {
     const parsedLat = parseFloat(lat);
     const parsedLon = parseFloat(lon);
@@ -81,19 +83,18 @@ app.get('/api/forecast', async (req, res) => {
     }
 
     const apiKey = process.env.WEATHER_API_KEY;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${parsedLat}&lon=${parsedLon}&units=imperial&appid=${apiKey}`;
+    const exclude = 'minutely,alerts'; // ✅ customize this if needed
+    const forecastUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${parsedLat}&lon=${parsedLon}&exclude=${exclude}&units=imperial&appid=${apiKey}`;
 
     console.log('Forecast URL:', forecastUrl);
 
     const forecastResponse = await axios.get(forecastUrl);
     res.status(200).json(forecastResponse.data);
   } catch (error) {
-    const errorDetails = error.response?.data || error.message;
-    console.error('Error fetching forecast:', errorDetails);
-
+    console.error('Error fetching forecast:', error.response?.data || error.message);
     res.status(500).json({
       message: 'Failed to fetch forecast data.',
-      error: errorDetails
+      error: error.response?.data || error.message,
     });
   }
 });
