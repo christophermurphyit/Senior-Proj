@@ -73,10 +73,6 @@ app.get('/api/forecast', async (req, res) => {
     return res.status(400).json({ message: 'Latitude and longitude are required.' });
   }
   try {
-<<<<<<< Updated upstream
-    const apiKey = process.env.WEATHER_API_KEY;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
-=======
     const parsedLat = parseFloat(lat);
     const parsedLon = parseFloat(lon);
 
@@ -89,7 +85,6 @@ app.get('/api/forecast', async (req, res) => {
 
     console.log('Forecast URL:', forecastUrl);
 
->>>>>>> Stashed changes
     const forecastResponse = await axios.get(forecastUrl);
     res.status(200).json(forecastResponse.data);
   } catch (error) {
@@ -103,9 +98,6 @@ app.get('/api/forecast', async (req, res) => {
   }
 });
 
-<<<<<<< Updated upstream
-// Get favorite location
-=======
 
 /********************************************************************
  * Account endpoints
@@ -114,7 +106,6 @@ app.get('/api/forecast', async (req, res) => {
 // =============================
 //  GET /getFavoriteLocation
 // =============================
->>>>>>> Stashed changes
 app.get('/api/getFavoriteLocation', (req, res) => {
   const { usernameOrEmail } = req.query;
   if (!usernameOrEmail) {
