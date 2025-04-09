@@ -14,7 +14,7 @@ const app = express();
 
 // Load environment variables from db_cred.env (for local development).
 // In production, these variables should be set via EB configuration and the db_cred.env file will not be deployed.
-dotenv.config({ path: __dirname + '/db_cred.env' });
+dotenv.config({ path: __dirname + '/process.env' });
 
 // Middleware configuration
 app.use(cors());
