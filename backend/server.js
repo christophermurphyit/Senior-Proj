@@ -73,17 +73,48 @@ app.get('/api/forecast', async (req, res) => {
     return res.status(400).json({ message: 'Latitude and longitude are required.' });
   }
   try {
+<<<<<<< Updated upstream
     const apiKey = process.env.WEATHER_API_KEY;
     const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
+=======
+    const parsedLat = parseFloat(lat);
+    const parsedLon = parseFloat(lon);
+
+    if (isNaN(parsedLat) || isNaN(parsedLon)) {
+      return res.status(400).json({ message: 'Invalid coordinates.' });
+    }
+
+    const apiKey = process.env.WEATHER_API_KEY;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${parsedLat}&lon=${parsedLon}&units=imperial&appid=${apiKey}`;
+
+    console.log('Forecast URL:', forecastUrl);
+
+>>>>>>> Stashed changes
     const forecastResponse = await axios.get(forecastUrl);
     res.status(200).json(forecastResponse.data);
   } catch (error) {
-    console.error('Error fetching forecast:', error.message);
-    res.status(500).json({ message: 'Failed to fetch forecast data.' });
+    const errorDetails = error.response?.data || error.message;
+    console.error('Error fetching forecast:', errorDetails);
+
+    res.status(500).json({
+      message: 'Failed to fetch forecast data.',
+      error: errorDetails
+    });
   }
 });
 
+<<<<<<< Updated upstream
 // Get favorite location
+=======
+
+/********************************************************************
+ * Account endpoints
+ ********************************************************************/
+
+// =============================
+//  GET /getFavoriteLocation
+// =============================
+>>>>>>> Stashed changes
 app.get('/api/getFavoriteLocation', (req, res) => {
   const { usernameOrEmail } = req.query;
   if (!usernameOrEmail) {
