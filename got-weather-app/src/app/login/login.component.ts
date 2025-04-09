@@ -28,7 +28,7 @@ export class LoginComponent {
       this.message = 'Username/Email and password are required.';
       return;
     }
-  
+
     this.http.post<any>(
       '/api/login',
       {
@@ -38,7 +38,7 @@ export class LoginComponent {
     ).subscribe({
       next: (response) => {
         if (response.message === 'Login successful') {
-          this.authService.login(response.username); // Store the username
+          this.authService.login(response.username, response.token); // Store the username
           this.router.navigate(['/home']); // Redirect to homepage
         } else {
           this.message = 'Invalid username or password.';
@@ -53,8 +53,8 @@ export class LoginComponent {
       },
     });
   }
-  
-  
+
+
 
   goHome() {
     this.router.navigate(['/home']);

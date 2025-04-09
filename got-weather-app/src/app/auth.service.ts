@@ -19,16 +19,18 @@ export class AuthService {
     }
   }
 
-  login(user: string) {
-    this.currentUser = user;
+  login(username: string, token: string) {
+    this.currentUser = username;
     this.isLoggedInSubject.next(true);
-    sessionStorage.setItem('loggedInUser', user);
+    sessionStorage.setItem('loggedInUser', username);
+    localStorage.setItem('token', token);
   }
 
   logout() {
     this.currentUser = null;
     this.isLoggedInSubject.next(false);
     sessionStorage.removeItem('loggedInUser');
+    localStorage.removeItem('token');
   }
 
   isAuthenticated(): boolean {
@@ -40,5 +42,9 @@ export class AuthService {
       this.currentUser = sessionStorage.getItem('loggedInUser');
     }
     return this.currentUser;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }

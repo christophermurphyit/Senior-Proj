@@ -5,6 +5,7 @@ import { FooterComponent } from './footer.component';
 import { WeatherService } from './weather.service';
 import { HamburgerMenuComponent } from './hamburger-menu/hamburger-menu.component';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'weather',
@@ -21,7 +22,7 @@ export class WeatherComponent implements OnInit {
   description: string = '';
   imageClass: string = '';
   public localTime: string = '';
-  private cityTimezoneOffset: number = 0; 
+  private cityTimezoneOffset: number = 0;
   username: string | null = null;
 
   // Forecast
@@ -43,12 +44,18 @@ export class WeatherComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private weatherService: WeatherService,
+    private router: Router,
     private authService: AuthService
   ) {}
 
   @ViewChild(HamburgerMenuComponent) hamburgerMenu!: HamburgerMenuComponent;
 
   ngOnInit(): void {
+
+     if (!this.authService.isAuthenticated()) {
+    this.router.navigate(['/login']);
+    return; //Stop execution if not logged in
+  }
     // Grab the current user if logged in
     this.username = this.authService.getCurrentUser();
 
@@ -83,7 +90,7 @@ export class WeatherComponent implements OnInit {
 
   private getCurrentWeather(latitude: number, longitude: number): void {
     console.log('Fetching weather data for location:', latitude, longitude);
-  
+
     // Current weather — now handled by backend using lat/lon
     this.http
       .get<any>(`/api/weather?lat=${latitude}&lon=${longitude}`)
@@ -91,10 +98,10 @@ export class WeatherComponent implements OnInit {
         next: (data) => {
           console.log('Weather data received:', data);
           this.windSpeed = Math.round(data.wind?.speed);
-  
+
           // Pass to your GoT logic + store real city
           this.renderDOM(data);
-  
+
           // Also store realCityName in DB if user is logged in
           this.updateUserLocationInDB(data.name);
         },
@@ -102,12 +109,12 @@ export class WeatherComponent implements OnInit {
           alert('Error fetching weather data. Please try again later.');
         },
       });
-  
+
     // 7-day forecast from backend (includes daily + hourly)
     this.weatherService.get7DayForecast(latitude, longitude).subscribe({
       next: (forecastData: any) => {
         this.forecastData = forecastData.daily;
-  
+
         if (forecastData.hourly && forecastData.hourly.length > 0) {
           this.dailyForecast = {
             morning: forecastData.hourly.find((hour: any) => new Date(hour.dt * 1000).getHours() === 7),
@@ -122,7 +129,7 @@ export class WeatherComponent implements OnInit {
       },
     });
   }
-  
+
 
   // ================================
   // 2) Searching city by name
@@ -133,17 +140,17 @@ export class WeatherComponent implements OnInit {
       this.hamburgerMenu.setUnit('Fahrenheit');
     }
     console.log('Searching city:', cityName);
-  
+
     // Step 1: Fetch current weather from backend
     this.http.get<any>(`/api/weather?city=${cityName}`).subscribe({
       next: (data) => {
         console.log('Current Weather Data:', data);
         this.windSpeed = Math.round(data.wind?.speed);
-  
+
         // GoT rendering + update location
         this.renderDOM(data);
         this.updateUserLocationInDB(data.name);
-  
+
         // Step 2: Extract lat/lon and use once for both forecasts
         //const { lat, lon } = data.coord;
         const coord = data.coord;
@@ -157,12 +164,12 @@ export class WeatherComponent implements OnInit {
     const lat = coord.lat;
     const lon = coord.lon;
     console.log('Using coordinates for forecast:', lat, lon);
-  
+
         // 7-day forecast
         this.weatherService.get7DayForecast(lat, lon).subscribe({
           next: (forecastData: any) => {
             this.forecastData = forecastData.daily;
-  
+
             // Daily forecast (hourly breakdown)
             if (forecastData.hourly && forecastData.hourly.length > 0) {
               this.dailyForecast = {
@@ -184,7 +191,7 @@ export class WeatherComponent implements OnInit {
       },
     });
   }
-  
+
 
   // On enter in the search box
   onSearchKey(event: KeyboardEvent): void {
