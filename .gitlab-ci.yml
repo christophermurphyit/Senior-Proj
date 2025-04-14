@@ -21,7 +21,7 @@ build_frontend:
 deploy_to_ec2:
   stage: deploy
   only:
-    - main
+    - testing
   before_script:
     - echo "$EC2_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
