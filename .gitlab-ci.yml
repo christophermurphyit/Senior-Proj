@@ -4,6 +4,6 @@ stages:
 echo_hello:
   stage: test
   script:
-    - echo "🚀 GitLab CI is working!"
+    - echo "🚀 GitLab CI is working!!"
   only:
     - testing
