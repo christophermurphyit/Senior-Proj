@@ -16,7 +16,7 @@ build_frontend:
     - ng build --configuration=production  # or: ng build --configuration production
   artifacts:
     paths:
-      - $ANGULAR_DIR/dist/got-weather-app/browser/
+    - $ANGULAR_DIR/dist/got-weather-app/
 
 deploy_to_ec2:
   stage: deploy
