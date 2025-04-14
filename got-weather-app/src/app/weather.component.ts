@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 })
 export class WeatherComponent implements OnInit {
   // Display + logic fields
+  isLoggedIn: boolean = false;
   temp: string = '';
   city: string = '';            // The GoT city
   realCityName: string = '';    // The actual city from weatherData.name
