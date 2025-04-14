@@ -1,0 +1,36 @@
+ stages:
+  - build
+  - deploy
+
+variables:
+  ANGULAR_DIR: "frontend"
+  BACKEND_DIR: "backend"
+
+build_frontend:
+  stage: build
+  image: node:20
+  before_script:
+    - cd $ANGULAR_DIR
+    - npm ci
+  script:
+    - ng build --configuration=production  # or: ng build --configuration production
+  artifacts:
+    paths:
+      - $ANGULAR_DIR/dist/
+
+deploy_to_ec2:
+  stage: deploy
+  only:
+    - main
+  before_script:
+    - echo "$EC2_SSH_KEY" > id_rsa
+    - chmod 600 id_rsa
+  script:
+    - scp -r -o StrictHostKeyChecking=no -i id_rsa $ANGULAR_DIR/dist/* $EC2_USER@$EC2_HOST:/var/www/gotweather/
+    - ssh -o StrictHostKeyChecking=no -i id_rsa $EC2_USER@$EC2_HOST "
+        cd /home/$EC2_USER/project/backend &&
+        git pull origin main &&
+        npm install &&
+        pm2 restart gotweather-backend || pm2 start gotweather-backend &&
+        pm2 save
+      "
