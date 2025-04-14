@@ -1,38 +1,9 @@
 stages:
-  - build
-  - deploy
+  - test
 
-variables:
-  ANGULAR_DIR: "got-weather-app"
-  BACKEND_DIR: "backend"
-
-build_frontend:
-  stage: build
-  image: node:20
+echo_hello:
+  stage: test
+  script:
+    - echo "🚀 GitLab CI is working!"
   only:
     - testing
-  before_script:
-    - cd $ANGULAR_DIR
-    - npm ci
-  script:
-    - npx ng build --configuration=production
-  artifacts:
-    paths:
-      - $ANGULAR_DIR/dist/got-weather-app/
-
-deploy_to_ec2:
-  stage: deploy
-  only:
-    - testing
-  before_script:
-    - echo "$EC2_SSH_KEY" > id_rsa
-    - chmod 600 id_rsa
-  script:
-    - scp -r -o StrictHostKeyChecking=no -i id_rsa $ANGULAR_DIR/dist/got-weather-app/* $EC2_USER@$EC2_HOST:/var/www/gotweather/
-    - ssh -o StrictHostKeyChecking=no -i id_rsa $EC2_USER@$EC2_HOST "
-        cd /home/$EC2_USER/project/backend &&
-        git pull origin main &&
-        npm install &&
-        pm2 restart gotweather-backend || pm2 start server.js --name gotweather-backend &&
-        pm2 save
-      "
