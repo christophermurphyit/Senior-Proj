@@ -26,7 +26,7 @@ deploy_to_ec2:
     - echo "$EC2_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
   script:
-    - scp -r -o StrictHostKeyChecking=no -i id_rsa "$ANGULAR_DIR/dist/got-weather-app/browser/" $EC2_USER@$EC2_HOST:/var/www/gotweather/
+    - scp -r -o StrictHostKeyChecking=no -i id_rsa $ANGULAR_DIR/dist/got-weather-app/* $EC2_USER@$EC2_HOST:/var/www/gotweather/
     - ssh -o StrictHostKeyChecking=no -i id_rsa $EC2_USER@$EC2_HOST "
         cd /home/$EC2_USER/project/backend &&
         git pull origin main &&
