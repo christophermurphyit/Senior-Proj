@@ -10,7 +10,7 @@ build_frontend:
   stage: build
   image: node:20
   only:
-    - testing
+    - main
   before_script:
     - cd $ANGULAR_DIR
     - npm ci
