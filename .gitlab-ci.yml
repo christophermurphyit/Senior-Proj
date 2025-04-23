@@ -9,8 +9,9 @@ variables:
 build_frontend:
   stage: build
   image: node:20
-  only:
-    - main
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
   before_script:
     - cd $ANGULAR_DIR
     - npm ci
@@ -23,15 +24,16 @@ build_frontend:
 deploy_to_ec2:
   stage: deploy
   image: node:20
-  only:
-    - testing
   dependencies:
     - build_frontend
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
   before_script:
     - echo "$EC2_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
   script:
-      scp -r -o StrictHostKeyChecking=no -i id_rsa $ANGULAR_DIR/dist/got-weather-app/browser/* $EC2_USER@$EC2_HOST:/var/www/gotweather/
+    - scp -r -o StrictHostKeyChecking=no -i id_rsa $ANGULAR_DIR/dist/got-weather-app/browser/* $EC2_USER@$EC2_HOST:/var/www/gotweather/
     - ssh -o StrictHostKeyChecking=no -i id_rsa $EC2_USER@$EC2_HOST "
         cd /home/ubuntu/seniordesign-weather/backend &&
         git pull origin main &&
