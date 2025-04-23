@@ -22,8 +22,11 @@ build_frontend:
 
 deploy_to_ec2:
   stage: deploy
+  image: node:20
   only:
     - testing
+  dependencies:
+    - build_frontend
   before_script:
     - echo "$EC2_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
