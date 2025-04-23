@@ -38,6 +38,6 @@ deploy_to_ec2:
         cd /home/ubuntu/seniordesign-weather/backend &&
         git pull origin main &&
         npm install &&
-        pm2 restart gotweather-backend || pm2 start server.js --name gotweather-backend &&
+        pm2 restart gotweather-backend -f || pm2 start server.js --name gotweather-backend
         pm2 save
       "
