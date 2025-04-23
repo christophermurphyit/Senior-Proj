@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./weather.component.css'],
 })
 export class WeatherComponent implements OnInit {
+  //test
   // Display + logic fields
   isLoggedIn: boolean = false;
   temp: string = '';
