@@ -36,8 +36,11 @@ deploy_to_ec2:
     - scp -r -o StrictHostKeyChecking=no -i id_rsa $ANGULAR_DIR/dist/got-weather-app/browser/* $EC2_USER@$EC2_HOST:/var/www/gotweather/
     - ssh -o StrictHostKeyChecking=no -i id_rsa $EC2_USER@$EC2_HOST "
         cd /home/ubuntu/seniordesign-weather/backend &&
-        git pull origin main &&
+        git fetch origin main &&
+        git reset --hard origin/main &&
         npm install &&
-        pm2 restart gotweather-backend -f || pm2 start server.js --name gotweather-backend
+        pm2 delete gotweather-backend || true &&
+        pm2 start server.js --name gotweather-backend &&
         pm2 save
       "
+
