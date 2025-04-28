@@ -361,13 +361,61 @@ export class WeatherComponent implements OnInit {
   }
 
   convertForecastDataToSelectedUnit(): void {
-    if (!this.forecastData || this.forecastData.length === 0) return;
-    // same logic as your code
+    if (this.forecastData && this.forecastData.length > 0) {
+      this.forecastData = this.forecastData.map(day => {
+        // If original temperatures are not set, store them
+        if (!day.temp.originalMax) {
+          day.temp.originalMax = day.temp.max;
+          day.temp.originalMin = day.temp.min;
+        }
+        // Convert based on the selected unit
+        return {
+          ...day,
+          temp: {
+            max: this.unit === 'Fahrenheit' ? day.temp.originalMax : this.convertToCelsius(day.temp.originalMax),
+            min: this.unit === 'Fahrenheit' ? day.temp.originalMin : this.convertToCelsius(day.temp.originalMin),
+            originalMax: day.temp.originalMax,
+            originalMin: day.temp.originalMin
+          }
+        };
+      });
+    }
   }
+  
   convertDailyForecastToSelectedUnit(): void {
-    if (!this.dailyForecast) return;
-    // same logic
+    if (this.dailyForecast) {
+      // Convert morning temperature
+      if (this.dailyForecast.morning) {
+        if (!this.dailyForecast.morning.originalTemp) {
+          this.dailyForecast.morning.originalTemp = this.dailyForecast.morning.temp; // Store the original Fahrenheit temperature
+        }
+        this.dailyForecast.morning.temp = this.unit === 'Fahrenheit'
+          ? this.dailyForecast.morning.originalTemp
+          : this.convertToCelsius(this.dailyForecast.morning.originalTemp);
+      }
+  
+      // Convert noon temperature
+      if (this.dailyForecast.noon) {
+        if (!this.dailyForecast.noon.originalTemp) {
+          this.dailyForecast.noon.originalTemp = this.dailyForecast.noon.temp; // Store the original Fahrenheit temperature
+        }
+        this.dailyForecast.noon.temp = this.unit === 'Fahrenheit'
+          ? this.dailyForecast.noon.originalTemp
+          : this.convertToCelsius(this.dailyForecast.noon.originalTemp);
+      }
+  
+      // Convert afternoon temperature
+      if (this.dailyForecast.afternoon) {
+        if (!this.dailyForecast.afternoon.originalTemp) {
+          this.dailyForecast.afternoon.originalTemp = this.dailyForecast.afternoon.temp; // Store the original Fahrenheit temperature
+        }
+        this.dailyForecast.afternoon.temp = this.unit === 'Fahrenheit'
+          ? this.dailyForecast.afternoon.originalTemp
+          : this.convertToCelsius(this.dailyForecast.afternoon.originalTemp);
+      }
+    }
   }
+  
   private convertToCelsius(tempF: number): number {
     return ((tempF - 32) * 5) / 9;
   }
