@@ -415,7 +415,7 @@ export class WeatherComponent implements OnInit {
       }
     }
   }
- //fix  
+ //fix //  
   private convertToCelsius(tempF: number): number {
     return ((tempF - 32) * 5) / 9;
   }
