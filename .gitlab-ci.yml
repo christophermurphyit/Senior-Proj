@@ -1,3 +1,26 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  ANGULAR_DIR: "got-weather-app"
+  BACKEND_DIR: "backend"
+
+build_frontend:
+  stage: build
+  image: node:20
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+  before_script:
+    - cd $ANGULAR_DIR
+    - npm ci
+  script:
+    - npx ng build --configuration=production
+  artifacts:
+    paths:
+      - $ANGULAR_DIR/dist/got-weather-app/
+
 deploy_to_ec2:
   stage: deploy
   image: node:20
