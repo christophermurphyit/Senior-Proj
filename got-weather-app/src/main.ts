@@ -6,6 +6,7 @@ import { WeatherComponent } from './app/weather.component';  // Import WeatherCo
 import { provideHttpClient } from '@angular/common/http';
 import { LoginComponent } from './app/login/login.component';
 import { AccountInfoComponent } from './app/account-info/account-info.component';
+import { appConfig } from './app/app.config';
 
 
 const routes: Routes = [
@@ -16,9 +17,4 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }  // Redirect root to /home
 ];
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient()  // Provides HttpClient globally
-  ]
-}).catch(err => console.error(err));
+bootstrapApplication(AppComponent, appConfig).catch(err => console.error(err));
