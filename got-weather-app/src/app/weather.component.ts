@@ -54,8 +54,11 @@ export class WeatherComponent implements OnInit {
 
   ngOnInit(): void {
 
-
-    this.isLoggedIn = this.authService.isAuthenticated();
+    if (!this.authService.isAuthenticated()) {
+    	this.router.navigate(['/login']);
+    	return;
+  	}
+    //this.isLoggedIn = this.authService.isAuthenticated(); commented out for jwt test and to bug fix error 401
     // Grab the current user if logged in
     this.username = this.authService.getCurrentUser();
 
@@ -221,7 +224,7 @@ export class WeatherComponent implements OnInit {
   // ================================
   private updateUserLocationInDB(city: string) {
     if (!this.username) {
-      console.log('No user logged in, skipping user_location update.');
+      //console.log('No user logged in, skipping user_location update.'); removed to test for jwt 401 error fix
       return;
     }
     this.http
