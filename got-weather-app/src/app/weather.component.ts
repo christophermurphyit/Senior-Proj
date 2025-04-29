@@ -54,13 +54,20 @@ export class WeatherComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (!this.authService.isAuthenticated()) {
+  const token = this.authService.getToken();
+  const isLoggedIn = this.authService.isAuthenticated();
+
+  if (isLoggedIn) {
+    this.username = this.authService.getCurrentUser();
+  }
+
+   /* if (!this.authService.isAuthenticated()) {
     	this.router.navigate(['/login']);
     	return;
-  	}
+  	}*/
     //this.isLoggedIn = this.authService.isAuthenticated(); commented out for jwt test and to bug fix error 401
     // Grab the current user if logged in
-    this.username = this.authService.getCurrentUser();
+    //this.username = this.authService.getCurrentUser();
 
     // Attempt geolocation
     this.checkLocationPermission();
