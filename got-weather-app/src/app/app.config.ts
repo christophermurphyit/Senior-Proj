@@ -9,6 +9,7 @@ export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
   provideRouter(routes),
   //provideHttpClient(withInterceptors([authInterceptor]))
+<<<<<<< HEAD
   
   // turn on standalone HttpClient + let DI supply ANY HTTP_INTERCEPTORS
   provideHttpClient(withInterceptorsFromDi()),
@@ -20,4 +21,13 @@ export const appConfig: ApplicationConfig = {
     multi:    true
   }
 ]
+=======
+  provideHttpClient(withInterceptorsFromDi()),
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
+  ]
+>>>>>>> revert-to-9155196f
 };
