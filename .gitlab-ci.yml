@@ -37,7 +37,6 @@ deploy_to_ec2:
     - ssh -o StrictHostKeyChecking=no -i id_rsa $EC2_USER@$EC2_HOST "
         cd /home/ubuntu/seniordesign-weather/backend &&
         git fetch origin main &&
-        git reset --hard origin/main &&
         npm install &&
         pm2 delete gotweather-backend || true &&
         pm2 start server.js --name gotweather-backend &&
