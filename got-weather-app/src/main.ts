@@ -13,10 +13,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { LoginComponent } from './app/login/login.component';
 import { AccountInfoComponent } from './app/account-info/account-info.component';
 import { appConfig } from './app/app.config';
-<<<<<<< HEAD
-
-=======
->>>>>>> revert-to-9155196f
 
 const routes: Routes = [
   { path: 'home', component: WeatherComponent},  // Main page for your app
@@ -26,9 +22,6 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }  // Redirect root to /home
 ];
 
-<<<<<<< HEAD
-bootstrapApplication(AppComponent, appConfig).catch(err => console.error(err));
-=======
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
@@ -38,4 +31,3 @@ bootstrapApplication(AppComponent, {
 */
 
 
->>>>>>> revert-to-9155196f
