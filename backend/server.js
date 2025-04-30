@@ -147,7 +147,7 @@ app.post('/api/createAccount', async (req, res) => {
 
   db.query(checkSql, [username, email], async (err, results) => {
     if (err) {
-      console.error("DB error during insert:", insertErr); 
+      console.error("DB error during insert:", err); 
       return res.status(500).json({ message: err.message });
     }
     if (results.length > 0) {

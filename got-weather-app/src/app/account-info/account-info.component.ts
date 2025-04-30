@@ -57,7 +57,7 @@ export class AccountInfoComponent implements OnInit {
 
     // 2. Fetch current info
     this.http
-      .get(`/api/getAccountInfo?usernameOrEmail=${currentUser}`)
+      .get(`/api/getAccountInfo`)
       .subscribe({
         next: (response: any) => {
           this.currentEmail = response.email;
