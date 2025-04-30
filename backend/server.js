@@ -143,8 +143,11 @@ app.post('/api/createAccount', async (req, res) => {
     });
   }
   const checkSql = 'SELECT * FROM ACCOUNT_T WHERE username = ? OR user_email = ?';
+
+
   db.query(checkSql, [username, email], async (err, results) => {
     if (err) {
+      console.error("DB error during insert:", insertErr); 
       return res.status(500).json({ message: err.message });
     }
     if (results.length > 0) {
@@ -158,6 +161,7 @@ app.post('/api/createAccount', async (req, res) => {
       `;
       db.query(insertSql, [email, username, hashedPassword, favoriteLocation], (insertErr) => {
         if (insertErr) {
+          console.error("DB error during insert:", insertErr); 
           return res.status(500).json({ message: insertErr.message });
         }
         console.log("Insert successful. Sending 201 response...");
